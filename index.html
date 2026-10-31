@@ -3453,7 +3453,7 @@ function messageMenu(i){const h=S.chats[cur],m=h[i];if(!m)return;const ast=m.rol
  [{label:'删除消息',icon:'trash',danger:1,run:()=>{if(confirm('确定删除这条消息吗？')){h.splice(i,1);save();draw()}}}]])}
 
 function quoteText(m){return m.image?'[图片]'+(m.content?' '+m.content:''):m.stk?'[表情包]':m.audio?'[语音] '+(m.content||''):m.transfer?'[转账]':(m.content||'')}
-function quoteHTML(m,me){if(!m.quote||!m.quote.text)return'';const d='<i class="qt-d"></i>',t='<span class="qt-t">'+esc(m.quote.text)+'</span>';return '<div class="qt" data-qt="'+(+m.quote.t||0)+'">'+(me?t+d:d+t)+'</div>'}
+function quoteHTML(m,me){if(!m.quote||!m.quote.text)return'';let qn='';try{const qr=m.quote.role;qn=qr==='user'?(who('me')||{}).name:(qr?(P(cur)||{}).name:'')}catch(e){}const d='<i class="qt-d"></i>',t='<span class="qt-t" data-qn="'+esc(qn?qn+'：':'')+'">'+esc(m.quote.text)+'</span>';return '<div class="qt" data-qt="'+(+m.quote.t||0)+'">'+(me?t+d:d+t)+'</div>'}
 function setQuote(m){pendingQuote={chat:cur,role:m.role,text:quoteText(m).replace(/\s+/g,' ').trim().slice(0,80),t:m.t||0};renderQBar();$('#ta').focus()}
 function takeQuote(){const q=pendingQuote&&pendingQuote.chat===cur?{quote:{role:pendingQuote.role,text:pendingQuote.text,t:pendingQuote.t}}:{};pendingQuote=null;renderQBar();return q}
 function renderQBar(){const b=document.getElementById('qbar');if(!b)return;if(pendingQuote&&pendingQuote.chat!==cur)pendingQuote=null;if(!pendingQuote){b.classList.remove('on');b.innerHTML='';return}b.classList.add('on');b.innerHTML='<span class="qb-t">'+(pendingQuote.role==='user'?'引用我的消息：':'引用 '+esc((P(cur)||{}).name||'')+'：')+esc(pendingQuote.text)+'</span><button type="button" id="qb-x" aria-label="取消引用">×</button>';document.getElementById('qb-x').onclick=()=>{pendingQuote=null;renderQBar()}}
