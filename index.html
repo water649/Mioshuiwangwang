@@ -2835,8 +2835,9 @@ function go(v,push=true){if(v==='chat'&&!P(cur))return;if(v==='settings'&&stack[
 function back(){if(stack[stack.length-1]==='cset'&&csetPage==='memory'){csetPage='main';rCset();return}if(stack[stack.length-1]==='settings'&&settingsPage!=='main'){settingsPage='main';rSettings();return}stack.pop();go(stack[stack.length-1]||'home',false)}
 document.addEventListener('click',e=>{
   const q=s=>e.target.closest(s);let x;
-  if(!q('#plus,#pm'))$('#pm').classList.remove('on');
-  if(!q('#sp,#smile'))$('#sp').classList.remove('on');
+  const _path=e.composedPath?e.composedPath():[];const _in=sel=>q(sel)||_path.some(n=>n&&n.matches&&n.matches(sel));
+  if(!_in('#plus,#pm')||_in('#pm button'))$('#pm').classList.remove('on');
+  if(!_in('#sp,#smile'))$('#sp').classList.remove('on');
   if(x=q('[data-rp-persona]')){rolePhonePersonaId=x.dataset.rpPersona;rolePhoneActiveApp='';rolePhoneRender()}
   else if(x=q('[data-rp-app]')){rolePhoneActiveApp=x.dataset.rpApp;rolePhoneRender()}
   else if(x=q('[data-go]'))go(x.dataset.go);
@@ -2858,7 +2859,7 @@ document.addEventListener('click',e=>{
   else if(q('#cmn'))go('cset');
   else if(x=q('[data-si]'))jump(+x.dataset.si);
   else if(x=q('[data-stk]')){const id=x.dataset.stk;
-    if(mg){if(confirm('删除这个表情包？')){S.stickers=S.stickers.filter(s=>s.id!==id);save();rSP()}}else sendStk(id)}
+    if(mg){if(confirm('删除这个表情包？')){S.stickers=S.stickers.filter(s=>s.id!==id);save();rSP()}}else{sendStk(id);$('#sp').classList.remove('on')}}
   else if(q('#stup'))addStk();
   else if(q('#stmg')){mg=!mg;rSP()}
   else if(q('#smile')){$('#sp').classList.toggle('on');rSP()}
