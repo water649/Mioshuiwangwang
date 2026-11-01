@@ -178,7 +178,7 @@ function playVoice(src,transcript=''){if(src==='simulated-voice'){if('speechSynt
 .st{aspect-ratio:1;background:var(--bg);border-radius:12px;overflow:hidden;position:relative;padding:4px}
 .st img{width:100%;height:100%;object-fit:contain}
 .st.mg:after{content:"×";position:absolute;top:2px;right:6px;color:var(--err);font-size:16px}
-#pm{display:none;position:absolute;bottom:100%;left:12px;margin-bottom:4px;background:var(--ai);border-radius:14px;padding:6px;flex-direction:column;z-index:4}
+#pm{display:none;position:absolute;bottom:100%;left:12px;margin-bottom:6px;background:rgba(255,255,255,.55);background:color-mix(in srgb,var(--bg) 58%,transparent);-webkit-backdrop-filter:blur(22px) saturate(1.7);backdrop-filter:blur(22px) saturate(1.7);border:1px solid rgba(255,255,255,.28);box-shadow:0 10px 30px rgba(0,0,0,.16);border-radius:16px;padding:6px;flex-direction:column;z-index:4}#pm button{background:transparent}
 #pm.on{display:flex}
 #pm button{padding:9px 16px;text-align:left;font-size:14px}
 #pm #pm-image{display:block}
@@ -1811,7 +1811,7 @@ button.feed-follow-plus{padding:0;cursor:pointer}
   <div id="msgs"></div>
   <div id="qbar"></div>
   <div id="inp">
-    <div id="pm"><button id="redo">AI 回复 / 重答</button><button id="clear">清空对话</button><button id="pm-image" type="button">发送图片</button><button id="pm-transfer" type="button">转账</button><button id="pm-voice" type="button">发送语音（模拟）</button><button id="pm-call" type="button">语音通话</button><button id="pm-calltog" type="button">对方来电：开</button><button id="pm-narr" type="button" style="display:none">发送旁白</button><input id="chat-image-file" type="file" accept="image/*" hidden></div>
+    <div id="pm"><button id="redo">重新回复</button><button id="clear">清空对话</button><button id="pm-image" type="button">发送图片</button><button id="pm-transfer" type="button">转账</button><button id="pm-voice" type="button">发送语音（模拟）</button><button id="pm-call" type="button">语音通话</button><button id="pm-calltog" type="button">对方来电：开</button><button id="pm-narr" type="button" style="display:none">发送旁白</button><input id="chat-image-file" type="file" accept="image/*" hidden></div>
     <div id="sp"></div>
     <button id="plus" data-ic="pl" aria-label="菜单"></button>
     <div class="ib"><textarea id="ta" rows="1" placeholder="输入一条信息"></textarea><button id="smile" type="button" aria-label="表情包"></button><button id="send" type="button" aria-label="发送 / AI 回复"></button></div>
@@ -1899,7 +1899,7 @@ button.feed-follow-plus{padding:0;cursor:pointer}
     <hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><div class="cap" style="margin-top:0">Voice Worldbook</div><p class="note">可以专门写角色说话的语气、停顿、情绪与音色要求。保存后作为普通世界书参与提示词注入。</p><button class="btn" id="add-voice-world" type="button">＋ Add Voice Worldbook</button><button class="btn" id="manage-voice-worlds" type="button">View / Manage Worldbooks</button>
     </div>
   </div>
-  <div class="body settings-sub" id="settings-prompt" style="display:none"><div class="cap">Global AI Roleplay Prompt</div><p class="note">Shared rules for all characters, sent alongside each contact’s persona prompt.</p><div class="card"><textarea id="global-prompt" rows="14" placeholder="例如：保持人设一致；不要替用户决定行为或描述用户内心；回复自然简洁……"></textarea><button class="btn" id="import-global-prompt">Import Prompt from File</button><button class="btn fill" id="save-roleprompt">Save Prompt</button></div></div>
+  <div class="body settings-sub" id="settings-prompt" style="display:none"><div class="cap">Global AI Roleplay Prompt</div><p class="note">Shared rules for all characters, sent alongside each contact’s persona prompt.</p><div class="card"><textarea id="global-prompt" rows="14" placeholder="按层写，越稳定越靠前：&#10;【怎么说话】两三句就够，不写成报告&#10;【边界】7～8条，每条都是踩过一次才写的&#10;【我的老毛病】5～6条，写“我老是这样”&#10;【怎么陪】&#10;【许可】可以做什么，比“不许”更改变行为&#10;【能力表】能用的记号，一行一个"></textarea><button class="btn" id="import-global-prompt">Import Prompt from File</button><button class="btn fill" id="save-roleprompt">Save Prompt</button></div></div>
   <div class="body settings-sub" id="settings-memory" style="display:none">
     <div class="mem-hero"><div class="mem-kicker">MEMORY SYSTEM</div><div class="mem-title">Memory Center</div><p class="mem-copy">Choose how memory is used in conversations, then configure vector search. Memory content is managed separately in each chat’s Chat Settings.</p></div>
     <div class="mem-section"><div class="mem-section-title">Memory Mode</div><p class="note" style="margin-top:3px">Choose the global default. Existing content in the other mode will not be deleted.</p>
@@ -2020,6 +2020,32 @@ function switchUser(id){
  Object.keys(inc).forEach(pid=>{S.cc[pid]=Object.assign(S.cc[pid]||{wb:[],stk:[],sys:'',css:''},inc[pid])});
  S.activeUserProfile=id;S.chats=S.chatsByUser[id]||(S.chatsByUser[id]={});S.last='';
 }
+function xsjStamp(){const d=new Date(),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())}
+function xsjDl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
+function xsjChatExport(pid,fmt){
+  const pp=P(pid)||{},msgs=S.chats[pid]||[],name=pp.name||'聊天',stamp=xsjStamp(),safe=String(name).replace(/[\\\/:*?"<>|]/g,'_').slice(0,40);
+  const json=JSON.stringify({type:'xiaoshouji-chat',version:1,exportedAt:new Date().toISOString(),persona:{id:pid,name},count:msgs.length,chat:msgs});
+  if(fmt==='json'){xsjDl(new Blob([json],{type:'application/json'}),safe+'-聊天记录-'+stamp+'.json');return}
+  const z=n=>String(n).padStart(2,'0'),ft=t=>{if(!t)return'';const d=new Date(t);return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+' '+z(d.getHours())+':'+z(d.getMinutes())};
+  const rows=msgs.map(m=>{const tx=esc(String(m.content||'')).replace(/\n/g,'<br>');if(m.narr)return'<div class="n">'+tx+'</div>';const me=m.role==='user',q=m.quote&&m.quote.text?'<div class="q">'+esc(m.quote.text)+'</div>':'',im=(typeof m.image==='string'&&m.image.indexOf('data:image')===0)?'<img src="'+m.image.replace(/"/g,'%22')+'">':'';return'<div class="r '+(me?'me':'ta')+'"><div class="b">'+q+im+tx+'</div><div class="t">'+esc(ft(m.t))+'</div></div>'});
+  const css='body{margin:0;background:#f4f4f5;color:#111;font:15px/1.6 -apple-system,"PingFang SC",sans-serif}main{max-width:640px;margin:0 auto;padding:20px 14px 60px}h1{font-size:18px;margin:0 0 4px}.s{color:#888;font-size:12px;margin-bottom:18px}.r{display:flex;flex-direction:column;margin:10px 0}.r.me{align-items:flex-end}.r.ta{align-items:flex-start}.b{max-width:82%;padding:9px 13px;border-radius:16px;word-break:break-word}.me .b{background:#111;color:#fff}.ta .b{background:#fff;border:1px solid #e4e4e7}.b img{max-width:100%;border-radius:10px;display:block;margin-bottom:6px}.q{font-size:12px;opacity:.6;border-left:2px solid currentColor;padding-left:8px;margin-bottom:6px}.t{font-size:11px;color:#999;margin:2px 6px}.n{text-align:center;color:#888;font-size:13px;font-style:italic;margin:12px 20px}@media(prefers-color-scheme:dark){body{background:#000;color:#eee}.ta .b{background:#1c1c1e;border-color:#2c2c2e}.me .b{background:#eee;color:#111}}';
+  const html='<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(name)+' 聊天记录</title><style>'+css+'</style></head><body><main><h1>'+esc(name)+'</h1><div class="s">导出于 '+stamp+' · 共 '+msgs.length+' 条</div>'+rows.join('')+'</main><script type="application/json" id="xsj-data">'+json.replace(/</g,'\\u003c')+'<\/script></body></html>';
+  xsjDl(new Blob([html],{type:'text/html'}),safe+'-聊天记录-'+stamp+'.html');
+}
+function xsjChatImport(pid){
+  const i=document.createElement('input');i.type='file';i.accept='.json,.html,.htm,application/json,text/html';
+  i.onchange=async()=>{const f=i.files&&i.files[0];if(!f)return;
+    try{const txt=await f.text();let raw;
+      if(/\.html?$/i.test(f.name)||/^\s*</.test(txt)){const el=new DOMParser().parseFromString(txt,'text/html').getElementById('xsj-data');if(!el)throw new Error('这个 HTML 不是本应用导出的聊天记录');raw=JSON.parse(el.textContent)}else raw=JSON.parse(txt);
+      const arr=Array.isArray(raw)?raw:(raw&&raw.chat);
+      if(!Array.isArray(arr)||!arr.length||!arr.every(m=>m&&typeof m==='object'&&typeof m.role==='string'))throw new Error('文件里没有可识别的聊天记录');
+      const n0=(S.chats[pid]||[]).length;
+      iosSheet({title:'导入 '+arr.length+' 条消息到当前聊天',items:[
+        {label:'覆盖当前聊天（现有 '+n0+' 条将被替换）',run:()=>{S.chats[pid]=arr;save();draw();toast('已覆盖导入')}},
+        {label:'追加到当前聊天末尾',run:()=>{S.chats[pid]=(S.chats[pid]||[]).concat(arr);save();draw();toast('已追加导入')}}]});
+    }catch(e){toast('导入失败：'+e.message)}};
+  i.click();
+}
 const CC=id=>S.cc[id]||(S.cc[id]={wb:[],stk:[],sys:'',css:''});
 const who=id=>id==='me'?Object.assign({id:'me'},S.me,{handle:S.me.handle||'me'}):(P(id)?Object.assign({},P(id),{handle:P(id).handle||id}):{id,name:'已删除',handle:''});
 const av=p=>p&&p.avatar?`<img src="${p.avatar}" alt="">`:esc(((p&&p.name)||'?')[0]);
@@ -2054,14 +2080,32 @@ async function ask(msgs,onD,opt,configOverride){
       try{const t=JSON.parse(d).choices[0].delta.content;if(t){all+=t;onD(all)}}catch(e){}}}
   return all.trim();
 }
-function build(p,h){
+const NOTE_KEEP=8,NOTE_CHARS=600,NOTE_TOTAL=4800;
+function dailyRecall(cc){const seen=new Set(),pool=[...(cc.memoryEntries||[]).slice(0,-NOTE_KEEP),...(cc.vectorMemories||[])].filter(m=>{const t=String(m&&m.text||'').trim();if(!t||seen.has(t))return false;seen.add(t);return true});if(!pool.length)return'';const day=Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/864e5),m=pool[day%pool.length],dt=m.createdAt?new Date(m.createdAt).toLocaleDateString('zh-CN'):'';return'【今天忽然想起的旧事】（这是旧事，日期按原文算，别当成刚发生的；不必硬提）\n'+(dt?'记于 '+dt+'：':'')+String(m.text).trim().slice(0,300)}
+function build(p,h,split){
   const recent=h.slice(-6).map(m=>m.content).join('\n');
   const cc=CC(p.id),wb=S.worlds.filter(w=>w.on!==false&&w.content&&((w.scope||'global')==='global'||(w.scope==='contact'&&(w.contacts||[]).includes(p.id)))&&(!w.keys.trim()||(w.trigger==='keyword'&&w.keys.split(/[,，\s]+/).filter(Boolean).some(k=>recent.includes(k))))).map(w=>({content:w.content,position:w.position||'after'}));
-  let sys=p.prompt||'';const manualMem=(cc.traditionalMemories||[]).filter(m=>m&&String(m.text||'').trim()).map((m,i)=>`${i+1}. ${m.text}`);if(!manualMem.length&&cc.traditionalMemory&&String(cc.traditionalMemory).trim())manualMem.push(cc.traditionalMemory);if(manualMem.length)sys+='\n\n【传统记忆】\n'+manualMem.join('\n');const generatedMem=(cc.memoryEntries||[]).filter(m=>m&&String(m.text||'').trim());if(generatedMem.length)sys+='\n\n【自动总结记忆条目】\n'+generatedMem.map((m,i)=>`${i+1}. ${m.text}`).join('\n');if(S.globalPrompt)sys+='\n\n【全局 AI 扮演提示词】\n'+S.globalPrompt;if(cc.sys)sys+='\n\n'+cc.sys;if(cc.trOn&&(cc.trOut||[]).length)sys+='\n\n【输出语言】请用以下语言回复用户：'+cc.trOut.join('、')+'。'+(cc.trOut.length>1?'可以在同一条消息里自然地混用这些语言。':'')+'不要在回复里自行附带翻译或括号注释。';
-  if(S.me.bio)sys+='\n\n【用户设定】'+S.me.name+'：'+S.me.bio;sys+=msTogetherCtx(p);sys+=cpWishCtx(p);sys+=npcCtx(p);sys+=coreadCtx(p);
-  const wbBefore=wb.filter(w=>w.position==='before').map(w=>w.content),wbAfter=wb.filter(w=>w.position!=='before').map(w=>w.content);if(wbBefore.length)sys='【世界书】\n'+wbBefore.join('\n\n')+'\n\n'+sys;if(wbAfter.length)sys+='\n\n【世界书】\n'+wbAfter.join('\n\n');
+  const manualMem=(cc.traditionalMemories||[]).filter(m=>m&&String(m.text||'').trim()).map((m,i)=>`${i+1}. ${m.text}`);if(!manualMem.length&&cc.traditionalMemory&&String(cc.traditionalMemory).trim())manualMem.push(cc.traditionalMemory);
+  /* L1 固定前缀：几乎不变的放最前 */
+  let sys=p.prompt||'';
+  if(S.me.bio)sys+='\n\n【用户设定】'+S.me.name+'：'+S.me.bio;
+  if(S.globalPrompt)sys+='\n\n【全局 AI 扮演提示词】\n'+S.globalPrompt;
+  if(cc.sys)sys+='\n\n'+cc.sys;
+  if(manualMem.length)sys+='\n\n【传统记忆】\n'+manualMem.join('\n');
+  if(cc.trOn&&(cc.trOut||[]).length)sys+='\n\n【输出语言】请用以下语言回复用户：'+cc.trOut.join('、')+'。'+(cc.trOut.length>1?'可以在同一条消息里自然地混用这些语言。':'')+'不要在回复里自行附带翻译或括号注释。';
+  /* L2/L3 换段才变：最近几张纸条 */
+  const notes=(cc.memoryEntries||[]).filter(m=>m&&String(m.text||'').trim()).slice(-NOTE_KEEP).map(m=>{const d=m.createdAt?new Date(m.createdAt).toLocaleDateString('zh-CN'):'';return(d?'['+d+'] ':'')+String(m.text).trim().slice(0,NOTE_CHARS)});
+  if(notes.length)sys+='\n\n【最近的纸条】\n'+notes.join('\n---\n').slice(-NOTE_TOTAL);
+  /* L4/L5 尾巴：每轮可能变，放缓存断点之后 */
+  let tail=String(msTogetherCtx(p)||'')+String(cpWishCtx(p)||'')+String(npcCtx(p)||'')+String(coreadCtx(p)||'');
+  const wbB=wb.filter(w=>w.position==='before').map(w=>w.content),wbA=wb.filter(w=>w.position!=='before').map(w=>w.content);
+  if(wbB.length||wbA.length)tail+='\n\n【世界书】\n'+[...wbB,...wbA].join('\n\n');
+  const rc=dailyRecall(cc);if(rc)tail+='\n\n'+rc;
+  tail=tail.trim();
   const o=[];h.slice(-(+S.cfg.hist||30)).forEach(m=>{const l=o[o.length-1];if(l&&l.role===m.role)l.content+='\n'+qc(m);else o.push({role:m.role,content:m.image?[{type:'text',text:qc(m)||'用户发送了一张图片，请结合图片内容回复。'},{type:'image_url',image_url:{url:m.image}}]:qc(m)})});
-  return[{role:'system',content:sys},...o];
+  const out=[{role:'system',content:sys},...o];
+  if(split){if(tail)out.push({role:'system',content:tail});return out}
+  if(tail)out[0].content+='\n\n'+tail;return out;
 }
 
 /* posts */
@@ -3544,7 +3588,7 @@ function setQuote(m){pendingQuote={chat:cur,role:m.role,text:quoteText(m).replac
 function takeQuote(){const q=pendingQuote&&pendingQuote.chat===cur?{quote:{role:pendingQuote.role,text:pendingQuote.text,t:pendingQuote.t}}:{};pendingQuote=null;renderQBar();return q}
 function renderQBar(){const b=document.getElementById('qbar');if(!b)return;if(pendingQuote&&pendingQuote.chat!==cur)pendingQuote=null;if(!pendingQuote){b.classList.remove('on');b.innerHTML='';return}b.classList.add('on');b.innerHTML='<span class="qb-t">'+(pendingQuote.role==='user'?'引用我的消息：':'引用 '+esc((P(cur)||{}).name||'')+'：')+esc(pendingQuote.text)+'</span><button type="button" id="qb-x" aria-label="取消引用">×</button>';document.getElementById('qb-x').onclick=()=>{pendingQuote=null;renderQBar()}}
 function findQuote(h,sn){sn=String(sn||'').trim();if(sn.length<2)return{};for(let k=h.length-1;k>=0;k--){const x=h[k],c=(x.content||'').trim();if(x.recalled||!c)continue;if(c.includes(sn)||(c.length>=2&&sn.includes(c)))return{quote:{role:x.role,text:quoteText(x).replace(/\s+/g,' ').trim().slice(0,80),t:x.t||0}}}return{}}
-function qc(m){if(m.narr)return '[旁白] '+(m.content||'');if(m.quote&&m.quote.text&&m.role==='user')return '[用户引用了'+(m.quote.role==='user'?'用户自己':'你')+'之前的消息：「'+m.quote.text+'」]\n'+(m.content||'');return m.content}
+function qc(m){if(m.narr)return '[旁白] '+(m.content||'');const c0=(m.audio&&m.role==='user'&&m.content)?'[用户发来一条语音消息（你听到的是TA的声音，不是文字），语音里说的是：「'+m.content+'」]':m.content;if(m.quote&&m.quote.text&&m.role==='user')return '[用户引用了'+(m.quote.role==='user'?'用户自己':'你')+'之前的消息：「'+m.quote.text+'」]\n'+(c0||'');return c0}
 function showRecalled(m){const me=m.role==='user',old=document.getElementById('rcv');if(old)old.remove();const sk=m.stk&&S.stickers.find(x=>x.id===m.stk);let body;if(sk)body='<img src="'+sk.src+'" alt="">';else if(m.image)body=(m.content?'<div class="rc-body">'+esc(m.content)+'</div>':'')+'<img src="'+m.image+'" alt="">';else body='<div class="rc-body">'+esc(m.content||'（空消息）')+'</div>';const d=document.createElement('div');d.id='rcv';d.innerHTML='<div><small>'+(me?'你':esc((P(cur)||{}).name||'对方'))+' 撤回的消息'+(m.t?' · '+hm(m.t):'')+'</small>'+body+'<button type="button">关闭</button></div>';d.onclick=e=>{if(e.target===d||e.target.tagName==='BUTTON')d.remove()};document.body.appendChild(d)}
 function recalledMenu(i){const h=S.chats[cur],m=h&&h[i];if(!m)return;showMsgMenu([[{label:'查看被撤回的内容',icon:'eye',run:()=>showRecalled(m)}],[{label:'删除这条撤回提示',icon:'trash',danger:1,run:()=>{h.splice(i,1);save();draw()}}]])}
 $('#msgs').addEventListener('pointerdown',e=>{const r=e.target.closest('.r,.recalled-row');if(!r||r.dataset.i===undefined||e.target.closest('.av')||e.target.closest('button'))return;msgLongPressed=false;const i=+r.dataset.i,isRc=r.classList.contains('recalled-row');msgPressTimer=setTimeout(()=>{msgLongPressed=true;isRc?recalledMenu(i):messageMenu(i)},520)});
@@ -3563,14 +3607,43 @@ $('#msgs').onclick=e=>{
 
 // 普通聊天语音的点击事件在 bub() 创建每条语音气泡时单独绑定，避免被聊天列表的其他点击处理覆盖。
 $('#plus').onclick=()=>$('#pm').classList.toggle('on');
-$('#pm-voice').onclick=async()=>{ $('#pm').classList.remove('on');const text=await askText('发送模拟语音','输入你想说的话；会合成语音并作为语音消息发送');if(text===null||!text.trim())return;try{const audio=await makeVoice(text.trim());S.chats[cur].push({role:'user',content:text.trim(),audio,t:Date.now()});save();draw();toast('语音消息已发送')}catch(e){toast('语音生成失败：'+e.message)}};
+async function recVoice(){
+  if(!navigator.mediaDevices||!window.MediaRecorder)return toast('当前浏览器不支持录音');
+  const kaWas=(typeof kaA!=='undefined'&&kaA&&!kaA.paused);if(kaWas){try{kaA.pause()}catch(_){}}
+  const kaBack=()=>{if(kaWas){try{const r=kaA.play();r&&r.catch&&r.catch(()=>{})}catch(_){}}};
+  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){kaBack();return toast('无法使用麦克风，请允许麦克风权限（需要 https 或本地打开）')}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let sr=null,tx='',txBase='';
+  const startSR=()=>{if(!SR)return;try{sr=new SR();sr.lang='zh-CN';sr.continuous=true;sr.interimResults=true;sr.onresult=e=>{let t='';for(const r of e.results)t+=r[0].transcript;tx=txBase+t};sr.onerror=()=>{};sr.onend=()=>{if(!ended&&!cancelled){txBase=tx;try{sr.start()}catch(_){}}};sr.start()}catch(_){sr=null}};
+  let mr;try{mr=new MediaRecorder(stream)}catch(e){stream.getTracks().forEach(t=>t.stop());kaBack();return toast('这个浏览器无法录音')}
+  const chunks=[];let cancelled=false,ended=false,t0=Date.now(),tm;
+  mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)';
+  ov.innerHTML='<div style="width:100%;max-width:520px;margin:0 12px 28px;padding:22px 18px;border-radius:22px;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);text-align:center;color:#111"><div style="font-size:15px;margin-bottom:6px">正在录音…</div><div id="rv-t" style="font-size:30px;font-weight:600;margin-bottom:16px">0:00</div><div style="display:flex;gap:10px"><button type="button" id="rv-c" style="flex:1;padding:12px;border-radius:14px;background:rgba(0,0,0,.08);color:#111">取消</button><button type="button" id="rv-s" style="flex:1;padding:12px;border-radius:14px;background:#111;color:#fff">发送</button></div></div>';
+  document.body.appendChild(ov);
+  const fin=()=>{clearInterval(tm);try{sr&&sr.stop()}catch(_){}stream.getTracks().forEach(t=>t.stop());ov.remove();kaBack()};
+  const finish=async()=>{if(ended)return;ended=true;fin();if(cancelled)return;
+    let audio=null;if(chunks.length){const blob=new Blob(chunks,{type:mr.mimeType||chunks[0].type||'audio/mp4'});audio=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(blob)}).catch(()=>null)}
+    if(!audio){if(!tx.trim())return toast('没有录到声音，请重试');audio='simulated-voice';toast('系统打断了录音，已按识别出的文字发送')}
+    const p=askText('确认语音文字','角色读不到声音，只会读到这段文字，请输入你说的内容');const ta=document.querySelector('#modal textarea');if(ta)ta.value=tx.trim();
+    const text=await p;if(text===null)return;if(!text.trim())return toast('没有语音文字，已取消');
+    S.chats[cur].push({role:'user',content:text.trim(),audio,t:Date.now()});save();draw();toast('语音消息已发送')};
+  const stop=()=>{if(mr.state!=='inactive'){try{mr.stop();setTimeout(finish,600)}catch(_){finish()}}else finish()};
+  mr.onstop=()=>finish();mr.onerror=()=>finish();
+  tm=setInterval(()=>{const sec=Math.floor((Date.now()-t0)/1000),el=ov.querySelector('#rv-t');if(el)el.textContent=Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');if(sec>=60)stop()},300);
+  ov.querySelector('#rv-c').onclick=()=>{cancelled=true;stop()};
+  ov.querySelector('#rv-s').onclick=()=>stop();
+  try{mr.start(1000);setTimeout(startSR,400)}catch(e){cancelled=true;fin();ended=true;toast('录音启动失败')}
+}
+$('#pm-voice').onclick=()=>{$('#pm').classList.remove('on');iosSheet({title:'发送语音',items:[{label:'录音（我自己说）',run:()=>recVoice()},{label:'输入文字，合成语音',run:()=>voiceByText()}]})};
+const voiceByText=async()=>{ $('#pm').classList.remove('on');const text=await askText('发送模拟语音','输入你想说的话；会合成语音并作为语音消息发送');if(text===null||!text.trim())return;try{const audio=await makeVoice(text.trim());S.chats[cur].push({role:'user',content:text.trim(),audio,t:Date.now()});save();draw();toast('语音消息已发送')}catch(e){toast('语音生成失败：'+e.message)}};
 
 $('#pm-narr').onclick=async()=>{$('#pm').classList.remove('on');const text=await askText('发送旁白','写下你的动作、神态、心理或环境，会以旁白形式显示在聊天里');if(text===null||!text.trim())return;S.chats[cur].push({role:'user',content:text.trim(),narr:1,t:Date.now()});save();draw()};
 $('#clear').onclick=()=>{if(confirm('清空这段对话？')){S.chats[cur]=[];save();draw()}};
 $('#redo').onclick=()=>{
-  if(busy)return;if(P(cur).blocked)return toast('已拉黑，请先解除拉黑');const h=S.chats[cur],l=h[h.length-1];
-  if(l&&l.role==='assistant'&&h.length>1)h.pop();
-  if(h[h.length-1].role!=='user')return;save();draw();gen();
+  if(busy)return;if(P(cur).blocked)return toast('已拉黑，请先解除拉黑');if(!S.cfg.key)return toast('请先在设置里填写 API Key');const h=S.chats[cur];
+  while(h.length>1&&h[h.length-1].role==='assistant')h.pop();
+  if(!h.length||h[h.length-1].role!=='user'){save();draw();return toast('没有可以重新回复的消息')}
+  save();draw();gen();
 };
 $('#ta').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,110)+'px';sIcon()});
 $('#ta').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();send()}});
@@ -3629,7 +3702,7 @@ async function summarizeRange(chatId,start,end,automatic){
  const cc=CC(chatId),p=P(chatId);const transcript=msgs.map(m=>`${m.role==='user'?'我':(p?.name||'对方')}: ${m.call&&window.__callCtx?window.__callCtx(m):(m.content|| (m.image?'[图片]':m.stk?'[表情包]':'[消息]'))}`).join('\n').slice(-30000);
  const primary=S.cfg;const sec={base:(S.cfg.secondaryBase||'').trim()||S.cfg.base,key:(S.cfg.secondaryKey||'').trim()||S.cfg.key,model:(S.cfg.secondaryModel||'').trim()||S.cfg.model,temp:0.2,stream:false};
  if(!sec.base||!sec.key||!sec.model)throw new Error('请先在「设置 → 模型与 API」配置主 API');
- const existing=[cc.traditionalMemory||'',...(cc.memoryEntries||[]).map(m=>m.text||'')].filter(Boolean).join('\n');const custom=(cc.summaryInstruction||'').trim();const baseInstruction='你是聊天记忆整理助手。把聊天记录整理成可长期复用、独立清晰的记忆条目。保留确定事实、关系变化、重要事件、偏好、承诺、称呼和未解决事项；区分谁说的，不要臆测，不要把临时情绪写成永久事实。输出可直接保存的总结正文，不要开场白。';const summary=await ask([{role:'system',content:baseInstruction+(custom?'\n\n【用户自定义总结指令，优先遵守】\n'+custom:'')}, {role:'user',content:`联系人：${p?.name||chatId}\n已有记忆（请避免重复，必要时补充修正）：\n${existing}\n\n本次聊天记录：\n${transcript}\n\n请生成一条新的记忆条目。`}],null,{max_tokens:1800},sec);
+ const existing=[cc.traditionalMemory||'',...(cc.memoryEntries||[]).map(m=>m.text||'')].filter(Boolean).join('\n');const custom=(cc.summaryInstruction||'').trim();const baseInstruction='今天是'+new Date().toLocaleDateString('zh-CN')+'。你是聊天记忆整理助手。写的不是摘要，而是一张给“下一段的自己”看的纸条，换段后第一眼就能接上口气。严格按此格式输出，不要开场白：\n【睁开眼】一行：此刻在哪、什么心情、还欠对方一句什么。\n【事实】3～6条，每条以具体日期开头（把“昨天”“刚才”换算成日期）；只写确定的事实、关系变化、称呼，区分谁说的，不臆测，不把临时情绪写成永久事实。\n【答应过】没做到的承诺和未解决的事。\n【没说完的】话到一半、情绪没收的地方。\n全文不超过600字。';const summary=await ask([{role:'system',content:baseInstruction+(custom?'\n\n【用户自定义总结指令，优先遵守】\n'+custom:'')}, {role:'user',content:`联系人：${p?.name||chatId}\n已有记忆（请避免重复，必要时补充修正）：\n${existing}\n\n本次聊天记录：\n${transcript}\n\n请生成一条新的记忆条目。`}],null,{max_tokens:1800},sec);
  if(!summary.trim())throw new Error('模型返回了空总结');cc.memoryEntries=cc.memoryEntries||[];cc.memoryEntries.push({id:uid(),text:summary.trim(),createdAt:Date.now(),rangeStart:start+1,rangeEnd:end});if((S.cfg.memoryMode||'traditional')==='vector'){cc.vectorMemories=cc.vectorMemories||[];cc.vectorMemories.push({id:uid(),text:summary.trim(),embedding:null,createdAt:Date.now()})}if(automatic)cc.lastAutoSummaryCount=end;save();return msgs.length;
 }
 async function maybeAutoSummarize(chatId){const cc=CC(chatId),h=S.chats[chatId]||[],interval=Math.max(20,Math.min(2000,Number(cc.summaryInterval)||200));if(!cc.autoSummary)return;const last=Number(cc.lastAutoSummaryCount)||0;if(h.length-last<interval)return;const end=h.length;try{await summarizeRange(chatId,last,end,true);toast('已自动总结聊天记忆')}catch(e){toast('自动记忆总结失败：'+e.message)}}
@@ -3639,9 +3712,9 @@ const trMsgPrompt=lang=>'【随消息附带译文】翻译已开启：messages �
 async function gen(){
   const p=P(cur),h=S.chats[cur];setBusy(1);const el=bub({role:'assistant',content:'···'},-1,1,0);
   try{
-    const basePrompt=build(p,h);if((S.cfg.memoryMode||'traditional')==='vector'){try{const vm=await vectorMemoryPrompt(p,h);if(vm)basePrompt.push({role:'system',content:vm})}catch(memErr){toast('向量记忆检索失败，本次继续普通聊天：'+memErr.message)}}const prompt=basePrompt.concat([{role:'system',content:'在保持角色人设和自然对话的前提下，请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条独立聊天消息","第二条独立聊天消息"],"reply":"兼容字段","thought":"角色此刻未说出口的内心想法","image_prompt":""}。messages 是角色按真实聊天节奏连续发送的消息数组：结合语境，适合分开发的内容就拆成 2-5 条短消息，每条只放一个自然聊天气泡；不要把几句话用换行或一大段塞进同一个气泡。只有确实一句就能说清时才只输出一条。不要机械地每次都拆成多条。reply 可作为 messages 的兼容备用字段。thought 是简短内心活动。若用户明确要求生成/发图片，image_prompt 填画面描述，否则留空。如果某条回复是针对对话里某一条具体消息的回应（用户说的或你自己之前说的都可以），可以偶尔（不要每条都用）把这一条写成对象 {"text":"回复内容","quote":"被引用消息的原文片段，原样摘抄，不超过30字"}，其余条目仍写成普通字符串。'},{role:'system',content:TRF_PROMPT()}].concat([{role:'system',content:SONG_PROMPT}]).concat((window.__callPrompt&&window.__callPrompt(cur))?[{role:'system',content:window.__callPrompt(cur)}]:[]).concat(CC(cur).narrOn?[{role:'system',content:NARR_PROMPT}]:[]).concat(CC(cur).trOn?[{role:'system',content:trMsgPrompt(CC(cur).trTo||'简体中文')}]:[]));
-    if(h.length&&h[h.length-1].role==='assistant')prompt.push({role:'user',content:proNudge(p,0,'cont')});const raw=await ask(prompt,null);let data;try{const clean=raw.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');data=JSON.parse(clean)}catch(_){data={reply:raw,thought:''}}
-    let replyQuotes=[],replies=[],replyNarr=[],replyTr=[];if(Array.isArray(data.messages)){data.messages.forEach(x=>{const isO=x&&typeof x==='object',nr=isO&&x.narr?String(x.narr).trim():'',tx=nr||String(isO?(x.text||x.content||x.reply||''):(x||'')).trim();if(tx){replies.push(tx);replyQuotes.push(isO&&!nr?String(x.quote||'').trim():'');replyNarr.push(!!nr);replyTr.push(isO&&!nr?String(x.tr||x.translation||'').trim():'')}})}if(!replies.length){const out=String(data.reply||raw).trim();replies=out.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);if(replies.length===1&&out.length>180){const parts=out.match(/[^。！？!?]+[。！？!?]?/g)||[out];if(parts.length>=3)replies=parts.map(x=>x.trim()).filter(Boolean)}}if(!replies.length)replies=[String(data.reply||raw).trim()];if(el&&el.parentNode)el.remove();const thoughtTr=String(data.thought_tr||data.thoughtTr||'').trim();const songObj=(()=>{const x=data.song;if(!x||typeof x!=='object')return null;const t=String(x.title||'').trim();return t?{title:t,artist:String(x.artist||'').trim(),lyric:String(x.lyric||'').trim(),tag:String(x.tag||'').trim()}:null})();const replyChatId=cur;let thoughtDone=0;for(let idx=0;idx<replies.length;idx++){if(cur!==replyChatId)break;if(idx>0){await new Promise(resolve=>setTimeout(resolve,520+Math.floor(Math.random()*420)));}const isN=!!replyNarr[idx];h.push({role:'assistant',content:replies[idx],...(isN?{narr:1}:((!thoughtDone&&(thoughtDone=1))?{thought:String(data.thought||'').trim(),...(thoughtTr&&thoughtTr!==String(data.thought||'').trim()?{thoughtTr}:{}),...(songObj?{song:songObj}:{})}:{thought:''})),t:Date.now(),...(isN?{}:findQuote(h,replyQuotes[idx])),...(!isN&&replyTr[idx]?{tr:replyTr[idx],trLang:CC(cur).trTo||'简体中文'}:{})});save();draw();}trfApplyAI(h,data);try{window.__callApplyAI&&window.__callApplyAI(replyChatId,data)}catch(_){}if(S.cfg.imageEnabled&&String(data.image_prompt||'').trim()){try{const im=await generateImage(String(data.image_prompt).trim());h.push({role:'assistant',content:'',image:im,thought:'我把刚才描述的画面生成出来了。',t:Date.now()})}catch(imgErr){h.push({role:'assistant',content:'图片生成失败：'+imgErr.message,t:Date.now()})}}save();try{await maybeAutoSummarize(cur)}catch(_){}
+    const basePrompt=build(p,h,true);if((S.cfg.memoryMode||'traditional')==='vector'){try{const vm=await vectorMemoryPrompt(p,h);if(vm)basePrompt.push({role:'system',content:vm})}catch(memErr){toast('向量记忆检索失败，本次继续普通聊天：'+memErr.message)}}const prompt=basePrompt.concat([{role:'system',content:'在保持角色人设和自然对话的前提下，请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条独立聊天消息","第二条独立聊天消息"],"reply":"兼容字段","thought":"角色此刻未说出口的内心想法","image_prompt":""}。messages 是角色按真实聊天节奏连续发送的消息数组：结合语境，适合分开发的内容就拆成 2-5 条短消息，每条只放一个自然聊天气泡；不要把几句话用换行或一大段塞进同一个气泡。只有确实一句就能说清时才只输出一条。不要机械地每次都拆成多条。reply 可作为 messages 的兼容备用字段。thought 是简短内心活动。若用户明确要求生成/发图片，image_prompt 填画面描述，否则留空。如果某条回复是针对对话里某一条具体消息的回应（用户说的或你自己之前说的都可以），可以偶尔（不要每条都用）把这一条写成对象 {"text":"回复内容","quote":"被引用消息的原文片段，原样摘抄，不超过30字"}，其余条目仍写成普通字符串。'},{role:'system',content:TRF_PROMPT()}].concat([{role:'system',content:SONG_PROMPT}]).concat((window.__callPrompt&&window.__callPrompt(cur))?[{role:'system',content:window.__callPrompt(cur)}]:[]).concat(CC(cur).narrOn?[{role:'system',content:NARR_PROMPT}]:[]).concat(CC(cur).trOn?[{role:'system',content:trMsgPrompt(CC(cur).trTo||'简体中文')}]:[]));
+    prompt.push({role:'system',content:FMT_RULE});if(h.length&&h[h.length-1].role==='assistant')prompt.push({role:'user',content:proNudge(p,0,'cont')});const raw=await ask(prompt,null);const data=parseAI(raw)
+    let replyQuotes=[],replies=[],replyNarr=[],replyTr=[];if(Array.isArray(data.messages)){data.messages.forEach(x=>{const isO=x&&typeof x==='object',nr=isO&&x.narr?String(x.narr).trim():'',tx=nr||String(isO?(x.text||x.content||x.reply||''):(x||'')).trim();if(tx){replies.push(tx);replyQuotes.push(isO&&!nr?String(x.quote||'').trim():'');replyNarr.push(!!nr);replyTr.push(isO&&!nr?String(x.tr||x.translation||'').trim():'')}})}if(!replies.length){const out=String(data.reply||raw).trim();replies=out.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);if(replies.length===1&&out.length>180){const parts=out.match(/[^。！？!?]+[。！？!?]?/g)||[out];if(parts.length>=3)replies=parts.map(x=>x.trim()).filter(Boolean)}}if(!replies.length)replies=[String(data.reply||raw).trim()];if(el&&el.parentNode)el.remove();const thoughtTr=String(data.thought_tr||data.thoughtTr||'').trim();const songObj=(()=>{const x=data.song;if(!x||typeof x!=='object')return null;const t=String(x.title||'').trim();return t?{title:t,artist:String(x.artist||'').trim(),lyric:String(x.lyric||'').trim(),tag:String(x.tag||'').trim()}:null})();for(let k=0;k<replies.length;k++)if(replyNarr[k])replies[k]=await narrCN(replies[k]);const replyChatId=cur;let thoughtDone=0;for(let idx=0;idx<replies.length;idx++){if(cur!==replyChatId)break;if(idx>0){await new Promise(resolve=>setTimeout(resolve,520+Math.floor(Math.random()*420)));}const isN=!!replyNarr[idx];h.push({role:'assistant',content:replies[idx],...(isN?{narr:1}:((!thoughtDone&&(thoughtDone=1))?{thought:String(data.thought||'').trim(),...(thoughtTr&&thoughtTr!==String(data.thought||'').trim()?{thoughtTr}:{}),...(songObj?{song:songObj}:{})}:{thought:''})),t:Date.now(),...(isN?{}:findQuote(h,replyQuotes[idx])),...(!isN&&replyTr[idx]?{tr:replyTr[idx],trLang:CC(cur).trTo||'简体中文'}:{})});save();draw();}trfApplyAI(h,data);try{window.__callApplyAI&&window.__callApplyAI(replyChatId,data)}catch(_){}if(S.cfg.imageEnabled&&String(data.image_prompt||'').trim()){try{const im=await generateImage(String(data.image_prompt).trim());h.push({role:'assistant',content:'',image:im,thought:'我把刚才描述的画面生成出来了。',t:Date.now()})}catch(imgErr){h.push({role:'assistant',content:'图片生成失败：'+imgErr.message,t:Date.now()})}}save();try{await maybeAutoSummarize(cur)}catch(_){}
   }catch(e){el.textContent='请求失败：'+e.message;el.classList.add('err');setBusy(0);return}
   setBusy(0);draw();
 }
@@ -3735,6 +3808,8 @@ function rCset(){
     <div class="is-c"><span class="is-i" style="background:#ff2d55">${rpSvg('br')}</span><span class="is-t"><b>当前美化</b></span><select id="cs-css" class="is-sel"><option value="">默认</option>${S.themes.map(t=>`<option value="${t.id}"${cc.css===t.id?' selected':''}>${esc(t.name)}</option>`).join('')}</select></div>
     <div class="is-c is-tap" data-go="css"><span class="is-t"><b>管理美化</b><small>自己写 CSS，保存后在这里切换</small></span><span class="is-chev">${rpSvg('chr')}</span></div>
   </div>
+  <div class="is-h">聊天记录</div>
+  <div class="is-g"><div class="is-c is-tap" id="cs-chat-exp"><span class="is-t"><b>导出此聊天记录</b><small>HTML 或 JSON</small></span></div><div class="is-c is-tap" id="cs-chat-imp"><span class="is-t"><b>导入聊天记录</b><small>支持 HTML / JSON</small></span></div></div>
   <div class="is-h">隐私</div>
   <div class="is-g"><div class="is-c"><span class="is-i" style="background:#8e8e93">${rpSvg('no')}</span><span class="is-t"><b>拉黑此联系人</b></span><span class="is-sw"><input type="checkbox" id="cs-bl" ${p.blocked?'checked':''}><i></i></span></div></div>
   <div class="is-f">拉黑后不能发消息或请求回复，可在「联系人」里解除。</div>
@@ -3747,6 +3822,8 @@ function rCset(){
   $$('#cbody [data-sgb]').forEach(c=>c.onchange=()=>{const g=c.dataset.sgb;cc.stkGroups=c.checked?[...(cc.stkGroups||[]),g]:(cc.stkGroups||[]).filter(x=>x!==g);save()});
   $('#cs-css').onchange=e=>{cc.css=e.target.value;save()};
   $('#cs-bl').onchange=e=>{p.blocked=e.target.checked;save()};
+  $('#cs-chat-exp').onclick=()=>iosSheet({title:'导出聊天记录',items:[{label:'导出为 HTML（可阅读，也能再导入）',run:()=>xsjChatExport(cur,'html')},{label:'导出为 JSON',run:()=>xsjChatExport(cur,'json')}]});
+  $('#cs-chat-imp').onclick=()=>xsjChatImport(cur);
   $('#cs-wall').onclick=()=>pickWall(u=>{cc.wall=u;save();applyChatWall();rCset()});
   {const a=$('#cs-wall-all');if(a)a.onclick=()=>{S.chatWall=cc.wall;save();toast('已应用到所有聊天');rCset()}}
   {const c=$('#cs-wall-clear');if(c)c.onclick=()=>{cc.wall='';S.chatWall='';save();applyChatWall();rCset();toast('已恢复默认壁纸')}}
@@ -4042,8 +4119,8 @@ $('#test').onclick=async()=>{const o=$('#tres');o.textContent='测试中…';
   try{await ask([{role:'user',content:'hi'}],null,{max_tokens:8});o.textContent='连接成功'}
   catch(e){o.textContent='失败：'+e.message+'（也可能是跨域限制）'}};
 function downloadBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
-$('#exp').onclick=()=>{const data=JSON.stringify(S);downloadBlob(new Blob([data],{type:'application/json'}),'xiaoshouji-backup.json')};
-$('#expzip').onclick=()=>{const data=new TextEncoder().encode(JSON.stringify(S));const name=new TextEncoder().encode('xiaoshouji-backup.json');const crcTable=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();let crc=0xffffffff;for(const b of data)crc=crcTable[(crc^b)&255]^(crc>>>8);crc=(crc^0xffffffff)>>>0;const local=new Uint8Array(30+name.length+data.length),v=new DataView(local.buffer);v.setUint32(0,0x04034b50,true);v.setUint16(4,20,true);v.setUint32(14,crc,true);v.setUint32(18,data.length,true);v.setUint32(22,data.length,true);v.setUint16(26,name.length,true);local.set(name,30);local.set(data,30+name.length);const central=new Uint8Array(46+name.length),cv=new DataView(central.buffer);cv.setUint32(0,0x02014b50,true);cv.setUint16(4,20,true);cv.setUint16(6,20,true);cv.setUint32(16,crc,true);cv.setUint32(20,data.length,true);cv.setUint32(24,data.length,true);cv.setUint16(28,name.length,true);central.set(name,46);const end=new Uint8Array(22),ev=new DataView(end.buffer);ev.setUint32(0,0x06054b50,true);ev.setUint16(8,1,true);ev.setUint16(10,1,true);ev.setUint32(12,central.length,true);ev.setUint32(16,local.length,true);downloadBlob(new Blob([local,central,end],{type:'application/zip'}),'xiaoshouji-backup.zip')};
+$('#exp').onclick=()=>{const data=JSON.stringify(S);downloadBlob(new Blob([data],{type:'application/json'}),'xiaoshouji-backup-'+xsjStamp()+'.json')};
+$('#expzip').onclick=()=>{const data=new TextEncoder().encode(JSON.stringify(S));const name=new TextEncoder().encode('xiaoshouji-backup.json');const crcTable=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();let crc=0xffffffff;for(const b of data)crc=crcTable[(crc^b)&255]^(crc>>>8);crc=(crc^0xffffffff)>>>0;const local=new Uint8Array(30+name.length+data.length),v=new DataView(local.buffer);v.setUint32(0,0x04034b50,true);v.setUint16(4,20,true);v.setUint32(14,crc,true);v.setUint32(18,data.length,true);v.setUint32(22,data.length,true);v.setUint16(26,name.length,true);local.set(name,30);local.set(data,30+name.length);const central=new Uint8Array(46+name.length),cv=new DataView(central.buffer);cv.setUint32(0,0x02014b50,true);cv.setUint16(4,20,true);cv.setUint16(6,20,true);cv.setUint32(16,crc,true);cv.setUint32(20,data.length,true);cv.setUint32(24,data.length,true);cv.setUint16(28,name.length,true);central.set(name,46);const end=new Uint8Array(22),ev=new DataView(end.buffer);ev.setUint32(0,0x06054b50,true);ev.setUint16(8,1,true);ev.setUint16(10,1,true);ev.setUint32(12,central.length,true);ev.setUint32(16,local.length,true);downloadBlob(new Blob([local,central,end],{type:'application/zip'}),'xiaoshouji-backup-'+xsjStamp()+'.zip')};
 $('#imp').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='.json,.zip,application/json,application/zip';i.onchange=async()=>{const f=i.files&&i.files[0];if(!f)return;try{let obj;if(/\.zip$/i.test(f.name)){const ab=await f.arrayBuffer();const json=await readJsonFromZip(ab);obj=JSON.parse(json)}else obj=JSON.parse(await f.text());if(!obj||typeof obj!=='object')throw new Error('文件内容不是有效备份');S=Object.assign(DEF(),obj);S.cfg=Object.assign(DEF().cfg,S.cfg||{});const saved=await save();if(!saved)throw new Error('备份已读取，但写入本地数据库失败；请勿清除旧数据');location.reload()}catch(e){alert('导入失败：'+e.message)}};i.click()};
 async function readJsonFromZip(ab){const v=new DataView(ab);let off=0;while(off+30<ab.byteLength){if(v.getUint32(off,true)!==0x04034b50)break;const method=v.getUint16(off+8,true),cs=v.getUint32(off+18,true),nl=v.getUint16(off+26,true),el=v.getUint16(off+28,true),name=new TextDecoder().decode(new Uint8Array(ab,off+30,nl)),start=off+30+nl+el;if(name.toLowerCase().endsWith('.json')){const bytes=new Uint8Array(ab,start,cs);if(method===0)return new TextDecoder().decode(bytes);if(method===8&&'DecompressionStream'in window)return await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text();throw new Error('此 ZIP 压缩方式不受支持')}off=start+cs}throw new Error('ZIP 内没有 JSON 备份文件')}
 
@@ -4095,22 +4172,25 @@ function notifyMsg(pid,m){
 }
 {const g0=gen;gen=async function(){const pid=cur,n0=(S.chats[pid]||[]).length;await g0.apply(this,arguments);const h=S.chats[pid]||[],m=h[h.length-1];if(h.length>n0&&m&&m.role==='assistant'){notifyMsg(pid,m);try{dyAutoNote(pid)}catch(e){}}}}
 /* ===== v9.57 主动发消息 / 接着说 ===== */
+const FMT_RULE='【输出格式硬性规定，每次都必须遵守】1. 只输出一个 JSON 对象，前后不要有任何文字、解释或 Markdown 代码块（不要出现 ```）。2. 必须有 messages 数组：每个元素是一个聊天气泡，写成字符串，或对象（{"text":"内容","quote":"引用原文"}、带译文的 {"text":..,"tr":..}、旁白 {"narr":"内容"}，对象写法以其他提示的要求为准）；不要把多个气泡塞进同一个字符串，也不要用换行硬拆。3. 字符串里的双引号必须转义，换行写成 \\n，括号和引号必须闭合。4. messages 里只放角色说的话（开启旁白时的旁白除外），不要出现字段名、系统提示、括号里的格式说明，也不要加「角色名：」前缀。5. 旁白（narr）一律使用简体中文，即使角色的输出语种是日语、英语等外语也不例外，旁白不翻译。6. 其他提示要求的可选字段（thought、narr、song、call、tr、image_prompt 等）仍按各自要求放在对应位置，没有就留空或不写。7. 始终保持角色人设，不要跳出角色去解释格式。';
+function parseAI(raw){raw=String(raw||'');const t=raw.replace(/^\s*```(?:json)?\s*/i,'').replace(/\s*```\s*$/,'').trim();try{return JSON.parse(t)}catch(_){}const a=t.indexOf('{'),b=t.lastIndexOf('}');if(a>=0&&b>a){try{return JSON.parse(t.slice(a,b+1))}catch(_){}}const m=t.match(/"messages"\s*:\s*\[([\s\S]*?)(\]|$)/);if(m&&!/\{/.test(m[1])){const arr=[...m[1].matchAll(/"((?:[^"\\]|\\.)*)"/g)].map(x=>{try{return JSON.parse('"'+x[1]+'"')}catch(_){return x[1]}}).filter(Boolean);if(arr.length){const th=t.match(/"thought"\s*:\s*"((?:[^"\\]|\\.)*)"/);return{messages:arr,thought:th?th[1]:''}}}return{reply:raw,thought:''}}
+async function narrCN(t){t=String(t||'');if(!(/[\u3040-\u30ff\uac00-\ud7af]/.test(t)||!/[\u4e00-\u9fff]/.test(t)))return t;try{const o=await ask([{role:'system',content:'把用户给的旁白翻译成简体中文，保持第三人称、语气和长度，只输出译文，不加引号、括号和解释。'},{role:'user',content:t}],null);const r=String(o||'').trim();return r||t}catch(_){return t}}
 function proWish(p){try{const u=S.userProfiles.find(x=>x.id===S.activeUserProfile),d=u&&S.cp&&S.cp.by&&S.cp.by[u.id+'|'+p.id];if(!d||p.boundUser!==u.id)return'';const w=(d.wishes||[]).filter(x=>!x.done);return w.length?w[Math.floor(Math.random()*w.length)].t:''}catch(e){return''}}
 function proNudge(p,idle,mode){
-  const now=new Date().toLocaleString('zh-CN',{weekday:'long',hour:'2-digit',minute:'2-digit'}),wish=Math.random()<0.5?proWish(p):'';
-  return '（系统提示，不要提及：'+(mode==='cont'?'用户没有发新消息，你刚说完话，现在想接着再说点什么。':'用户已经有一段时间（约'+idle+'分钟）没有说话。')+'现在是'+now+'。请你以角色身份主动开口：顺着刚才的话题补充、关心、分享此刻在做的事、想念，或自然地换个话题，要符合人设、关系和当前时间。'+(wish?'这次请自然地主动提起你们在情侣空间里一起记下、还没实现的愿望：「'+wish+'」，比如问问想不想去做、约个时间、说说自己的期待，不要照念原文。':'')+'不要说“你怎么不回我”“系统”“AI”之类的元话语，也不要重复你刚说过的话。）'
+  const wish=Math.random()<0.5?proWish(p):'';
+  return '（系统提示，不要提及：'+(mode==='cont'?'用户没有发新消息，你刚说完话，现在想接着再说点什么。':'用户这会儿没有说话，你想主动再发消息。')+'请你以角色身份开口，优先延续上一个还没说完的话题（接着聊、追问、补充你没说完的话、回应你们之前聊到的事）；只有上个话题确实已经聊完，才自然地换个话题。要符合人设和你们的关系。'+(wish?'这次请自然地主动提起你们在情侣空间里一起记下、还没实现的愿望：「'+wish+'」，比如问问想不想去做、说说自己的期待，不要照念原文。':'')+'不要说“你怎么不回我”“系统”“AI”之类的元话语，也不要重复你刚说过的话。）'
 }
 const PRO={busy:new Set()};
 async function proSend(id){
   const p=P(id),h=S.chats[id];if(!p||!h||!h.length||PRO.busy.has(id))return;const cc=CC(id);cc.proLast=Date.now();save();PRO.busy.add(id);
   try{
     const idle=Math.max(1,Math.round((Date.now()-(h[h.length-1].t||Date.now()))/60000));
-    const prompt=build(p,h).concat([{role:'system',content:'请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条消息","第二条消息"],"thought":"此刻未说出口的内心想法"}。messages 是你主动发出的 1-3 条自然聊天消息，每条一个气泡，不要塞成一大段。'}]).concat(cc.trOn?[{role:'system',content:trMsgPrompt(cc.trTo||'简体中文')}]:[]).concat([{role:'user',content:proNudge(p,idle,'idle')}]);
-    const raw=await ask(prompt,null);let data;try{data=JSON.parse(raw.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,''))}catch(_){data={reply:raw}}
-    let rs=[];if(Array.isArray(data.messages))data.messages.forEach(x=>{const o=x&&typeof x==='object',t=String(o?(x.text||x.content||''):(x||'')).trim();if(t)rs.push({t,tr:o?String(x.tr||x.translation||'').trim():''})});
+    const prompt=build(p,h).concat([{role:'system',content:'请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条消息","第二条消息"],"thought":"此刻未说出口的内心想法"}。messages 是你主动发出的聊天消息，按真实聊天节奏想发几条就发几条，每条一个气泡，不要塞成一大段。'},{role:'system',content:FMT_RULE}]).concat(cc.trOn?[{role:'system',content:trMsgPrompt(cc.trTo||'简体中文')}]:[]).concat(cc.narrOn?[{role:'system',content:NARR_PROMPT}]:[]).concat([{role:'user',content:proNudge(p,idle,'idle')}]);
+    const raw=await ask(prompt,null);const data=parseAI(raw)
+    let rs=[];if(Array.isArray(data.messages))data.messages.forEach(x=>{const o=x&&typeof x==='object',nr=o&&x.narr?String(x.narr).trim():'',t=nr||String(o?(x.text||x.content||''):(x||'')).trim();if(t)rs.push({t,narr:!!nr,tr:o&&!nr?String(x.tr||x.translation||'').trim():''})});
     if(!rs.length){const t=String(data.reply||'').trim();if(t)rs=[{t,tr:''}]}
-    if(!rs.length)return;rs=rs.slice(0,3);const batch=uid(),th=String(data.thought||'').trim(),base=Date.now();
-    rs.forEach((r,i)=>h.push({role:'assistant',content:r.t,thought:i?'':th,t:base+i,pro:batch,...(r.tr?{tr:r.tr,trLang:cc.trTo||'简体中文'}:{})}));
+    if(!rs.length)return;for(const r of rs)if(r.narr)r.t=await narrCN(r.t);const batch=uid(),th=String(data.thought||'').trim(),base=Date.now();
+    let _th=0;rs.forEach((r,i)=>h.push({role:'assistant',content:r.t,...(r.narr?{narr:1}:{thought:(!_th&&(_th=1))?th:''}),t:base+i,pro:batch,...(r.tr?{tr:r.tr,trLang:cc.trTo||'简体中文'}:{})}));
     save();if(stack[stack.length-1]==='chat'&&cur===id)draw();try{if(stack[stack.length-1]==='msgs')msgRender()}catch(_){}
     try{notifyMsg(id,{content:rs[0].t})}catch(_){}
   }catch(e){}finally{PRO.busy.delete(id)}
