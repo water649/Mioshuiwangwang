@@ -4009,6 +4009,7 @@ const SV={
  redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v4.5h-4.5"/></svg>',
  end:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 8.6c-3.1 0-6 .7-8.4 2-.6.4-1 1-1 1.7v1.6c0 .8.7 1.4 1.5 1.3l2.7-.4c.7-.1 1.2-.7 1.2-1.4v-1c1.2-.4 2.8-.6 4-.6s2.8.2 4 .6v1c0 .7.5 1.3 1.2 1.4l2.7.4c.8.1 1.5-.5 1.5-1.3v-1.6c0-.7-.4-1.3-1-1.7-2.4-1.3-5.3-2-8.4-2z"/></svg>',
  kb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M6.5 10h.01M10 10h.01M14 10h.01M17.5 10h.01M7.5 14.2h9"/></svg>',
+ ai:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 2.5l2 5.9 5.900 2L13 12.300l-2 5.900-2-5.900L3.100 10.400l5.900-2z"/><path d="M18.500 14.500l.9 2.600 2.600.9-2.600.9-.9 2.600-.9-2.600-2.600-.9 2.600-.9z"/></svg>',
  up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg>',
  info:'<svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="18" cy="11.3" r="1.7" fill="currentColor"/><path d="M18 16.4v9.2" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"/></svg>'
 };
@@ -4043,7 +4044,7 @@ function mount(){
  d.innerHTML=`<button class="vc-info" type="button" id="vc-info" aria-label="缩小为悬浮窗">${SV.info}</button>
 <div class="vc-head"><div class="vc-time" id="vc-time"></div><div class="vc-name" id="vc-name"></div><div class="vc-tag" id="vc-tag"></div></div>
 <div class="vc-log" id="vc-log"></div>
-<div class="vc-in" id="vc-in"><textarea id="vc-ta" rows="1" placeholder="打字说话…" enterkeyhint="send" autocomplete="off"></textarea><button type="button" id="vc-send" aria-label="发送">${SV.up}</button></div>
+<div class="vc-in" id="vc-in"><textarea id="vc-ta" rows="1" placeholder="打字说话…" enterkeyhint="send" autocomplete="off"></textarea><button type="button" id="vc-send" aria-label="让对方回复">${SV.ai}</button></div>
 <div class="vc-grid" id="vc-grid">${B('vc-spk',SV.spk,'免提','')}${B('vc-txt',SV.txt,'字幕','')}${B('vc-mute',SV.mic,'静音','')}${B('vc-redo',SV.redo,'重答','')}${B('vc-end',SV.end,'结束','end')}${B('vc-kb',SV.kb,'键盘','')}</div>
 <div class="vc-incoming">${B('vc-dec',SV.end,'拒绝','dec')}${B('vc-acc',SV.phone,'接听','acc')}</div>`;
  document.body.appendChild(d);
@@ -4064,7 +4065,7 @@ function mount(){
  Q('#vc-send').onclick=send;
  const ta=Q('#vc-ta');
  ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();send()}});
- ta.addEventListener('input',()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,96)+'px'});
+ ta.addEventListener('input',()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,96)+'px';sendIcon()});
  Q('#vc-log').addEventListener('click',()=>ta.blur());
  /* 悬浮窗：可拖动，轻点展开 */
  let drag=null;
@@ -4105,7 +4106,7 @@ function paint(){
 function logPaint(){
  const C=CALL,box=Q('#vc-log');if(!box)return;
  if(!C){box.innerHTML='';return}
- box.innerHTML=C.lines.map(l=>`<div class="vc-l ${l.r}">${esc(l.c)}</div>`).join('')+(C.typing?'<div class="vc-l a typ"><i></i><i></i><i></i></div>':'');
+ box.innerHTML=C.lines.map(l=>`<div class="vc-l ${l.r}">${esc(l.c)}${l.tr?`<div class="vc-tr">${esc(l.tr)}</div>`:''}</div>`).join('')+(C.typing?'<div class="vc-l a typ"><i></i><i></i><i></i></div>':'');
  box.scrollTop=box.scrollHeight;
  const la=[...C.lines].reverse().find(l=>l.r==='a'),fs=Q('#vc-fsub');if(fs)fs.textContent=la?la.c:'通话中';
 }
@@ -4121,7 +4122,7 @@ function addRec(pid,role,content,call){
  return m;
 }
 function start(pid){
- pid=pid||cur;
+ pid=pid||cur;sendIcon();
  if(CALL){if(CALL.pid===pid&&CALL.mini)return expand();return toast(CALL.pid===pid?'正在通话中':'正在和 '+nameOf(CALL.pid)+' 通话')}
  const p=P(pid);if(!p)return;
  if(p.blocked)return toast('已拉黑，请先解除拉黑');
@@ -4165,15 +4166,15 @@ function finish(){
 function stopAudio(C){if(C.audio){try{C.audio.pause()}catch(e){}}if(C.audioDone)C.audioDone()}
 
 /* ---------- 对话 ---------- */
+function sendIcon(){const b=Q('#vc-send'),ta=Q('#vc-ta');if(!b||!ta)return;const has=!!ta.value.trim();b.innerHTML=has?SV.up:SV.ai;b.setAttribute('aria-label',has?'发送':'让对方回复')}
 function send(){
  const C=CALL;if(!C||C.state!=='live')return;
- const ta=Q('#vc-ta'),t=ta.value.trim();if(!t)return;
- ta.value='';ta.style.height='auto';
+ const ta=Q('#vc-ta'),t=ta.value.trim();
+ if(!t){if(C.busy)return;if(!C.hint){C.hint=1;toast('输入框为空时，这个键会让对方回复')}respond();return}
+ ta.value='';ta.style.height='auto';sendIcon();
  addLine(C,'u',t);
- if(C.busy){C.token++;C.busy=false;stopAudio(C)}
- respond();
 }
-function addLine(C,r,c){C.lines.push({r,c,t:Date.now()});save();if(CALL===C)logPaint()}
+function addLine(C,r,c,tr){const l={r,c,t:Date.now()};if(tr)l.tr=tr;C.lines.push(l);save();if(CALL===C)logPaint()}
 function redo(){
  const C=CALL;if(!C||C.state!=='live')return;
  stopAudio(C);C.token++;C.busy=false;
@@ -4182,8 +4183,14 @@ function redo(){
 }
 function callSys(C){
  const me=meName();
- return '【语音通话中】你现在正在和用户「'+me+'」打电话，通话已接通（'+(C.dir==='out'?'是用户打给你的':'是你打给用户的'+(C.reason?'，你打电话的原因：'+C.reason:''))+'）。这是实时口语通话，不是发文字消息：只输出你此刻要说出口的话本身，纯文本，每次 1-3 句，口语化、有语气和停顿，像真的在讲电话。不要 JSON、不要 Markdown、不要 emoji 和颜文字、不要括号动作或旁白、不要写角色名前缀。可以用换行把一次回应拆成 2-3 个短句分开说。保持你的人设，以及和用户之前聊天的记忆与语气。只有当对话自然结束（互道再见、晚安等）或剧情上你要挂电话时，才在最后单独一行写 [挂断]，其余时候不要写。'+(vOn()?'你说的话会被合成为你的声音念出来，所以要写得适合念出来。':'');
+ return '【语音通话中】你现在正在和用户「'+me+'」打电话，通话已接通（'+(C.dir==='out'?'是用户打给你的':'是你打给用户的'+(C.reason?'，你打电话的原因：'+C.reason:''))+'）。这是实时口语通话，不是发文字消息：只输出你此刻要说出口的话本身，纯文本，每次 1-3 句，口语化、有语气和停顿，像真的在讲电话。不要 JSON、不要 Markdown、不要 emoji 和颜文字、不要括号动作或旁白、不要写角色名前缀。可以用换行把一次回应拆成 2-3 个短句分开说。保持你的人设，以及和用户之前聊天的记忆与语气。只有当对话自然结束（互道再见、晚安等）或剧情上你要挂电话时，才在最后单独一行写 [挂断]，其余时候不要写。'+(vOn()?'你说的话会被合成为你的声音念出来，所以要写得适合念出来。':'')+trRule(C);
 }
+function trRule(C){
+ const cc=CC(C.pid),to=cc.trTo||'简体中文',out=(cc.trOut||[]);
+ if(cc.trOn&&out.length)return '\n【翻译格式】你这次通话要使用「'+out.join('、')+'」说话。每一句话后面紧跟 ||| 再写该句的'+to+'译文，格式：原文 ||| 译文。每个换行分出来的短句都要带译文。';
+ return '\n【翻译格式】如果你这次说的话不是简体中文（比如你是外国人、用母语说话），每一句后面紧跟 ||| 再写该句的'+(to==='简体中文'?'简体中文':to)+'译文，格式：原文 ||| 译文；如果你说的是简体中文，就完全不要写 |||。';
+}
+function splitTr(t){const m=String(t).split(/\s*(?:\|\|\||｜｜｜)\s*/);return[m[0].trim(),(m.slice(1).join(' ')||'').trim()]}
 function cleanReply(raw){
  let t=String(raw||'').trim().replace(/^```(?:json|text)?\s*/i,'').replace(/\s*```$/,'');
  if(/^[\[{]/.test(t)){try{const j=JSON.parse(t);if(Array.isArray(j))t=j.map(x=>typeof x==='object'?(x.text||x.content||''):x).join('\n');else if(j&&typeof j==='object'){if(Array.isArray(j.messages))t=j.messages.map(x=>typeof x==='object'?(x.text||x.content||''):x).join('\n');else t=String(j.reply||j.text||j.content||t)}}catch(e){}}
@@ -4215,12 +4222,13 @@ async function respond(){
   if(CALL===C&&tok===C.token){C.busy=false;C.typing=false;logPaint()}
  }
 }
-async function speak(C,text,tok,gap){
+async function speak(C,raw,tok,gap){
+ const sp=splitTr(raw),text=sp[0],tr=sp[1];if(!text)return;
  let src=null;
  if(gap){C.typing=true;logPaint()}
  if(vOn()){try{src=await makeVoice(text)}catch(e){if(!C.vWarn){C.vWarn=1;toast('语音合成失败，已改为文字：'+(e&&e.message||e))}}}
  if(CALL!==C||tok!==C.token)return;
- C.typing=false;addLine(C,'a',text);
+ C.typing=false;addLine(C,'a',text,tr);
  if(src&&src!=='simulated-voice')await play(C,src,tok);
  else await sleep(Math.min(1600,450+text.length*35));
 }
@@ -4261,7 +4269,7 @@ function ctxOf(m){
 function showRec(m){
  const c=m.call||{},r=Q('#vcrec'),ls=c.lines||[],info=cardInfo(m),nm=nameOf(cur);
  const when=new Date(m.t).toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
- r.innerHTML=`<div class="vc-card"><div class="vc-ch"><b>${esc(info.t)}</b><small>${esc(when)} · ${c.miss||c.declined||c.cancel?'未接通':fmtD(durOf(m))}</small></div><div class="vc-cb">${ls.length?ls.map(l=>`<div class="vc-rl ${l.r==='u'?'me':''}"><b>${esc(l.r==='u'?meName():nm)}</b>${esc(l.c)}</div>`).join(''):'<div class="vc-empty">没有文字记录</div>'}</div><div class="vc-cf"><button type="button" data-x>关闭</button><button type="button" class="pri" data-redial>${c.miss||c.declined||c.cancel?'回拨':'再打一次'}</button></div></div>`;
+ r.innerHTML=`<div class="vc-card"><div class="vc-ch"><b>${esc(info.t)}</b><small>${esc(when)} · ${c.miss||c.declined||c.cancel?'未接通':fmtD(durOf(m))}</small></div><div class="vc-cb">${ls.length?ls.map(l=>`<div class="vc-rl ${l.r==='u'?'me':''}"><b>${esc(l.r==='u'?meName():nm)}</b>${esc(l.c)}${l.tr?`<div class="vc-rtr">${esc(l.tr)}</div>`:''}</div>`).join(''):'<div class="vc-empty">没有文字记录</div>'}</div><div class="vc-cf"><button type="button" data-x>关闭</button><button type="button" class="pri" data-redial>${c.miss||c.declined||c.cancel?'回拨':'再打一次'}</button></div></div>`;
  r.classList.add('on');
  r.onclick=e=>{if(e.target===r||e.target.closest('[data-x]'))r.classList.remove('on');else if(e.target.closest('[data-redial]')){r.classList.remove('on');start(cur)}};
 }
@@ -4304,6 +4312,65 @@ window.__callApplyAI=function(pid,data){
  if(tg)tg.onclick=()=>{const cc=CC(cur);cc.callOff=!cc.callOff;save();lab();toast(cc.callOff?'已关闭对方主动来电':'已允许对方主动来电')};
  const plus=Q('#plus');if(plus)plus.addEventListener('click',lab);
 })();
+
+/* v9.48 角色可以读到用户写的日记 / 留言，聊天里可以自然提起 */
+function userDiaryCtx(p){
+ if(!p||!p.id||!P(p.id)||p.blocked)return'';
+ const au=S.activeUserProfile;if(p.boundUser&&p.boundUser!==au)return'';
+ const first=(S.userProfiles[0]||{}).id;
+ const mine=(S.diaries||[]).filter(d=>d.pid==='me'&&(d.uid||first)===au&&String(d.content||'').trim()).sort((a,b)=>b.time-a.time);
+ if(!mine.length)return'';
+ const fd=t=>{const x=new Date(t);return(x.getMonth()+1)+'月'+x.getDate()+'日'};
+ const clip=(t,n)=>{t=String(t).replace(/\[\[(?:红|蓝)[:：](.+?)\]\]/g,'$1').replace(/\s+/g,' ').trim();return t.length>n?t.slice(0,n)+'…':t};
+ const longs=mine.filter(d=>(d.type||'long')==='long').slice(0,4),notes=mine.filter(d=>d.type==='note').slice(0,3);
+ let out='【用户写的日记 / 留言板】\n用户（'+meName()+'）在日记 App 里写了日记和留言，你作为 TA 身边的人可以读到。最近的内容（新→旧）：\n';
+ longs.forEach(d=>{out+='· '+fd(d.time)+' 日记'+(d.title?'《'+d.title+'》':'')+'：'+clip(d.content,260)+'\n'});
+ notes.forEach(d=>{out+='· '+fd(d.time)+' 留言：'+clip(d.content,90)+'\n'});
+ return out+'你已经读过这些。聊天时遇到合适的时机，可以自然地提起、关心或接话，也可以说你读过；不要每条消息都提，不要整段复述，不要生硬地宣布“我看了你的日记”。如果用户问起日记里的事，要答得具体。';
+}
+const build1=build;
+build=function(p,h){
+ const m=build1.apply(this,arguments);
+ try{const t=userDiaryCtx(p);if(t&&m&&m[0]&&typeof m[0].content==='string')m[0].content+='\n\n'+t}catch(e){}
+ return m;
+};
+
+/* v9.49 设置：生图 / 语音 也能拉取模型并选择（和 API 页一样） */
+function modelPicker(o){
+ const inp=Q('#'+o.input);if(!inp||inp.dataset.mp)return;inp.dataset.mp=1;
+ const box=document.createElement('div');
+ box.innerHTML='<button class="btn" type="button" style="white-space:nowrap;margin-top:8px">Fetch Models</button><label style="margin-top:10px">Available Models (tap to select)</label><select><option value="">'+(o.fallback?'常用模型（点「Fetch Models」可拉取最新）':'先点上面的 Fetch Models')+'</option></select><p class="note" style="margin-top:8px"></p>';
+ inp.insertAdjacentElement('afterend',box);
+ const btn=box.querySelector('button'),sel=box.querySelector('select'),out=box.querySelector('.note');
+ const fill=(ids,note)=>{
+  const hit=o.re?ids.filter(x=>o.re.test(x)):[],rest=o.re?ids.filter(x=>!o.re.test(x)):ids;
+  const opt=a=>a.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');
+  sel.innerHTML='<option value="">请选择一个模型（共 '+ids.length+' 个）</option>'+(hit.length?'<optgroup label="'+o.hitLabel+'">'+opt(hit)+'</optgroup>'+(rest.length?'<optgroup label="其他">'+opt(rest)+'</optgroup>':''):opt(rest));
+  if(ids.includes(inp.value))sel.value=inp.value;
+  out.textContent=note;
+ };
+ if(o.fallback)fill(o.fallback,'这是常用模型列表，选中后会填到上面的 Model 里。');
+ sel.onchange=()=>{if(!sel.value)return;inp.value=sel.value;inp.dispatchEvent(new Event('input',{bubbles:true}));inp.dispatchEvent(new Event('change',{bubbles:true}));out.textContent='已选择模型：'+sel.value+(o.needSave?'（记得点保存）':'')};
+ if(o.noFetch){btn.style.display='none';return}
+ btn.onclick=async()=>{
+  const g=ids=>{for(const i of ids){const e=Q('#'+i);if(e&&e.value.trim())return e.value.trim()}return''};
+  const base=(g(o.base)||o.defBase||'').replace(/\/+$/,''),key=g(o.key);
+  if(!base)return toast('请先填写接口地址');if(!key)return toast('请先填写 API Key');
+  btn.disabled=true;btn.textContent='拉取中…';out.textContent='正在获取模型列表…';
+  try{
+   const r=await fetch(base+'/models',{headers:{Authorization:'Bearer '+key}});if(!r.ok)throw new Error('HTTP '+r.status);
+   const j=await r.json(),ms=(Array.isArray(j.data)?j.data.map(x=>x.id):Array.isArray(j.models)?j.models.map(x=>typeof x==='string'?x:x.id):[]).filter(Boolean);
+   if(!ms.length)throw new Error('没有识别到模型列表');ms.sort((a,b)=>a.localeCompare(b));
+   fill(ms,'已拉取 '+ms.length+' 个模型，请在列表里点选。');
+  }catch(e){
+   if(o.fallback)fill(o.fallback,'这个接口不支持拉取（'+e.message+'），已显示常用模型，也可以直接手填。');
+   else out.textContent='拉取失败：'+e.message+'。请检查接口是否支持 GET /models、Key 和浏览器跨域（CORS）。';
+  }finally{btn.disabled=false;btn.textContent='Fetch Models'}
+ };
+}
+modelPicker({input:'c-image-model',base:['c-image-base','c-base'],key:['c-image-key','c-key'],defBase:'https://api.openai.com/v1',re:/image|dall|flux|diffusion|sdxl|stable|imagen|midjourney|seedream|banana|nano/i,hitLabel:'疑似生图模型'});
+modelPicker({input:'c-voice-model',base:['c-voice-base'],key:['c-voice-key'],defBase:'https://api.minimax.io/v1',re:/speech|tts|voice|audio|cosy|fish/i,hitLabel:'疑似语音模型',needSave:1,fallback:['speech-2.8-hd','speech-2.8-turbo','speech-2.6-hd','speech-2.6-turbo','speech-02-hd','speech-02-turbo','speech-01-hd','speech-01-turbo']});
+modelPicker({input:'c-nai-model',noFetch:1,fallback:['nai-diffusion-4-5-full','nai-diffusion-4-5-curated','nai-diffusion-4-full','nai-diffusion-4-curated-preview','nai-diffusion-3','nai-diffusion-furry-3']});
 
 mount();
 })();
@@ -5290,8 +5357,9 @@ const NOTE_COLORS=['#fff4a8','#ffd9d9','#d6ebff','#dcf5d4','#ecdcff'];
 const dyPlain=s=>String(s||'').replace(/\[\[(?:红|蓝)[:：](.+?)\]\]/g,'$1');
 const dyBodyOf=d=>{const ls=String(d.content||'').split('\n');let i=0;while(i<ls.length&&!ls[i].trim())i++;const n=s=>String(s).replace(/[\s\p{P}\p{S}]/gu,'').toLowerCase();if(d.title&&i<ls.length&&n(dyPlain(ls[i]))===n(d.title))i++;return ls.slice(i).join('\n')};
 const dyOwn=d=>d.pid==='me'||P(d.pid)?d.pid:'me';
+const dyMine=d=>dyOwn(d)!=='me'||((d.uid||(S.userProfiles[0]||{}).id)===S.activeUserProfile);
 const dyDate=t=>{const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-const dyList=()=>S.diaries.filter(d=>dyOwn(d)===DY.owner&&(d.type||'long')===DY.tab).sort((a,b)=>b.time-a.time);
+const dyList=()=>S.diaries.filter(d=>dyOwn(d)===DY.owner&&dyMine(d)&&(d.type||'long')===DY.tab).sort((a,b)=>b.time-a.time);
 const dyFx=()=>D().fx==='none'?'':'dy-fx-'+D().fx;
 const dyVars=()=>{const c=D();return `--dy-font:${c.font?fontStack(c.font):'inherit'};--dy-size:${c.size}px;--dy-lh:${c.lh}`};
 function dyParse(raw){
@@ -5338,13 +5406,13 @@ async function dyTick(){
 }
 async function dyRun(fn){if(DY.busy)return;DY.busy=true;rDiary(1);try{await fn()}catch(e){toast('生成失败：'+e.message)}DY.busy=false;if(stack[stack.length-1]==='diary')rDiary(1)}
 function rDiary(still){
- const b=$('#diary-body'),c=D();if(DY.owner!=='me'&&!P(DY.owner))DY.owner='me';
+ const b=$('#diary-body'),c=D();if(DY.owner!=='me'&&!momentBound().some(x=>x.id===DY.owner))DY.owner='me';
  if(c.nsys===DY_SYS_NOTE_OLD)c.nsys=DY_SYS_NOTE;
  const o=DY.owner,u=who(o),dc=c.deco[o]||{},list=(DY.tab==='pola'?[]:dyList()),isMe=o==='me',sc=c.sched[o]||{},isN=DY.tab==='note',isP=DY.tab==='pola';
- const nL=S.diaries.filter(d=>dyOwn(d)===o&&(d.type||'long')==='long').length,nN=S.diaries.filter(d=>dyOwn(d)===o&&d.type==='note').length,nP=ppAlbum().length;
+ const nL=S.diaries.filter(d=>dyOwn(d)===o&&dyMine(d)&&(d.type||'long')==='long').length,nN=S.diaries.filter(d=>dyOwn(d)===o&&dyMine(d)&&d.type==='note').length,nP=ppAlbum().length;
  const sl=(b.querySelector('.dy-owners')||{}).scrollLeft||0;
  b.className='body dy dy-clean dy-p-'+(c.paper==='warm'?'plain':c.paper)+' dy-fr-'+c.frame+' '+dyFx()+(still?' dy-still':'');b.style.cssText=dyVars();
- const chips=['me',...S.personas.filter(x=>!x.blocked).map(x=>x.id)].map(id=>{const w=who(id);return `<button class="dy-chip${id===o?' on':''}" data-dy-owner="${id}"><span class="av">${av(w)}</span><em>${esc(id==='me'?(S.me.name||'我'):w.name)}</em></button>`}).join('');
+ const chips=['me',...momentBound().map(x=>x.id)].map(id=>{const w=who(id);return `<button class="dy-chip${id===o?' on':''}" data-dy-owner="${id}"><span class="av">${av(w)}</span><em>${esc(id==='me'?(S.me.name||'我'):w.name)}</em></button>`}).join('');
  const sv=(d,f)=>`<svg viewBox="0 0 24 24" fill="${f||'none'}" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`,tsx=dc.ts||Date.now();
  const head=isP?'':`<div class="dy-post dy-it">${dc.cover?`<div class="dy-pcover" data-dy-head style="background-image:url('${String(dc.cover).replace(/'/g,'%27')}')"></div>`:''}<div class="dy-pbody"><div class="dy-ph"><div class="dy-av"><span class="av">${av(u)}</span></div><div class="dy-pn"><b>${esc(u.name)}</b><small>@${esc(u.handle||o)}</small></div></div><p class="dy-pt${dc.text?'':' empty'}" data-dy-text>${esc(dc.text||'点这里写一句装饰文案')}</p><div class="dy-pd">${sv('<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>')}<span>${dyDate(tsx)} ${hm(tsx)}</span></div></div><div class="dy-pa"><button data-dy-like class="${dc.liked?'on':''}">${sv('<path d="M12 20s-7.5-4.6-9-9.2C1.9 7.3 4 4.5 7 4.5c1.9 0 3.5 1 5 2.8 1.5-1.8 3.1-2.8 5-2.8 3 0 5.1 2.8 4 6.3-1.5 4.6-9 9.2-9 9.2Z"/>',dc.liked?'currentColor':'none')}喜欢</button><i></i><button data-dy-gonote>${sv('<path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4 3.5V16h-.5A2.5 2.5 0 0 1 4 13.5Z"/>')}留言板</button><i></i><button data-dy-save>${sv('<path d="M13 5h6v6M19 5l-8 8"/><path d="M11 6H6.5A1.5 1.5 0 0 0 5 7.5v10A1.5 1.5 0 0 0 6.5 19h10a1.5 1.5 0 0 0 1.5-1.5V13"/>')}存为图片</button><i></i><button data-dy-head class="dy-more" aria-label="更多">${sv('<circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/>','currentColor')}</button></div></div>`;
  const seg=`<div class="dy-seg dy-it" style="--i:1"><button data-dy-tab="long" class="${!isN&&!isP?'on':''}">长日记<small>${nL}</small></button><button data-dy-tab="pola" class="${isP?'on':''}">拍立得<small>${nP}</small></button><button data-dy-tab="note" class="${isN?'on':''}">留言板<small>${nN}</small></button></div>`;
@@ -5352,7 +5420,7 @@ function rDiary(still){
  if(isP)act='';
  else if(isMe)act=`<button class="dy-btn fill" data-dy-new>${isN?'写留言':'写日记'}</button>`;
  else if(isN)act=`<button class="dy-btn fill" data-dy-free${dis}>${DY.busy?'生成中…':'随心写'}</button><button class="dy-btn" data-dy-topic${dis}>指定生成</button>`;
- else act=`<button class="dy-btn fill" data-dy-gen${dis}>${DY.busy?'生成中…':'现在生成 · '+(+c.count||1)+'篇'}</button><label class="dy-sched"><input type="checkbox" data-dy-son ${sc.on?'checked':''}>每天<input type="time" data-dy-stime value="${sc.time||'22:00'}">自动写</label>`;
+ else act=`<button class="dy-btn fill" data-dy-gen${dis}>${DY.busy?'生成中…':'现在生成 · '+(+c.count||1)+'篇'}</button>`;
  let body;
  if(isP)body=ppRender();
  else if(!list.length)body=`<div class="empty dy-it" style="--i:3">${isN?'留言板还是空的':'还没有日记'}</div>`;
@@ -5391,8 +5459,8 @@ function rDiary(still){
   save();if(s0.on)toast('已设定：每天 '+(s0.time||'22:00')+' 自动写日记（需保持页面打开或开启保活）')};
 }
 function dyNew(){
- if(DY.tab==='note'){modal('',v=>{v=v.trim();if(!v)return;S.diaries.push({id:uid(),type:'note',pid:DY.owner,title:'',content:v,comment:'',time:Date.now()});save();rDiary()});return}
- dyOpen(null,true,{id:uid(),type:'long',pid:DY.owner,title:'',content:'',comment:'',time:Date.now()})}
+ if(DY.tab==='note'){modal('',v=>{v=v.trim();if(!v)return;S.diaries.push({id:uid(),type:'note',pid:DY.owner,uid:S.activeUserProfile,title:'',content:v,comment:'',time:Date.now()});save();rDiary()});return}
+ dyOpen(null,true,{id:uid(),type:'long',pid:DY.owner,uid:S.activeUserProfile,title:'',content:'',comment:'',time:Date.now()})}
 function dyEditText(){const c=D(),o=DY.owner,dc=c.deco[o]||(c.deco[o]={});modal(dc.text||'',v=>{dc.text=v.trim();dc.ts=Date.now();save();rDiary(1)})}
 async function dySaveCard(){
  try{
@@ -5584,7 +5652,7 @@ function dySettings(){
  <h4>长日记</h4>
  <div class="f"><span>生成篇数</span><input type="number" min="1" max="5" value="${c.count}" data-k="count"></div>
  <div class="f"><span>每篇字数</span><input type="number" min="100" max="2000" step="50" value="${c.len}" data-k="len"></div>
- ${o==='me'?'<p class="note" style="color:var(--sub);font-size:12.5px">定时写日记：切换到某个角色后，在主页点“每天 … 自动写”设置时间。</p>':`<div class="f"><span>${esc(who(o).name)}</span><label style="display:flex;align-items:center;gap:6px;flex:1;font-size:13.5px"><input type="checkbox" data-sk="on" ${sc.on?'checked':''}>每天<input type="time" data-sk="time" value="${sc.time||'22:00'}" style="width:auto">自动写</label></div>`}
+ ${o==='me'?'<p class="note" style="color:var(--sub);font-size:12.5px">定时写日记：切换到某个角色后，在这里的设置里勾选“每天 … 自动写”。</p>':`<div class="f"><span>${esc(who(o).name)}</span><label style="display:flex;align-items:center;gap:6px;flex:1;font-size:13.5px"><input type="checkbox" data-sk="on" ${sc.on?'checked':''}>每天<input type="time" data-sk="time" value="${sc.time||'22:00'}" style="width:auto">自动写</label></div>`}
  <div class="f"><span>系统提示词</span><button class="dy-btn" data-reset="sys" style="margin-left:auto">恢复默认</button></div><textarea data-k="sys">${esc(c.sys)}</textarea>
  <div class="f"><span>外加提示词</span></div><textarea data-k="extra" placeholder="例如：多写一些心理活动；用更口语的语气…">${esc(c.extra)}</textarea>
  <h4>留言板</h4>
@@ -6557,6 +6625,8 @@ html.kb #inp,html.kb .wx-in,html.kb .feed-composer,html.kb .pd-composer{padding-
 #vcui .vc-l{max-width:82%;padding:8px 13px;border-radius:17px;font-size:15px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
 #vcui .vc-l.a{align-self:flex-start;background:rgba(255,255,255,.1);color:rgba(255,255,255,.94);border-bottom-left-radius:6px}
 #vcui .vc-l.u{align-self:flex-end;background:rgba(255,255,255,.9);color:#111;border-bottom-right-radius:6px}
+#vcui .vc-tr{margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.16);font-size:13px;line-height:1.45;color:rgba(255,255,255,.58)}
+#vcrec .vc-rtr{margin-top:2px;font-size:12.5px;color:var(--sub)}
 #vcui .vc-l.typ{display:flex;gap:5px;padding:12px 14px}
 #vcui .vc-l.typ i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.7);animation:vcDot 1.1s infinite ease-in-out}
 #vcui .vc-l.typ i:nth-child(2){animation-delay:.15s}#vcui .vc-l.typ i:nth-child(3){animation-delay:.3s}
@@ -6623,6 +6693,11 @@ html.kb #vcui .vc-grid{display:none}
 #vcrec .vc-cf{display:flex;gap:10px;padding:10px 14px 14px}
 #vcrec .vc-cf button{flex:1;height:42px;border:0;border-radius:21px;background:var(--p);color:var(--ink);font-size:15px;font-weight:600}
 #vcrec .vc-cf button.pri{background:var(--me);color:var(--me-ink)}
+
+/* v9.48 日记按钮：白底 + 细灰线（同 Models & API 页） */
+.dy-clean .dy-btn,.dy-clean .dy-btn.fill,.dy-btn,.dy-btn.fill{background:#fff;color:#111;border:1px solid #dcdce0;border-radius:12px;font-weight:600;font-size:14.5px;padding:10px 16px;box-shadow:none}
+.dy-clean .dy-btn:active,.dy-btn:active{background:#f4f4f6}
+[data-theme=dark] .dy-clean .dy-btn,[data-theme=dark] .dy-clean .dy-btn.fill,[data-theme=dark] .dy-btn,[data-theme=dark] .dy-btn.fill{background:var(--bg);color:var(--ink);border-color:var(--line)}
 </style>
 <script>
 /* v78: surface the real reason of unhandled promise rejections */
