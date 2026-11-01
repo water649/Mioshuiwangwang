@@ -2695,10 +2695,10 @@ const CPNAV=[['inbox','inbox','收件箱'],['all','all','全部'],['mine','mine'
 const CPNM={inbox:'收件箱',all:'全部',mine:'我发起的',req:'TA 的提问',trash:'回收站',tree:'树洞',ann:'纪念日',day:'你我之间',wish:'愿望清单'};
 const cpNext=()=>cpD.ann.filter(a=>!a.fixed).map(a=>({a,i:cpAnn(a)})).filter(x=>x.i.left!=null&&x.i.left<=7).sort((a,b)=>a.i.left-b.i.left)[0];
 const cpBars=()=>{const un=cpD.cards.filter(c=>cpF.inbox(c)&&cpUnread(c)).sort((a,b)=>cpLast(b)-cpLast(a))[0],nx=cpNext(),p=cpPt()||{name:'TA'};let h='';if(un)h+=`<div class="cpw-note" data-act="opencard" data-id="${un.id}"><span><b>${esc(p.name)}</b> 在 ${cpTm(cpLast(un))} 更新了「${esc(un.msgs[0].t.slice(0,14))}」</span><a>查看</a></div>`;if(nx)h+=`<div class="cpw-note" data-act="nav" data-v="ann">${cpI('cal')}<span>距离「${esc(nx.a.name)}」${nx.i.left===0?'就是今天':'还有 '+nx.i.left+' 天'}</span></div>`;return h};
-const cpCpl=()=>{const p=cpPt()||{name:''},u=cpUser(),n=cpDiff(cpParse(cpD.since||cpISO(new Date())),cpDay(new Date()))+1;return `<div class="cpw-couple">${cpAv(u)}<div class="cpmid">${cpI('heart','1')}<span>在一起第 <b>${n}</b> 天</span></div>${cpAv(p)}</div>`};
-const cpTrP=new WeakSet();
+const cpCpl=()=>{const p=cpPt()||{name:''},u=cpUser(),s=cpD.since||cpISO(new Date()),n=cpDiff(cpParse(s),cpDay(new Date()))+1,f=cpD.ann.find(x=>x.fixed);return `<div class="cpw-couple">${cpAv(u)}<div class="cpmid"><span>${esc(f?f.name:'在一起')}</span><b>${n}<i>天</i></b><small>${cpFmt(s)} 起</small></div>${cpAv(p)}</div>`};
+const cpTrP=new WeakSet(),cpSplit=t=>{const m=String(t).split(/\s*(?:\|\|\||｜｜｜)\s*/);return[m[0].trim(),(m.slice(1).join(' ')||'').trim()]};
 const cpForeign=t=>{t=String(t||'');const k=/[\u3040-\u30ff\uac00-\ud7af]/.test(t),la=(t.match(/[A-Za-z]/g)||[]).length,han=(t.match(/[\u4e00-\u9fff]/g)||[]).length;return k||(la>=6&&la>han)};
-const cpTrB=o=>o.tr?`<div class="cpw-tr">${esc(o.tr)}</div>`:cpTrP.has(o)?'<div class="cpw-tr">翻译中…</div>':'';
+const cpTrB=o=>o.tr&&o.tr!==o.t?`<div class="cpw-tr">${esc(o.tr)}</div>`:cpTrP.has(o)?'<div class="cpw-tr">翻译中…</div>':'';
 const cpTrRule=p=>{const to=(CC(p.id).trTo)||'简体中文';return '\n【翻译格式】如果你这次写的内容不是'+to+'（比如你是外国人、用母语说话），在全部内容之后紧跟 ||| 再写整段内容的'+to+'译文，格式：原文 ||| 译文；如果你写的就是'+to+'，完全不要写 |||。'};
 
 const cpPanel=(t,b,f='')=>`<div class="cpw-pn full"><div class="cpw-ph">${t}</div>${b}${f?`<div class="cpw-pf">${f}</div>`:''}</div>`;
@@ -2721,8 +2721,17 @@ function cpListV(){const n=cpN.nav,q=cpN.q.trim().toLowerCase(),all=cpD.cards.fi
 function cpTreeV(){const live=cpD.cards.filter(cpF.inbox);
  const slots=CPSL.map(([x,y],i)=>{const c=live.find(k=>k.slot===i);return c?`<button class="cpcard ${cpUnread(c)?'new':''}" data-act="opencard" data-id="${c.id}" style="left:${(x-23)/3.6}%;top:${(y+12)/4.4}%;width:${46/3.6}%;height:${56/4.4}%;animation-delay:-${i*.7}s">${cpI(cpKi(c))}<i></i><i></i></button>`:`<button class="cpslot" data-act="slot" data-i="${i}" style="left:${(x-9)/3.6}%;top:${(y-9)/4.4}%;width:${18/3.6}%;height:${18/4.4}%">${cpI('plus')}</button>`}).join('');
  return cpPanel('树洞',`<div class="cpw-tb"><button data-act="shake" ${cpN.busy==='taq'?'disabled':''}>${cpI('spark')}${cpN.busy==='taq'?'TA 在想问题…':'摇一摇树'}</button><button data-act="slot">${cpI('plus')}挂一张卡片</button></div><div class="cpmain">${cpBars()}${cpCpl()}<div class="cptree">${cpTreeSvg(live)}${slots}</div></div>`,`<span>树上挂着 ${live.length} 张</span><a data-act="nav" data-v="all">全部卡片</a>`)}
-function cpAnnV(){const L=cpD.ann.map(a=>({a,i:cpAnn(a)})).sort((x,y)=>x.i.sort-y.i.sort);
- const rows=L.map(({a,i})=>`<div class="cpw-r" data-act="annedit" data-id="${a.id}"><div class="cpw-avs"><i class="cpw-sq cpw-ic">${cpI(a.fixed?'heart':'cal')}</i></div><div class="cpw-t"><b>${esc(a.name)}</b><span> – ${cpFmt(a.date)}${a.rep&&!a.fixed?' · 每年':''}</span></div><div class="cpw-rt"><b class="cpw-big">${i.big}</b><small>${i.sub}</small></div></div>`).join('')||'<p class="cpmu2">还没有纪念日</p>';
+const CPMS=[100,200,300,365,500,520,600,700,730,800,900,1000,1314,1500,1825,2000,2500,3000,3650];
+function cpHero(){const p=cpPt()||{name:''},u=cpUser(),since=cpD.since||cpISO(new Date()),n=cpDiff(cpParse(since),cpDay(new Date()))+1,nx=CPMS.find(m=>m>n),pv=[0,...CPMS].filter(m=>m<=n).pop(),pc=nx?Math.max(3,Math.round((n-pv)/(nx-pv)*100)):100;
+ return `<div class="cpa-hero" data-act="annedit" data-id="since"><div class="cpa-top">${cpAv(u)}<div class="cpa-ln">${cpI('heart','1')}</div>${cpAv(p)}</div><div class="cpa-days"><span>在一起第</span><b>${n}</b><span>天</span></div><div class="cpa-since">${cpFmt(since)} 起</div>${nx?`<div class="cpa-ms"><div class="cpa-mt"><span>下一个里程碑 · ${nx} 天</span><em>还有 ${nx-n} 天</em></div><div class="cpa-bar"><i style="width:${pc}%"></i></div></div>`:''}</div>`}
+const cpAnRow=({a,i})=>{const [y,mo,d]=a.date.split('-'),fx=!!a.fixed,rep=a.rep&&!fx;let pr=0,pt='';
+ if(fx){const n=i.big,nx=Math.floor(n/100)*100+100;pr=(n%100)/100;pt='距第 '+nx+' 天还有 '+(nx-n)+' 天'}
+ else if(i.left!=null)pr=Math.max(.03,Math.min(1,1-i.left/365));
+ const hot=i.left!=null&&i.left<=7;
+ return `<div class="cpw-an ${fx?'fx':''} ${hot?'hot':''}" data-act="annedit" data-id="${a.id}"><div class="cpw-cal"><b>${+mo}月</b><span>${d}</span><i>${y}</i></div><div class="cpw-ab"><b>${esc(a.name)}</b><small>${cpFmt(a.date)}${rep?' · 每年':''}</small>${pr?`<div class="cpw-bar"><i style="width:${Math.round(pr*100)}%"></i></div>`:''}${pt?`<small class="cpw-pt">${pt}</small>`:''}</div><div class="cpw-an-r"><b>${i.big}</b><small>${i.sub}</small></div></div>`};
+function cpAnnV(){const L=cpD.ann.map(a=>({a,i:cpAnn(a)})).sort((x,y)=>x.i.sort-y.i.sort),fx=L.filter(x=>x.a.fixed),up=L.filter(x=>!x.a.fixed&&x.i.left!=null),ps=L.filter(x=>!x.a.fixed&&x.i.left==null);
+ const sec=(t,l)=>l.length?`<div class="cpw-dh">${t}</div>${l.map(cpAnRow).join('')}`:'';
+ const rows=sec('在一起',fx)+sec('即将到来',up)+sec('已经过去',ps)||'<p class="cpmu2">还没有纪念日</p>';
  return cpPanel('纪念日',`<div class="cpw-tb"><button data-act="annnew">${cpI('plus')}新纪念日</button></div><div class="cpmain">${cpCpl()}${rows}</div>`,`<span>共 ${cpD.ann.length} 个</span>`)}
 function cpDayV(){const g={};cpD.days.slice().sort((a,b)=>b.date.localeCompare(a.date)||b.ts-a.ts).forEach(d=>(g[d.date]=g[d.date]||[]).push(d));const p=cpPt()||{name:''},u=cpUser();
  const body=Object.keys(g).map(k=>`<div class="cpw-dh">${cpFmt(k)} ${cpWk(k)}</div><div class="cpw-dl">${g[k].map(d=>`<div class="cpw-bl ${d.by}" data-act="dayedit" data-id="${d.id}"><div class="cpw-bh"><i class="cpw-sq">${av(d.by==='u'?u:p)}</i><b>${esc(d.by==='u'?u.name:p.name)}</b><span>${cpTm(d.ts).split(' ')[1]}</span><em class="cpw-mood">${cpI(d.mood||'calm')}</em></div><p>${esc(d.t)}</p>${d.by==='c'?cpTrB(d):''}</div>`).join('')}</div>`).join('')||'<p class="cpmu2">还没有记录，写下今天的一件小事吧。</p>';
@@ -2756,21 +2765,24 @@ function cpR(){const s=cpN.sub.at(-1),sc=[...cpr.querySelectorAll('.cpmain')].ma
 function cpRender(){cpLoad();cpN.sub=[];cpN.nav='inbox';cpN.q='';cpN.busy=null;cpN.menu=null;cpN.edit=null;cpN.key='';if(!cpD.partner||!cpPt())cpN.sub=[{k:'setup',first:1}];cpR()}
 const cpSys=(p,x)=>build(p,[])[0].content+'\n你和用户「'+cpUser().name+'」是恋人，正在你们的「情侣空间」里互动。\n请读取并遵循上文中的角色设定、传统记忆和自动总结记忆条目；生成内容时结合已有关系、共同经历、称呼偏好与最近聊天上下文，保持角色一致，不得无视记忆或凭空编造已发生的重大事实。'+x+'\n口语化，用你的口吻，不用 markdown，不加名字前缀。';
 const cpChat=()=>{const cc=CC(cpD.partner),msgs=S.chats[cpD.partner]||[];return msgs.slice(-20).map(m=>(m.role==='user'?'用户：':m.role==='assistant'?'角色：':'系统：')+String(m.content||'')).join('\n')};
-async function cpQ(){const prev=cpD.cards.slice(-5).map(c=>c.msgs[0].t).join('；');const r=await ask([{role:'system',content:cpSys(cpPt(),'你要在情绪树洞里给用户挂一张问题卡片：问题温柔、具体、能引出真心话，不超过40字，只输出问题本身，不要引号。避免与已有问题重复：'+prev+cpTrRule(cpPt()))},{role:'user',content:'最近的聊天：\n'+cpChat()}]);const[o,tr]=splitTr(String(r||'').trim()),q=o.replace(/^["“「]|["”」]$/g,'').split('\n')[0];return q&&q.length<=80?{q,tr}:null}
+async function cpQ(){const p=cpPt(),prev=cpD.cards.slice(-5).map(c=>c.msgs[0].t).join('；');const raw=await cpGen(p,'以你自己的身份，在情绪树洞里给用户挂一张问题卡片：问题温柔、具体、能引出真心话。已有问题（不要重复）：'+(prev||'暂无'),'只写问题本身，一句话，不超过40字，不加引号。');const[o,tr]=cpSplit(raw),q=cpClean(o);return q&&q.length<=80?{q,tr:cpClean(tr)}:null}
 const cpPre=()=>{const used=cpD.cards.map(c=>c.msgs[0].t),a=CPPRE.filter(x=>!used.includes(x));const l=a.length?a:CPPRE;return l[rnd(l.length)]};
 function cpSlot(){const used=cpD.cards.filter(c=>!c.arch&&!c.trash).map(c=>c.slot),f=CPSL.findIndex((_,i)=>!used.includes(i));if(f>=0)return f;const o=cpD.cards.filter(c=>!c.arch&&!c.trash).sort((a,b)=>a.ts-b.ts)[0];o.arch=1;const s=o.slot;o.slot=-1;return s}
 function cpMk(kind,q,tr){const s=cpN.slot!=null&&!cpD.cards.some(c=>!c.arch&&!c.trash&&c.slot===cpN.slot)?cpN.slot:cpSlot();cpN.slot=null;const c={id:cpid(),kind,slot:s,ts:Date.now(),msgs:[{f:kind==='taq'?'c':'u',t:q,tr:tr||'',ts:Date.now()}]};if(kind==='taq')c.seen=Date.now();cpD.cards.push(c);cpSave();return c}
 async function cpTaq(){if(cpN.busy)return;cpN.busy='taq';cpR();let q=null;try{q=await cpQ()}catch(e){toast('接口不可用，已随机抽题')}cpN.busy=null;const c=q?cpMk('taq',q.q,q.tr):cpMk('taq',cpPre());cpN.sub=[{k:'card',id:c.id}];cpR()}
 async function cpReply(c){if(cpN.busy)return;cpN.busy=c.id;cpR();const p=cpPt(),u=cpUser(),L=c.msgs.map(m=>(m.f==='u'?u.name:p.name)+'：'+m.t).join('\n'),first=c.msgs.filter(m=>m.f==='c').length<=(c.kind==='taq'?1:0);
  const ins={ask:'用户在树洞里向你提了一个问题。请认真、真诚地回答；若已有追问就继续回答。',tell:'用户在树洞里倒出了心事。请先接住情绪，再给一句具体的陪伴或安慰，不说教。',taq:'你在树洞里向用户抛了一个问题，用户做了回答。请先回应TA的回答'+(first?'，并说说你自己对这个问题的回答':'')+'。'}[c.kind]+'不超过120字。';
- try{const context=cpChat();const r=await ask([{role:'system',content:cpSys(p,ins+cpTrRule(p)+'\n请优先遵循你已有的角色设定、传统记忆和自动总结记忆；结合最近聊天中已经发生的事情、双方的称呼与关系变化自然回应，不要假装不知道已有信息，也不要机械复述。')},{role:'user',content:'【情侣空间当前卡片对话】\n'+L+'\n\n【你与用户最近的聊天上下文】\n'+(context||'暂无可用的近期聊天记录') }]);const[o,tr]=splitTr(String(r).trim());c.msgs.push({f:'c',t:o,tr,ts:Date.now()});c.seen=Date.now()}catch(e){toast('回复失败：'+e.message)}cpN.busy=null;cpSave();cpR()}
+ try{const context=cpChat();const r=await ask([{role:'system',content:cpSys(p,ins+cpTrRule(p)+'\n请优先遵循你已有的角色设定、传统记忆和自动总结记忆；结合最近聊天中已经发生的事情、双方的称呼与关系变化自然回应，不要假装不知道已有信息，也不要机械复述。')},{role:'user',content:'【情侣空间当前卡片对话】\n'+L+'\n\n【你与用户最近的聊天上下文】\n'+(context||'暂无可用的近期聊天记录') }]);const[o,tr]=cpSplit(String(r).trim());c.msgs.push({f:'c',t:o,tr,ts:Date.now()});c.seen=Date.now()}catch(e){toast('回复失败：'+e.message)}cpN.busy=null;cpSave();cpR()}
 async function cpDayGen(){if(cpN.busy)return;cpN.busy='day';cpR();const p=cpPt();
  const prior=cpD.days.filter(d=>d.by==='c').slice(-18).map((d,i)=>`${i+1}. ${d.t}`).join('\n');
  try{const r=await ask([{role:'system',content:cpSys(p,'你要为「你我之间」写一条有新意的恋人记忆点滴，60-100字。必须把角色设定、传统记忆、长期记忆、自动总结记忆条目、关系细节和共同经历当作主要素材来源。近期聊天只能在确实没有可用旧记忆时才补充，绝不能每次都复述当天聊天。\n\n【选材与去重规则】\n1. 写之前先在全部可用记忆中寻找具体、不同的事件或细节，再决定写什么；不要默认挑最显眼或最近出现的事件。\n2. 必须参考下方「最近已经写过的点滴」，动态提取其中重复的事件、场景、物件和核心意象，并优先避开；换一种说法重写同一件事也算重复。不要把某个角色的具体经历当成其他角色的记忆。\n3. 不要预设或全局禁止任何题材、地点、物件或意象。应只根据当前角色实际拥有的记忆和「最近已经写过的点滴」动态判断哪些内容近期重复；如果某类素材刚写过，就优先选择记忆中的其他事件或细节。只有当角色记忆确实支持该题材、且为避免重复没有更合适的素材时，才再次使用它。不同角色之间不得共享具体记忆、禁用词或题材偏好。\n4. 尽量轮换素材类型：相处习惯、某次出行、家里生活、吃饭、工作/学习、礼物、称呼、某个小物件、照顾彼此、一次误会后的和好、未来约定、角色成长等；只选择记忆实际支持的内容，不要为了轮换硬编重大经历。\n5. 若记忆中有多件事，优先挑从未写过或很久没写过的一件；若只有零散细节，可以自然扩写成普通生活片段，但不要伪称具体重大事件真实发生过。\n6. 角色用第一人称记录「我和你」之间的小事；不要写成对用户说教，不要复述聊天记录。\n仅输出JSON：{"mood":"smile|calm|sad|love|tired","text":"...","tr":"如果 text 不是简体中文，这里写 text 的简体中文译文；否则留空"}')},{role:'user',content:'【近期聊天，仅作弱辅助背景；优先不要取材于此】\n'+cpChat()+'\n\n【最近已经写过的点滴，严禁重复这些事件或核心意象】\n'+(prior||'暂无已生成点滴')+'\n\n请在角色全部记忆中寻找一件不同的事或细节再写。'}]);let j=null;try{j=JSON.parse(String(r).match(/\{[\s\S]*\}/)[0])}catch(e){}
   const t=(j&&j.text)||String(r).trim(),m=j&&CPMOODS.some(x=>x[0]===j.mood)?j.mood:'calm';cpD.days.push({id:cpid(),date:cpISO(new Date()),mood:m,t,tr:(j&&j.tr)||'',by:'c',ts:Date.now()});toast('TA 写了一条点滴')}catch(e){toast('生成失败：'+e.message)}cpN.busy=null;cpSave();cpR()}
-async function cpWishGen(){if(cpN.busy)return;cpN.busy='wish';cpR();const prev=cpD.wishes.map(w=>w.t).slice(-20).join('；');
- try{const r=await ask([{role:'system',content:cpSys(cpPt(),'你要在「愿望清单」里许下一个想和用户一起完成的愿望：具体、可执行、符合你和用户已有的关系与记忆，不超过24字，只输出愿望本身，不要引号、序号和解释。避免与已有愿望重复：'+prev+cpTrRule(cpPt()))},{role:'user',content:'最近的聊天：\n'+cpChat()}]);
-  const[o,tr]=splitTr(String(r||'').trim()),t=o.replace(/^["“「]|["”」]$/g,'').split('\n')[0];if(t&&t.length<=60){cpD.wishes.push({id:cpid(),t,tr,by:'c',done:0,ts:Date.now()});toast('TA 许了一个愿')}else toast('没有生成可用的愿望')}catch(e){toast('生成失败：'+e.message)}
+async function cpGen(p,task,fmt){const r=await ask([{role:'system',content:cpSys(p,'')},{role:'user',content:'【背景：你与用户最近的聊天，仅供参考，不要回复它】\n'+cpChat()+'\n\n【现在的任务，请只完成这一件事】\n'+task+'\n输出要求：'+fmt+cpTrRule(p)+'\n不要寒暄，不要接着聊天，不要解释，只输出结果本身。'}]);return String(r||'').trim()}
+const cpClean=s=>String(s||'').replace(/^(愿望|願い|问题|質問|wish|question)\s*[:：]\s*/i,'').replace(/^["“「『]|["”」』]$/g,'').split('\n')[0].trim();
+async function cpWishGen(){if(cpN.busy)return;cpN.busy='wish';cpR();const p=cpPt(),prev=cpD.wishes.map(w=>w.t).slice(-20).join('；');
+ try{const raw=await cpGen(p,'以你自己的身份，在「情侣空间·愿望清单」里许下一个你想和用户一起去完成的愿望：一件具体、可执行的事，符合你们的关系与共同经历。已有愿望（不要重复）：'+(prev||'暂无'),'只写愿望本身，一句话，不超过24字，不加引号和序号，不要用问句。');
+  const[o,tr]=cpSplit(raw),t=cpClean(o);
+  if(t&&t.length<=40&&!/[?？]/.test(t)){cpD.wishes.push({id:cpid(),t,tr:cpClean(tr),by:'c',done:0,ts:Date.now()});toast('TA 许了一个愿')}else toast('这次没生成出像样的愿望，再试一次')}catch(e){toast('生成失败：'+e.message)}
  cpN.busy=null;cpSave();cpR()}
 cpr.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.isComposing)return;const t=e.target;if(t.id==='cpf-q'){cpN.q=t.value;cpR()}else if(t.id==='cpf-w'){e.preventDefault();const b=cpr.querySelector('[data-act=wishadd]');b&&b.click()}else if(t.id==='cpf-a'){const b=cpr.querySelector('[data-act=csend]');b&&b.click()}});
 cpr.addEventListener('click',async e=>{const b=e.target.closest('[data-act]');
@@ -6380,7 +6392,7 @@ html.kb #inp,html.kb .wx-in,html.kb .feed-composer,html.kb .pd-composer{padding-
 .cpw-top{display:flex;justify-content:space-between;align-items:center;padding:6px 10px 5px;font-size:12px;color:var(--wsub);flex:none}
 .cpw-brand{font-size:15px;color:var(--wlink);letter-spacing:.5px}.cpw-brand i{font-style:normal;font-size:10px;color:var(--wsub);margin-left:4px;vertical-align:super}
 .cpw-lk{display:flex;gap:6px;align-items:center}.cpw-lk i{font-style:normal;color:var(--wl)}.cpw-lk a{color:var(--wlink);cursor:pointer}
-.cpw-body{flex:1;min-height:0;display:grid;grid-template-columns:clamp(92px,27vw,168px) minmax(0,1fr);gap:8px;padding:0 8px 8px}
+.cpw-body{flex:1;min-height:0;display:grid;grid-template-columns:clamp(92px,27vw,168px) minmax(0,1fr);gap:8px;padding:0 8px calc(env(safe-area-inset-bottom,0px) + 34px)}
 .cpw-left{min-height:0;overflow:auto;display:flex;flex-direction:column;gap:8px}
 .cpw-main{min-width:0;min-height:0;display:flex}
 .cpw-pn{background:var(--wb);border:1px solid var(--wl);border-radius:5px;overflow:hidden;display:flex;flex-direction:column;flex:none}
@@ -6434,7 +6446,7 @@ html.kb #inp,html.kb .wx-in,html.kb .feed-composer,html.kb .pd-composer{padding-
 .cpw-ck{width:20px;height:20px;border:1.5px solid var(--wl);border-radius:3px;background:var(--wbg);padding:0;justify-content:center;flex:none;color:transparent}
 #cp-root .cpw-ck{padding:0}#cp-root .cpw-ck svg{width:14px;height:14px}#cp-root .cpw-ck.on{background:linear-gradient(var(--wg1),var(--wg2));border-color:#86b030;color:var(--wgt)}
 .cpw-r.dn .cpw-t b{text-decoration:line-through;color:var(--wsub)}#cp-root .cpw-x{color:var(--wsub);padding:4px}#cp-root .cpw-x svg{width:14px;height:14px}
-.cppage{position:absolute;inset:0;background:var(--wbg);display:flex;flex-direction:column;z-index:5;padding:0 8px 8px}
+.cppage{position:absolute;inset:0;background:var(--wbg);display:flex;flex-direction:column;z-index:5;padding:0 8px calc(env(safe-area-inset-bottom,0px) + 34px)}
 .cpw-wt{display:flex;align-items:center;gap:6px;padding:3px 4px 3px 10px;background:linear-gradient(var(--wh1),var(--wh2));border:1px solid var(--wl);border-radius:5px 5px 0 0;flex:none;min-width:0}
 .cpw-wt b{flex:1;min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cpw-wb{display:flex;gap:2px;flex:none}#cp-root .cpw-wb button{padding:6px;border-radius:3px}#cp-root .cpw-wb svg{width:16px;height:16px}
@@ -6471,6 +6483,39 @@ html.kb #inp,html.kb .wx-in,html.kb .feed-composer,html.kb .pd-composer{padding-
 [data-theme=dark] #cp-root .cpw-tr{background:#fff;color:#111}
 .cpw-t.tx{display:block;-webkit-line-clamp:unset;overflow:visible}.cpw-t.tx .cpw-tr{margin:-4px 0 4px 8px;font-size:11.5px}
 .cpw-r.un .cpw-t.tx div{font-weight:700}.cpw-r.un .cpw-t.tx .cpw-tr{font-weight:800}
+.cpa-hero{margin:10px;padding:14px 12px 12px;border:1px solid var(--wl);border-radius:6px;background:linear-gradient(var(--wh1),var(--wb2) 60%,var(--wbg));text-align:center;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+.cpa-top{display:flex;align-items:center;justify-content:center;gap:10px}
+.cpa-ln{flex:1;max-width:96px;display:flex;align-items:center;color:#d9526b}.cpa-ln:before,.cpa-ln:after{content:"";flex:1;border-top:1.5px dashed var(--wl)}#cp-root .cpa-ln svg{width:18px;height:18px;margin:0 4px}
+.cpa-days{margin-top:8px;display:flex;align-items:baseline;justify-content:center;gap:6px;color:var(--wsub);font-size:13px}.cpa-days b{font-size:44px;font-weight:300;color:var(--wt);line-height:1;letter-spacing:-1px}
+.cpa-since{font-size:11.5px;color:var(--wsub);margin-top:2px}
+.cpa-ms{margin-top:12px;text-align:left}.cpa-mt{display:flex;justify-content:space-between;font-size:11.5px;color:var(--wsub);margin-bottom:4px}.cpa-mt em{font-style:normal;color:var(--wlink);font-weight:700}
+.cpa-bar{height:8px;border-radius:4px;background:var(--wln);border:1px solid var(--wl);overflow:hidden}.cpa-bar i{display:block;height:100%;background:linear-gradient(var(--wg1),var(--wg2));border-radius:3px}.cpa-bar.sm{height:5px;margin-top:6px}
+.cpa-l{padding:8px 0 2px}
+.cpa-c{display:flex;align-items:center;gap:10px;margin:0 10px 8px;padding:8px 10px;border:1px solid var(--wln);border-left:3px solid var(--wl);border-radius:4px;background:var(--wbg);cursor:pointer}.cpa-c:active{background:var(--wsel)}
+.cpa-d{width:42px;flex:none;border:1px solid var(--wl);border-radius:4px;overflow:hidden;text-align:center;background:var(--wbg)}.cpa-d small{display:block;background:linear-gradient(var(--wpr1),var(--wpr2));color:#fff;font-size:10.5px;line-height:15px}.cpa-d b{display:block;font-size:20px;font-weight:400;line-height:26px;color:var(--wt)}
+.cpa-i{flex:1;min-width:0}.cpa-i>b{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cpa-i>span{display:block;font-size:11.5px;color:var(--wsub);margin-top:1px}
+.cpa-tg{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}.cpa-tg:empty{display:none}.cpa-tg em{font-style:normal;font-size:10.5px;padding:0 6px;line-height:15px;border-radius:8px;border:1px solid var(--wl);background:var(--wb2);color:var(--wsub)}.cpa-tg em.y{background:linear-gradient(var(--wg1),var(--wg2));border-color:#86b030;color:var(--wgt);font-weight:700}
+.cpa-r{text-align:right;flex:none;min-width:44px}.cpa-r b{display:block;font-size:24px;font-weight:300;line-height:1;color:var(--wt)}.cpa-r small{font-size:10.5px;color:var(--wsub)}.cpa-r .tdb{font-size:14px;font-weight:700;color:var(--wgt);background:linear-gradient(var(--wg1),var(--wg2));border:1px solid #86b030;border-radius:10px;padding:3px 9px;display:inline-block}
+.cpa-c.sn{background:var(--wy);border-left-color:#e0b93a}.cpa-c.td{border-left-color:#86b030;background:var(--wsel)}.cpa-c.ps{opacity:.8;border-left-color:var(--wln)}.cpa-c.ps .cpa-r b{color:var(--wsub)}
+/* v2: bottom spacing + anniversary polish */
+.cpw-body{padding-bottom:calc(22px + env(safe-area-inset-bottom,0px)*.6)}
+.cppage{padding-bottom:calc(22px + env(safe-area-inset-bottom,0px)*.6)}
+.cpw-couple{gap:18px;padding:16px 10px 14px;background:radial-gradient(ellipse at 50% 0,var(--wb2),var(--wbg) 70%)}
+.cpw-couple .cpav{width:56px;height:56px;border-radius:4px;box-shadow:0 2px 6px rgba(60,90,160,.25)}
+#cp-root .cpmid svg{width:18px;height:18px}.cpmid b{font-size:28px;font-weight:300;line-height:1.1}.cpmid small{font-size:10.5px;color:var(--wsub)}
+.cpw-an{display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--wln);cursor:pointer}.cpw-an:active{background:var(--wsel)}
+.cpw-cal{width:46px;flex:none;border:1px solid var(--wl);border-radius:4px;overflow:hidden;text-align:center;background:var(--wbg);box-shadow:0 1px 3px rgba(60,90,160,.22)}
+.cpw-cal b{display:block;font-size:11px;line-height:17px;color:#fff;background:linear-gradient(var(--wpr1),var(--wpr2))}
+.cpw-cal span{display:block;font-size:21px;line-height:26px;font-weight:700}
+.cpw-cal i{display:block;font-style:normal;font-size:9.5px;line-height:13px;color:var(--wsub);border-top:1px dashed var(--wln)}
+.cpw-an.fx .cpw-cal b{background:linear-gradient(#f4a0b3,#d9526b)}
+.cpw-ab{flex:1;min-width:0}.cpw-ab>b{display:block;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cpw-ab small{display:block;color:var(--wsub);font-size:11.5px;margin-top:2px}.cpw-ab .cpw-pt{font-size:10.5px;margin-top:4px}
+.cpw-bar{height:6px;border-radius:3px;background:var(--wln);margin-top:7px;overflow:hidden;border:1px solid var(--wl)}
+.cpw-bar i{display:block;height:100%;background:linear-gradient(var(--wg1),var(--wg2))}.cpw-an.fx .cpw-bar i{background:linear-gradient(#f6b4c2,#d9526b)}
+.cpw-an-r{text-align:right;flex:none;max-width:96px}.cpw-an-r b{display:block;font-size:26px;font-weight:300;line-height:1}.cpw-an-r small{display:block;font-size:10.5px;color:var(--wsub);margin-top:4px}
+.cpw-an.fx .cpw-an-r b{color:#d9526b}.cpw-an.hot{background:var(--wy);box-shadow:inset 3px 0 0 #8cc63f}.cpw-an.hot .cpw-an-r b{color:var(--wpr2)}
+.cpmid span{font-size:13px;color:var(--wsub)}.cpmid b i{font-style:normal;font-size:13px;font-weight:400;color:var(--wsub);margin-left:3px}
 /* Instagram-inspired Moments feed refresh */
 #v-app.feed-mode .feed-home{background:var(--bg)}
 #v-app.feed-mode .feed-scroll{padding:0 0 24px}
