@@ -227,6 +227,77 @@ label{display:block;font-size:12px;color:var(--sub);margin:14px 0 6px}
 .rolephone-content{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;padding:14px;background:var(--p);border:1px solid var(--line);border-radius:16px;margin:10px 0;font-size:14px}
 .rolephone-msg{display:flex;flex-direction:column;gap:8px;margin:12px 0}.rolephone-msg .rp-bubble{max-width:86%;padding:10px 13px;border-radius:17px;background:var(--fld);white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55}.rolephone-msg .rp-bubble.me{align-self:flex-end;background:var(--me);color:var(--me-ink)}
 .rolephone-note{border-left:3px solid var(--line);padding:10px 12px;margin:10px 0;background:var(--p);border-radius:0 12px 12px 0}
+/* character phone: iOS lock screen (iOS 5) + home screen (iOS 7-9 flat icons) */
+.rps{--ic:min(17.2vw,72px);position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;color:#fff;overflow:hidden;font-family:-apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC",sans-serif;user-select:none;-webkit-user-select:none}
+.rps.lt{color:#1c1c1e}
+.rps-sb{width:100%;flex:none;padding-top:env(safe-area-inset-top,0px)}
+.rps-sbi{position:relative;height:20px;max-width:420px;margin:0 auto;padding:0 6px;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600}
+.rps-sbl,.rps-sbr{display:flex;align-items:center;gap:4px}
+.rps-t{position:absolute;left:50%;transform:translateX(-50%)}
+.rps-sbl svg{width:14px;height:11px}.rps-sbr svg{width:25px;height:12px}
+.rps-in{flex:1;min-height:0;width:min(100%,420px);display:flex;flex-direction:column}
+.rps-grid{display:grid;grid-template-columns:repeat(4,var(--ic));justify-content:space-evenly;align-items:start;row-gap:calc(var(--ic)*.15);padding-top:calc(var(--ic)*.12)}
+.rps-app{position:relative;width:var(--ic);display:flex;flex-direction:column;align-items:center;gap:calc(var(--ic)*.08);color:inherit;font:inherit;-webkit-tap-highlight-color:transparent}
+.rps-app b{font-size:11px;font-weight:600;line-height:1.2;max-width:calc(var(--ic)*1.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 0 3px rgba(0,0,0,.28)}
+.rps.lt .rps-app b{text-shadow:none}
+.rps-ic{position:relative;width:var(--ic);height:var(--ic);border-radius:22.5%;background:var(--g,#888);display:grid;place-items:center;overflow:hidden;font-size:calc(var(--ic)*.52);font-weight:600;line-height:1;color:#fff}
+.rps-ic svg{width:58%;height:58%}
+.rps-ic svg.full{width:100%;height:100%}
+.rps-app:active .rps-ic{filter:brightness(.7)}
+div.rps-app:active .rps-ic{filter:none}
+.rps-ic.cal{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;font-weight:400}
+.rps-cw{margin-top:calc(var(--ic)*.1);font-size:calc(var(--ic)*.14);font-weight:600;color:#ff3b30;line-height:1}
+.rps-cd{font-size:calc(var(--ic)*.62);font-weight:200;color:#111;line-height:1.02;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+.rps-bd{position:absolute;top:calc(var(--ic)*-.1);right:calc(var(--ic)*-.1);min-width:22px;height:22px;padding:0 6px;box-sizing:border-box;border-radius:11px;background:#ff3b30;color:#fff;font-size:14px;font-weight:600;line-height:22px;text-align:center;z-index:2}
+.rps-dots{margin-top:12px;display:flex;justify-content:center;gap:9px;padding-bottom:8px}
+.rps-dots i{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.4}.rps-dots i.on{opacity:1}
+.rps-dockbar{width:100%;flex:none;background:rgba(255,255,255,.3);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);padding:12px 0 calc(10px + env(safe-area-inset-bottom,0px))}
+.rps.lt .rps-dockbar{background:rgba(255,255,255,.5)}
+.rps-dock{width:min(100%,420px);margin:0 auto;display:grid;grid-template-columns:repeat(4,var(--ic));justify-content:space-evenly}
+.rps-wg{margin:auto calc((100% - 4*var(--ic))/5) 0;background:#fff;border-radius:26px;padding:20px 18px 16px;color:#1c1c1e;box-shadow:0 2px 14px rgba(0,0,0,.08)}
+.rps-wt{font-size:clamp(18px,5.6vw,23px);font-weight:700;line-height:1.18;letter-spacing:-.01em}
+.rps-ws{margin-top:8px;font-size:clamp(13px,3.9vw,16px);color:#9b9ba1}
+.rps-wi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.rps-wi i{aspect-ratio:1.45;border-radius:12px;background:#e8e8ec center/cover no-repeat;display:grid;place-items:center;cursor:pointer;color:#c9c9ce;font-size:22px;font-style:normal;font-weight:300}
+.rpl{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;color:#fff;overflow:hidden;font-family:-apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC",sans-serif;user-select:none;-webkit-user-select:none}
+.rpl-sb{width:100%;flex:none;padding-top:env(safe-area-inset-top,0px);background:linear-gradient(rgba(74,76,82,.9),rgba(26,27,31,.9));border-bottom:1px solid rgba(0,0,0,.55)}
+.rpl-sbi{height:20px;max-width:420px;margin:0 auto;padding:0 6px;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700}
+.rpl-sbi .g{display:flex;align-items:center;gap:4px;min-width:60px}.rpl-sbi .g:last-child{justify-content:flex-end}
+.rpl-sbi svg{height:12px;width:auto}
+.rpl-top{position:relative;width:100%;flex:none;text-align:center;padding:12px 0 10px;background:linear-gradient(rgba(62,64,70,.6),rgba(16,17,20,.66));border-bottom:1px solid rgba(255,255,255,.22);box-shadow:0 1px 0 rgba(0,0,0,.55)}
+.rpl-t{font-size:clamp(54px,17vw,72px);font-weight:300;line-height:1;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.rpl-d{font-size:16px;font-weight:600;margin-top:4px;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.rpl-bk,.rpl-us{position:absolute;top:8px;z-index:3;height:30px;border-radius:15px;background:rgba(255,255,255,.16);color:#fff;font-size:13px;font-weight:600}
+.rpl-bk{left:8px;width:30px;font-size:22px;line-height:27px;text-align:center;opacity:0}
+.rpl-us{right:8px;max-width:42%;display:flex;align-items:center;gap:5px;padding:0 9px 0 3px}
+.rpl-us .a{width:24px;height:24px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#555;font-size:12px;flex:none}
+.rpl-us .a img{width:100%;height:100%;object-fit:cover}
+.rpl-us .n{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rpl-list{flex:1;min-height:0;overflow-y:auto;width:100%;scrollbar-width:none}
+.rpl-list::-webkit-scrollbar{display:none}
+.rpl-al{display:flex;align-items:center;gap:10px;padding:12px;font-size:15px;font-weight:700;background:linear-gradient(rgba(38,39,44,.82),rgba(14,15,18,.86));border-bottom:1px solid rgba(255,255,255,.1)}
+.rpl-al svg{width:24px;height:24px;flex:none}
+.rpl-w{position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.1)}
+.rpl-go{position:absolute;inset:0;background:#4a78c2;display:flex;align-items:center;justify-content:flex-end;padding-right:18px;font-size:14px;font-weight:700;opacity:0}
+.rpl-card{position:relative;display:flex;gap:10px;align-items:flex-start;padding:10px 12px;background:linear-gradient(rgba(38,39,44,.82),rgba(14,15,18,.86));touch-action:pan-y;cursor:grab}
+.rpl-card.sel{background:linear-gradient(rgba(88,91,100,.88),rgba(54,56,64,.92))}
+.rpl-av{width:38px;height:38px;border-radius:9px;overflow:hidden;display:grid;place-items:center;flex:none;background:#6b6f7a;color:#fff;font-weight:700;font-size:16px;pointer-events:none}
+.rpl-av img{width:100%;height:100%;object-fit:cover}
+.rpl-m{min-width:0;flex:1;pointer-events:none}
+.rpl-m b{display:block;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpl-m p{margin:1px 0 0;font-size:14px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.rpl-m i{display:block;text-align:right;font-style:normal;font-size:11px;font-weight:700;color:#c3c6cc;margin-top:2px}
+.rpl-tip{text-align:center;font-size:12px;opacity:.78;padding:14px 16px;text-shadow:0 1px 2px rgba(0,0,0,.7)}
+.rpl-empty{padding:18px 16px;text-align:center;font-size:14px;color:#d5d7dc;background:rgba(0,0,0,.5)}
+.rpl-bot{width:100%;flex:none;display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 12px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(rgba(20,21,25,.6),rgba(0,0,0,.82));border-top:1px solid rgba(255,255,255,.22)}
+.rpl-sl{position:relative;flex:1;max-width:380px;height:52px;border-radius:9px;background:linear-gradient(#18191d,#2a2c31);border:1px solid rgba(255,255,255,.35);box-shadow:inset 0 2px 5px rgba(0,0,0,.7)}
+.rpl-tx{position:absolute;inset:0;display:grid;place-items:center;padding-left:56px;font-size:18px;font-weight:500;pointer-events:none;background:linear-gradient(90deg,#8d9097 40%,#fff 50%,#8d9097 60%) 0 0/250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:rpl-shim 2.6s linear infinite}
+@keyframes rpl-shim{from{background-position:120% 0}to{background-position:-120% 0}}
+.rpl-kn{position:absolute;left:3px;top:3px;width:66px;height:44px;border-radius:7px;background:linear-gradient(#f7f9fc,#c3c9d2);box-shadow:0 1px 2px rgba(0,0,0,.6),inset 0 1px 0 #fff;display:grid;place-items:center;touch-action:none;cursor:grab}
+.rpl-kn svg{width:32px;height:20px}
+.rpl-cam{flex:none;width:46px;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:0;color:#fff}
+.rpl-cam::before,.rpl-cam::after{content:"";width:100%;border-top:2px solid #6f7178;border-bottom:2px solid #6f7178;height:6px;box-sizing:border-box}
+.rpl-cam svg{width:30px;height:24px}
 /* 查手机：微信 / 自言自语 */
 .wx{--wbg:#ededed;--wbar:#ededed;--wo:#fff;--wm:#95ec69;--wt:#111;--wl:#e3e3e3;--wsub:#8a8a8a;--wg:#07c160;position:fixed;inset:0;max-width:640px;margin:0 auto;z-index:5;background:var(--wbg);color:var(--wt);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 [data-theme=dark] .wx{--wbg:#111;--wbar:#191919;--wo:#1f1f1f;--wm:#3eb575;--wt:#e6e6e6;--wl:#2a2a2a;--wsub:#777}
@@ -1151,6 +1222,17 @@ button.feed-follow-plus{padding:0;cursor:pointer}
 .of-hint{font-size:12px;line-height:1.6;color:var(--sub);margin:8px 2px 0}
 .of-wbt{flex:1;min-width:0}.of-wbt b{display:block;font-size:15px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.of-wbt small{display:block;color:var(--sub);font-size:12px;margin-top:3px}
 .of-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.of-chip{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:inherit}.of-chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.avl-bar{display:flex;gap:10px;margin:14px 16px 4px}.avl-btn{border:0;background:var(--ink);color:var(--bg);border-radius:999px;padding:9px 16px;font-size:14px;cursor:pointer;font-family:inherit}
+.avl-hint{margin:6px 16px 10px;font-size:12px;line-height:1.6;color:var(--sub)}
+.avl-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 16px 24px}
+.avl-item{position:relative;border:1px solid var(--line);border-radius:16px;padding:14px 10px 10px;text-align:center}
+.avl-imgs{display:flex;justify-content:center;gap:8px}.avl-imgs img{width:64px;height:64px;border-radius:50%;object-fit:cover}.avl-imgs.pair img{width:52px;height:52px}
+.avl-n{margin-top:8px;font-size:14px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}.avl-item small{color:var(--sub);font-size:11px}
+.avl-x{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.5);color:#fff;font-size:14px;line-height:1;padding:0;cursor:pointer}
+.avp{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;flex-direction:column}
+.avp-top{padding:calc(16px + env(safe-area-inset-top,0px)) 22px 10px;font-size:20px;font-weight:700;color:var(--ink)}.avp-top button{border:0;background:none;color:var(--ink);font-size:inherit;font-weight:inherit;padding:0;font-family:inherit}
+.avp-g{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:16px 8px;padding:10px 20px 30px;align-content:start}
+.avp-t{border:0;background:none;text-align:center;color:var(--ink);font-size:12px;cursor:pointer;font-family:inherit}.avp-t img{width:76px;height:76px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 6px}.avp-t small{display:block;color:var(--sub);font-size:11px;margin-top:2px}
 /* ===== 共读 ===== */
 #v-coread,#v-crread{background:var(--bg)}
 .cr-wrap{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;width:100%}
@@ -2146,7 +2228,7 @@ function ofSend(){if(OF.busy){if(OF.kind==='main'&&OF.ctl)ofStop();else toast('�
 function ofSys(p){
   const online=(S.chats[p.id]||[]).slice(-10).map(m=>(m.role==='user'?(S.me.name||'用户'):p.name)+'：'+qc(m)).join('\n');
   const dd=ofD();let sys=build(p,[...(S.chats[p.id]||[]).slice(-4),...dd.msgs.slice(-6)],false,{noTr:true,wbIds:dd.wb||undefined})[0].content;
-  sys+='\n\n【线下模式】现在你和用户「'+(S.me.name||'用户')+'」不是在手机上聊天，而是线下面对面。请用小说式的叙述回应：'+ofPov(dd)+'对白放进引号里（日语用「」，其他语言用“”），叙述和对白分开写，保持你的人设和你们的关系。只写你自己（'+p.name+'）的行动、感受和台词，不替用户决定动作、台词或内心。不输出 JSON、不用 Markdown、不加「角色名：」前缀，篇幅 150-400 字，自然收尾，给用户留出接话的空间。';
+  sys+='\n\n【线下模式】现在你和用户「'+(S.me.name||'用户')+'」不是在手机上聊天，而是线下面对面。请用小说式的叙述回应：'+ofPov(dd)+'对白放进引号里（日语用「」，其他语言用“”），叙述和对白分开写，保持你的人设和你们的关系。只写你自己（'+p.name+'）的行动、感受和台词，不替用户决定动作、台词或内心。不输出 JSON、不用 Markdown、不加「角色名：」前缀，'+ofLen(dd)+'自然收尾，给用户留出接话的空间。';
   if(ofForeign(p))sys+=ofTrNote(p,0);
   if(online)sys+='\n\n【最近的线上聊天（仅供参考，线下可自然承接）】\n'+online;
   return sys;
@@ -2205,6 +2287,7 @@ function ofMemView(cb){
 const OFP=[];
 function ofFixSum(d){if(!d.mem.length){d.lastSum=0;return}const t=d.mem.map(m=>m.to).filter(x=>typeof x==='number');if(t.length)d.lastSum=Math.min(d.msgs.length,Math.max(...t))}
 async function ofSumNow(done){if(OF.mem)return toast('正在总结，请稍等');const d0=ofD();if(d0&&d0.msgs.length-(d0.lastSum||0)<2){if(d0.msgs.length<2)return toast('线下内容太少，暂时不用总结');if(!confirm('没有未总结的新内容。要从头重新总结全部线下记录吗？'))return;d0.lastSum=0}OF.mem=1;toast('开始总结，请稍等，不用重复点击');try{const n=await ofSummarize();toast('已生成线下记忆（读取 '+n+' 条）');done&&done()}catch(e){toast('总结失败：'+e.message)}finally{OF.mem=0}}
+function ofLen(d){const a=d.lenMin===undefined?150:(+d.lenMin||0),b=d.lenMax===undefined?400:(+d.lenMax||0);if(!a&&!b)return'篇幅不限，按情节自然决定长短，';if(a&&b)return'每次回复的正文控制在 '+a+'-'+b+' 字，';return b?'每次回复的正文不超过 '+b+' 字，':'每次回复的正文不少于 '+a+' 字，'}
 function ofPov(d){const n=S.me.name||'用户',k=d&&d.pov||'3';
   if(k==='1')return '用第一人称写：「我」就是你自己（角色），写你的动作、神态、心理和所见所闻，称呼用户为「你」或用户的名字（'+n+'）；每一句叙述都要写出主语（我/你），不要省略主语，不要写成没有主语的碎句。';
   if(k==='2')return '用第二人称写：用「你」指代用户（'+n+'），角色（你自己）用自己的名字或「他/她」；只叙述你对用户做了什么、用户外在可见的反应和环境，不替用户决定动作、台词或内心；每一句叙述都要写出主语，不要省略主语，不要写成没有主语的碎句。';
@@ -2216,12 +2299,14 @@ function ofSettings(){
   const pov=d.pov||'3',fr=ofForeign(p);
   ov.innerHTML=`<div class="of-top"><h1><button class="of-bk" id="of-ovx" type="button">设置</button></h1></div><div class="of-fan">
     <div class="of-gh">叙述人称</div><div class="of-g"><div class="of-r"><div class="of-m3" id="of-pov">${[['1','第一人称'],['2','第二人称'],['3','第三人称']].map(([k,l])=>`<button data-k="${k}" class="${pov===k?'on':''}" type="button">${l}</button>`).join('')}</div></div></div>
+    <div class="of-gh">每次回复字数（仅线下，番外不限制）</div><div class="of-g"><div class="of-r"><span>最少字数（0 = 不限）</span><input class="of-num" id="of-lmin" type="number" min="0" max="3000" value="${d.lenMin===undefined?150:d.lenMin}"></div><div class="of-r"><span>最多字数（0 = 不限）</span><input class="of-num" id="of-lmax" type="number" min="0" max="3000" value="${d.lenMax===undefined?400:d.lenMax}"></div></div>
     <div class="of-gh">记忆</div><div class="of-g"><label class="of-r"><span>自动总结记忆</span>${sw('of-sa',d.auto!==false)}</label><div class="of-r"><span>总结间隔（线下消息条数）</span><input class="of-num" id="of-ev" type="number" min="10" max="500" value="${d.every||30}"></div><div class="of-r of-tap" id="of-sumnow"><span>立即总结记忆</span><span class="v" id="of-sumv"></span></div><div class="of-r of-tap" id="of-memv"><span>查看 / 编辑记忆</span><span class="v" id="of-memc"></span></div></div>
     <div class="of-gh">世界书</div><div class="of-g"><div class="of-r of-tap" id="of-wbo"><span>生效的世界书</span><span class="v" id="of-wbv">${wbTxt()}</span></div></div>
     ${fr?`<div class="of-gh">翻译</div><div class="of-g"><label class="of-r"><span>显示中文翻译</span>${sw('of-st',d.showTr!==false)}</label></div>`:''}
     <div class="of-gh">线下专属 CSS（与线上美化互不影响）</div><div class="of-g" style="padding:12px"><div class="of-chips" id="of-chips"></div><textarea class="of-css" id="of-css" spellcheck="false" placeholder="例如：.of-b{font-size:16px}">${esc((S.off&&S.off.css)||'')}</textarea><p class="of-hint">可用类名：.of-list .of-m .of-m.me .of-m.ta .of-n .of-na .of-b .of-q（对白下划线） .of-zh .of-or .of-bar .of-in .of-top .of-seg .of-pill .of-card</p><div class="of-ops"><button class="of-mini" id="of-cssa" type="button">保存并应用</button><button class="of-mini" id="of-cssn" type="button">另存为预设</button><button class="of-mini" id="of-cssd" type="button">删除预设</button><button class="of-mini" id="of-cssc" type="button">清空</button></div></div></div>`;
   ov.querySelector('#of-ovx').onclick=()=>{ov.remove();ofRender()};
   ov.querySelectorAll('#of-pov [data-k]').forEach(b=>b.onclick=()=>{d.pov=b.dataset.k;save();ov.querySelectorAll('#of-pov [data-k]').forEach(x=>x.classList.toggle('on',x===b));toast('下一次生成起生效')});
+  {const lm=ov.querySelector('#of-lmin'),lx=ov.querySelector('#of-lmax'),fix=()=>{let a=Math.max(0,Math.min(3000,+lm.value||0)),b=Math.max(0,Math.min(3000,+lx.value||0));if(a&&b&&a>b)b=a;d.lenMin=a;d.lenMax=b;lm.value=a;lx.value=b;save()};lm.onchange=fix;lx.onchange=fix}
   ov.querySelector('#of-sa').onchange=e=>{d.auto=e.target.checked;save()};
   ov.querySelector('#of-ev').onchange=e=>{d.every=Math.max(10,Math.min(500,Number(e.target.value)||30));e.target.value=d.every;save()};
   const refMem=()=>{ov.querySelector('#of-sumv').textContent='未总结 '+Math.max(0,d.msgs.length-(d.lastSum||0))+' 条 ›';ov.querySelector('#of-memc').textContent=d.mem.length+' 条 ›'};refMem();
@@ -2273,6 +2358,46 @@ async function ofFanGen(theme){
     d.fan.unshift({id:uid(),title,titleOr,body,theme:theme||'',createdAt:Date.now()});OF.theme='';save();toast('番外已生成');
   }catch(e){toast(OF.stopped||(e&&e.name==='AbortError')?'已终止':'番外生成失败：'+e.message)}finally{OF.busy=0;OF.ctl=null;OF.stopped=0;ofRender()}
 }
+
+/* ===== 头像库 ===== */
+function avCompress(src,cb,max){max=max||320;const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),w=Math.max(1,Math.round(im.width*k)),h=Math.max(1,Math.round(im.height*k)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);try{cb(c.toDataURL('image/jpeg',0.86))}catch(e){cb(src)}};im.onerror=()=>cb(src);im.src=src}
+function avPickFiles(cb){const i=document.createElement('input');i.type='file';i.accept='image/*';i.multiple=true;i.onchange=()=>{const fs=[...(i.files||[])];if(!fs.length)return;Promise.all(fs.map(f=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>avCompress(fr.result,r);fr.onerror=()=>r(null);fr.readAsDataURL(f)}))).then(a=>cb(a.filter(Boolean)))};i.click()}
+function avRefInfo(ref){const [id,n]=String(ref||'').split('#'),it=(S.avatarLib||[]).find(x=>x.id===id);return it?{it,n:+n||0}:null}
+function avSrcOf(ref){const r=avRefInfo(ref);return r?r.it.imgs[r.it.type==='pair'?(r.n===2?1:0):0]||'':''}
+function chatAvU(u,me,id){const o=(CC(id||cur)||{}).chatAv||{},src=o[me?'me':'char'];return src?{...u,avatar:src}:u}
+function avLibHTML(){const L=S.avatarLib||[];return `<div class="avl-bar"><button class="avl-btn" id="avl-add1" type="button">上传头像</button><button class="avl-btn" id="avl-add2" type="button">上传情头</button></div><p class="avl-hint">单人头像可一次选多张；情头请一次选 2 张（按选择顺序）。名字会告诉角色，方便 TA 挑选；点名字可以改。</p><div class="avl-grid">${L.map(x=>`<div class="avl-item"><button class="avl-x" data-avl-del="${x.id}" type="button" aria-label="删除">×</button><div class="avl-imgs${x.type==='pair'?' pair':''}">${x.imgs.map(s=>`<img src="${esc(s)}" alt="">`).join('')}</div><div class="avl-n" data-avl-ren="${x.id}">${esc(x.name||'未命名')}</div><small>${x.type==='pair'?'情头':'单人'}</small></div>`).join('')||'<div class="empty" style="grid-column:1/-1">头像库还是空的</div>'}</div>`}
+function avLibBind(refresh){
+  const add=(o)=>{(S.avatarLib=S.avatarLib||[]).push(Object.assign({id:uid(),createdAt:Date.now()},o))};
+  const a1=$('#avl-add1'),a2=$('#avl-add2');
+  if(a1)a1.onclick=()=>avPickFiles(async imgs=>{if(imgs.length===1){const n=await sgPrompt('给这个头像起个名字（角色会据此挑选）','','例如：黑猫、月亮');if(n===null)return;add({type:'single',name:(n||'').trim()||'未命名',imgs})}else imgs.forEach((src,i)=>add({type:'single',name:'头像'+((S.avatarLib||[]).length+1),imgs:[src]}));save();refresh()});
+  if(a2)a2.onclick=()=>avPickFiles(imgs=>{if(imgs.length!==2)return toast('情头需要一次选 2 张图（按选择顺序）');sgPrompt('给这对情头起个名字','','例如：黑白猫情头').then(n=>{if(n===null)return;add({type:'pair',name:(n||'').trim()||'未命名情头',imgs});save();refresh()})});
+  $$('[data-avl-ren]').forEach(b=>b.onclick=()=>{const x=(S.avatarLib||[]).find(i=>i.id===b.dataset.avlRen);if(!x)return;sgPrompt('名称',x.name||'','').then(n=>{if(n===null||!String(n).trim())return;x.name=String(n).trim();save();refresh()})});
+  $$('[data-avl-del]').forEach(b=>b.onclick=()=>{const x=(S.avatarLib||[]).find(i=>i.id===b.dataset.avlDel);if(!x||!confirm('删除「'+(x.name||'未命名')+'」？已经在聊天里用上的头像不受影响。'))return;S.avatarLib=S.avatarLib.filter(i=>i.id!==x.id);save();refresh()})}
+function avLibPick(cb){
+  const L=S.avatarLib||[],tiles=[];L.forEach(it=>it.imgs.forEach((src,k)=>tiles.push({src,ref:it.type==='pair'?it.id+'#'+(k+1):it.id,name:it.name||'未命名',sub:it.type==='pair'?'情头 · 第'+(k+1)+'张':'单人'})));
+  const ov=document.createElement('div');ov.className='avp';
+  ov.innerHTML=`<div class="avp-top"><button type="button" id="avp-x">头像库</button></div><div class="avp-g">${tiles.map((t,i)=>`<button class="avp-t" data-i="${i}" type="button"><img src="${esc(t.src)}" alt="">${esc(t.name)}<small>${t.sub}</small></button>`).join('')||'<p class="avl-hint" style="grid-column:1/-1">头像库还是空的，先到「我的 → 头像库」上传。</p>'}</div>`;
+  ov.querySelector('#avp-x').onclick=()=>ov.remove();
+  ov.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const t=tiles[+b.dataset.i];ov.remove();cb(t)});
+  document.body.appendChild(ov);
+}
+function avChatPick(me){
+  const cc=CC(cur),o=cc.chatAv=cc.chatAv||{},key=me?'me':'char',done=()=>{save();draw();try{rCset()}catch(e){}};
+  showFeedSheet([
+    {label:'从相册选择',run:()=>pickImage(src=>avCompress(src,s2=>{o[key]=s2;o[key+'Ref']='';done()}))},
+    {label:'从头像库选择',run:()=>avLibPick(t=>{o[key]=t.src;o[key+'Ref']=t.ref;done()})},
+    ...(o[key]?[{label:'恢复默认头像',run:()=>{o[key]='';o[key+'Ref']='';done()}}]:[]),
+    {label:'取消',run:()=>{}}]);
+}
+function avPrompt(id){
+  const L=S.avatarLib||[];if(!L.length)return[];const o=(CC(id)||{}).chatAv||{};
+  const lines=L.map(it=>it.type==='pair'?'· 「'+it.name+'」情头：'+it.id+'#1（第1张）、'+it.id+'#2（第2张）':'· 「'+it.name+'」单人头像：'+it.id).join('\n');
+  const m=avRefInfo(o.meRef),c=avRefInfo(o.charRef);
+  const ms=m?('用户在这个聊天里正在用「'+m.it.name+'」'+(m.it.type==='pair'?'情头的第'+m.n+'张；如果你想和用户配成情侣头像，请选同一对里的另一张：'+m.it.id+'#'+(m.n===1?2:1):'（单人头像）')):'用户在这个聊天里用的是相册里的图或默认头像';
+  const cs=c?('你当前用的是「'+c.it.name+'」'+(c.it.type==='pair'?'情头第'+c.n+'张':'')):'你当前用的是默认头像';
+  return[{role:'system',content:'【头像库】你可以更换自己在这个聊天里的头像（只影响此聊天，不影响联系人页）。头像库里有：\n'+lines+'\n'+ms+'。'+cs+'。只有当用户提出想换头像、想一起换情侣头像，或你们聊到时才换，不要主动频繁更换。想换时在 JSON 里加字段 "avatar":"图片id"（只能填上面列出的 id，原样填写），不换就不要写这个字段；换的同时在 messages 里自然地说一句。'}]
+}
+function avApplyAI(id,data){const ref=String(data&&data.avatar||'').trim();if(!ref)return;const src=avSrcOf(ref);if(!src)return;const cc=CC(id);cc.chatAv=cc.chatAv||{};cc.chatAv.char=src;cc.chatAv.charRef=ref;save();if(cur===id)draw();toast(((P(id)||{}).name||'对方')+' 换了新头像')}
 const CC=id=>S.cc[id]||(S.cc[id]={wb:[],stk:[],sys:'',css:''});
 const who=id=>id==='me'?Object.assign({id:'me'},S.me,{handle:S.me.handle||'me'}):(P(id)?Object.assign({},P(id),{handle:P(id).handle||id}):{id,name:'已删除',handle:''});
 const av=p=>p&&p.avatar?`<img src="${p.avatar}" alt="">`:esc(((p&&p.name)||'?')[0]);
@@ -2394,7 +2519,7 @@ function profileSlots(){
 }
 function profileTabContent(id,ps){
   if(profileTab==='posts')return (ps.map(o=>post(o)).join('')||'<div class="empty">还没有帖子</div>')+profileSlots();
-  if(profileTab==='media')return profileSlots();
+  if(profileTab==='media')return id==='me'?avLibHTML():profileSlots();
   if(profileTab==='stickers')return stickerManagerHTML('profile');
   if(profileTab==='replies')return '<div class="empty">还没有回复</div>';
   return '<div class="empty">还没有转发</div>';
@@ -2405,7 +2530,7 @@ function profHTML(id){
   const editor='';
   return `<div class="bn" id="change-user-bg" ${bg}></div><div class="pr"><div class="av big" id="change-user-avatar">${av(u)}</div></div>
   <div class="pi"><div class="profile-name-row"><b class="profile-name">${esc(u.name)}${BADGE}</b>${isMe?'<button class="pill" id="switch-account" type="button">切换账号</button>':`<button class="pill" data-chat="${id}">发消息</button>`}</div><small>@${esc(u.handle)}</small>${(bt||isMe)?`<div class="up-bio-wrap"><div class="up-cap">简介</div><p class="up-bio" id="up-bio-view">${esc(bt||'还没写简介，请到联系人设定里填写')}</p><button class="up-more" type="button" data-bio-toggle>展开</button></div>`:''}<small>${ps.length} 帖子</small></div>
-  ${editor}<div class="profile-tabs">${[['posts','串文'],['replies','回复'],['media','影音内容'],['retweets','转发'],['stickers','表情包']].map(([k,t])=>`<button type="button" data-profile-tab="${k}" class="${profileTab===k?'on':''}">${t}</button>`).join('')}</div><div id="profile-tab-content">${profileTabContent(id,ps)}</div>`;
+  ${editor}<div class="profile-tabs">${[['posts','串文'],['replies','回复'],['media',isMe?'头像库':'影音内容'],['retweets','转发'],['stickers','表情包']].map(([k,t])=>`<button type="button" data-profile-tab="${k}" class="${profileTab===k?'on':''}">${t}</button>`).join('')}</div><div id="profile-tab-content">${profileTabContent(id,ps)}</div>`;
 }
 
 
@@ -2446,7 +2571,6 @@ const ROLE_PHONE_APPS=[
  {id:'notes',name:'iPhone 备忘录',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',desc:'日常、想做的事'},
  {id:'twitter',name:'Twitter',icon:'𝕏',desc:'帖子与草稿'},
  {id:'phone',name:'电话',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H4.8A1.8 1.8 0 0 0 3 4.8C3 13.7 10.3 21 19.2 21a1.8 1.8 0 0 0 1.8-1.8V17l-5-2-1.7 2.1a14.5 14.5 0 0 1-5.6-5.6L10.8 10 9 5 7 3Z"/></svg>',desc:'通话记录与联系人'},
- {id:'rednote',name:'小红书',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 9h3l-3 6h3M14 9h3M14 12h3M14 15h3"/></svg>',desc:'笔记、收藏与浏览'},
  {id:'monologue',name:'自言自语',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/><path d="M15 4v4M13 6h4"/></svg>',desc:'私密心声'},
  {id:'music',name:'Apple Music',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></svg>',desc:'歌单与最近播放'}
 ];
@@ -2454,16 +2578,96 @@ let rolePhonePersonaId='',rolePhoneActiveApp='';
 function rolePhoneStore(id){S.rolePhones=S.rolePhones||{};S.rolePhones[id]=S.rolePhones[id]||{apps:{}};S.rolePhones[id].apps=S.rolePhones[id].apps||{};return S.rolePhones[id]}
 function rolePhoneConfig(){return {base:(S.cfg.secondaryBase||'').trim()||S.cfg.base,key:(S.cfg.secondaryKey||'').trim()||S.cfg.key,model:(S.cfg.secondaryModel||'').trim()||S.cfg.model,temp:.85,stream:false}}
 function rolePhonePrompt(p){return `今天是${new Date().toLocaleDateString('zh-CN')}。你正在模拟角色「${p.name}」的私人手机内容。${S.me.bio?`用户「${S.me.name||'用户'}」的人设：${S.me.bio}。请让手机内容里的关系与称呼符合这份人设。`:''}请完全依据角色设定、角色简介、聊天上下文来创作，内容要像真实个人手机里的碎片，具体、有生活感、前后一致，不要解释自己是AI，不要写成设定分析。\n角色简介：${p.bio||'无'}\n角色人设：${p.prompt||'无'}\n与用户最近的聊天：${(((S.chats||{})[p.id]||H(p.id)||[])).slice(-18).map(m=>(m.role==='user'?'用户':'角色')+'：'+(m.content||'[多媒体]')).join('\n').slice(-7000)||'暂无聊天记录'}\n请保持角色口吻与已知事实，不要凭空改写双方关系。`}
+const RPS_WIFI='<svg viewBox="0 0 16 12"><path d="M1 4.2a10 10 0 0 1 14 0M3.3 6.8a6.7 6.7 0 0 1 9.4 0M5.7 9.2a3.3 3.3 0 0 1 4.6 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="10.8" r="1.1" fill="currentColor"/></svg>';
+const RPS_BAT=(f)=>`<svg viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="2.5" fill="none" stroke="currentColor" opacity=".8"/><rect x="2" y="2" width="${(19*f).toFixed(1)}" height="8" rx="1.2" fill="currentColor"/><rect x="23.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".8"/></svg>`;
+const RPS_WP=[
+ {n:'暮光蓝紫',c:'linear-gradient(180deg,#3d55a6 0%,#6b72bd 32%,#a79fd2 62%,#d9bcd2 85%,#e9c9cf 100%)'},
+ {n:'石墨黑',c:'linear-gradient(#2b2d33,#0b0c0f)'},
+ {n:'灰雨滴',c:'radial-gradient(circle at 18% 22%,rgba(255,255,255,.75) 0 2.5px,transparent 3.5px),radial-gradient(circle at 72% 18%,rgba(255,255,255,.7) 0 3px,transparent 4px),radial-gradient(circle at 40% 58%,rgba(255,255,255,.6) 0 2px,transparent 3px),radial-gradient(circle at 85% 66%,rgba(255,255,255,.65) 0 3px,transparent 4px),radial-gradient(circle at 25% 84%,rgba(255,255,255,.6) 0 2.5px,transparent 3.5px),linear-gradient(#cfd0d3,#8a8b90)'},
+ {n:'雾蓝',c:'linear-gradient(#b7c7da,#e6ebf1)',l:1},
+ {n:'低饱和粉',c:'#ead9dd',l:1},
+ {n:'奶油白',c:'#f3efe9',l:1},
+ {n:'深海',c:'linear-gradient(#1d3557,#0a1729)'}
+];
+const RPS_DEF={home:RPS_WP[0],lock:RPS_WP[1]};
+function rpsWp(kind,pid){const w=kind==='lock'?S.rolePhoneLockWp:rolePhoneStore(pid).wp;return w||RPS_DEF[kind]}
+function rpsWpStyle(w){return w.t==='img'?'background:url('+w.v+') center/cover no-repeat':'background:'+w.c}
+function rpsWpSet(kind,pid,w){if(kind==='lock'){if(w)S.rolePhoneLockWp=w;else delete S.rolePhoneLockWp}else{const st=rolePhoneStore(pid);if(w)st.wp=w;else delete st.wp}save();rolePhoneRender();toast(w?'壁纸已更换':'已恢复默认壁纸')}
+function rpsWpFile(kind,pid){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=()=>{const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);let l=0;try{const t=document.createElement('canvas');t.width=t.height=8;const g=t.getContext('2d');g.drawImage(im,0,0,8,8);const d=g.getImageData(0,0,8,8).data;let s=0;for(let q=0;q<d.length;q+=4)s+=.299*d[q]+.587*d[q+1]+.114*d[q+2];l=s/64/255>.68?1:0}catch(e){}rpsWpSet(kind,pid,{t:'img',v:c.toDataURL('image/jpeg',.82),l})};im.onerror=()=>toast('图片读取失败');im.src=r.result};r.readAsDataURL(f)};i.click()}
+function rpsWpSheet(kind,pid){iosSheet({title:kind==='lock'?'锁屏壁纸':'主屏幕壁纸',items:[{label:'从相册选择…',run:()=>rpsWpFile(kind,pid)}].concat(RPS_WP.map(w=>({label:w.n,run:()=>rpsWpSet(kind,pid,{c:w.c,l:w.l?1:0})})),[{label:'恢复默认',run:()=>rpsWpSet(kind,pid,null)}])})}
+const RPS_IC={
+ message:{l:'Messages',g:'linear-gradient(#6ee26e,#1fb83a)',h:'<svg viewBox="0 0 24 24"><path fill="#fff" d="M12 3.2C6.6 3.2 2.4 6.7 2.4 11.1c0 2.4 1.3 4.5 3.3 5.9-.2 1.5-.9 2.8-1.9 3.7 2.3-.1 4.1-1 5.4-2.1.9.3 1.8.4 2.8.4 5.4 0 9.6-3.5 9.6-7.9S17.4 3.2 12 3.2z"/></svg>'},
+ phone:{l:'Phone',g:'linear-gradient(#6ee26e,#1fb83a)',h:'<svg viewBox="0 0 24 24"><path fill="#fff" d="M7 3H4.8A1.8 1.8 0 0 0 3 4.8C3 13.7 10.3 21 19.2 21a1.8 1.8 0 0 0 1.8-1.8V17l-5-2-1.7 2.1a14.5 14.5 0 0 1-5.6-5.6L10.8 10 9 5 7 3Z"/></svg>'},
+ notes:{l:'Notes',g:'#fff',h:'<svg class="full" viewBox="0 0 60 60"><defs><linearGradient id="rpsn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe071"/><stop offset="1" stop-color="#f7c331"/></linearGradient></defs><rect width="60" height="15" fill="url(#rpsn)"/><path d="M0 15.5h60M0 26.5h60M0 37.5h60M0 48.5h60" stroke="#e0e0e5" stroke-width="1"/></svg>'},
+ monologue:{l:'Health',g:'#fff',h:'<svg viewBox="0 0 24 24" style="width:64%;height:64%"><defs><linearGradient id="rpsh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5a7a"/><stop offset="1" stop-color="#ff2d55"/></linearGradient></defs><path fill="url(#rpsh)" d="M12 21s-8.5-5.4-8.5-11.5A4.7 4.7 0 0 1 12 6.8a4.7 4.7 0 0 1 8.5 2.7C20.5 15.6 12 21 12 21z"/></svg>'},
+ twitter:{l:'Twitter',g:'#4a97e6',h:'<svg viewBox="0 0 24 24" style="width:64%;height:64%"><path fill="#fff" d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>'},
+ music:{l:'Music',g:'#fff',h:'<svg viewBox="0 0 24 24"><defs><linearGradient id="rpsm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff4d6a"/><stop offset=".55" stop-color="#ff5e8a"/><stop offset="1" stop-color="#6a7cf0"/></linearGradient></defs><g stroke="url(#rpsm)" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17V6.2l10.5-2V15"/><path d="M9 9.2l10.5-2"/></g><ellipse cx="6.8" cy="17.3" rx="2.9" ry="2.3" fill="url(#rpsm)"/><ellipse cx="17.3" cy="15.3" rx="2.9" ry="2.3" fill="url(#rpsm)"/></svg>'}
+};
+const RPS_GEAR='<svg viewBox="0 0 24 24" fill="none" stroke="#3f4148" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/><circle cx="12" cy="12" r="3"/></svg>';
+const RPS_USER='<svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4.2" fill="#6f7686"/><path d="M3.8 21c0-4.6 3.7-7.4 8.2-7.4s8.2 2.8 8.2 7.4z" fill="#6f7686"/></svg>';
+const RPS_SHOP='<svg class="full" viewBox="0 0 100 100"><defs><linearGradient id="rpssh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f8fe3"/><stop offset="1" stop-color="#9ccff6"/></linearGradient></defs><rect x="22" y="14" width="40" height="40" fill="#d9d9dc"/><text x="42" y="25" text-anchor="middle" font-size="9" font-weight="700" font-family="serif" fill="#222">News</text><path d="M26 30h32M26 35h32M26 40h32" stroke="#bdbdc2" stroke-width="1.4"/><rect x="8" y="36" width="30" height="46" fill="#f6c232"/><text x="12" y="46" font-size="7.5" font-weight="700" font-family="sans-serif" fill="#3a3a3a">ART</text><circle cx="23" cy="57" r="6" fill="#3aa0ee"/><rect x="12" y="66" width="11" height="11" fill="#ee4438"/><path d="M26 78l6-9 6 9z" fill="#fff" opacity=".85"/><rect x="32" y="27" width="31" height="55" fill="url(#rpssh)"/><text x="47.5" y="36" text-anchor="middle" font-size="7" font-weight="700" font-family="serif" fill="#1c2f86">TRAVEL</text><path d="M47.5 48c1.3 0 2.2 1 2.2 3v7l9 5v3l-9-3v6l3 2.5v2.5l-5.2-1.5-5.2 1.5v-2.5l3-2.5v-6l-9 3v-3l9-5v-7c0-2 .9-3 2.2-3z" fill="#fff"/><rect x="58" y="36" width="34" height="46" fill="#5cc043"/><text x="75" y="45" text-anchor="middle" font-size="6.6" font-weight="700" font-family="serif" fill="#fff">SPORTS</text><circle cx="75" cy="58" r="7.5" fill="#e6ee45"/><path d="M69.5 52.8c3 3 3 9.4 0 12.4M80.5 52.8c-3 3-3 9.4 0 12.4" fill="none" stroke="#fff" stroke-width="1.2"/><path d="M60 82l5-12h20l5 12M62.5 76h25M75 70v12" fill="none" stroke="#fff" stroke-width="1.2"/></svg>';
+const RPS_SAFARI='<svg class="full" viewBox="0 0 100 100"><defs><radialGradient id="rpssf" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#7fd4ff"/><stop offset="1" stop-color="#1a68e0"/></radialGradient></defs><circle cx="50" cy="50" r="41" fill="url(#rpssf)"/><circle cx="50" cy="50" r="38.5" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="0.9 3.08"/><polygon points="68,32 54.2,54.2 45.8,45.8" fill="#ff3b30"/><polygon points="32,68 54.2,54.2 45.8,45.8" fill="#fff"/><circle cx="50" cy="50" r="2.2" fill="#d1d5db"/></svg>';
+function rpsPickUser(){iosSheet({title:'切换用户',items:S.userProfiles.map(u=>({label:u.name||'未命名',av:av(u),on:u.id===S.activeUserProfile,run:()=>{if(u.id===S.activeUserProfile)return;switchUser(u.id);S.me={name:u.name||'',handle:u.handle||'',bio:u.bio||'',avatar:u.avatar||''};rolePhonePersonaId='';rolePhoneActiveApp='';rpsSel='';saveNow();rolePhoneRender();toast('已切换到 '+(u.name||'未命名'))}}))})}
+let rpsSel='';
+function rpsNow(){const d=new Date();return{d,t:d.getHours()+':'+String(d.getMinutes()).padStart(2,'0'),h:((d.getHours()%12)+d.getMinutes()/60)*30,m:d.getMinutes()*6}}
+function rpsLock(ps){
+ const n=rpsNow(),wd=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][n.d.getDay()];
+ const u=S.userProfiles.find(x=>x.id===S.activeUserProfile)||S.userProfiles[0]||{};
+ if(!ps.some(p=>p.id===rpsSel))rpsSel=ps[0]?ps[0].id:'';
+ const rows=ps.length?ps.map(p=>`<div class="rpl-w"><div class="rpl-go">进入手机 ›</div><div class="rpl-card${p.id===rpsSel?' sel':''}" data-rpl="${p.id}"><div class="rpl-av">${av(p)}</div><div class="rpl-m"><b>${esc(p.name)}</b><p>${esc(p.bio||'左滑进入这部手机')}</p><i>现在</i></div></div></div>`).join('')+(ps.length>1?'<div class="rpl-tip">点选角色，左滑通知进入对方的手机</div>':''):'<div class="rpl-empty">这个用户还没有绑定角色，可以切换用户，或在通讯录里绑定</div>';
+ return`<div class="rpl" style="${rpsWpStyle(rpsWp('lock'))}"><div class="rpl-sb"><div class="rpl-sbi"><span class="g">无 SIM 卡${RPS_WIFI}</span><svg viewBox="0 0 12 14" style="height:11px"><rect x="1" y="6" width="10" height="7.5" rx="1.5" fill="#fff"/><path d="M3.2 6V4.2a2.8 2.8 0 0 1 5.6 0V6" fill="none" stroke="#fff" stroke-width="1.5"/></svg><span class="g">88%${RPS_BAT(.88)}</span></div></div>
+<div class="rpl-top"><button class="rpl-bk" data-back>‹</button><button class="rpl-us" data-rpl-user><span class="a">${av(u)}</span><span class="n">${esc(u.name||'未命名')}</span><span>▾</span></button><div class="rpl-t" id="rpl-t">${n.t}</div><div class="rpl-d">${n.d.getMonth()+1}月${n.d.getDate()}日${wd}</div></div>
+<div class="rpl-list"><div class="rpl-al"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M12 6.5v7" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.3" fill="#fff"/></svg>未安装 SIM 卡</div>${rows}</div>
+<div class="rpl-bot"><div class="rpl-sl" id="rpl-sl"><div class="rpl-tx" id="rpl-tx">移动滑块来解锁</div><div class="rpl-kn" id="rpl-kn"><svg viewBox="0 0 40 24"><path d="M2 9h22V2l14 10-14 10v-7H2z" fill="#8a8e97"/></svg></div></div><button class="rpl-cam" data-rpl-wp><svg viewBox="0 0 28 22"><path d="M3 5h5l2-3h8l2 3h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="#f2f3f5"/><circle cx="14" cy="13" r="5" fill="#2b2d33"/><circle cx="14" cy="13" r="3.2" fill="#f2f3f5"/></svg></button></div></div>`}
+function rpsLockBind(ps){
+ const ub=$('[data-rpl-user]');if(ub)ub.onclick=rpsPickUser;
+ const cam=$('[data-rpl-wp]');if(cam)cam.onclick=()=>rpsWpSheet('lock');
+ const go=id=>{rolePhonePersonaId=id;rolePhoneActiveApp='';rolePhoneRender()};
+ $$('.rpl-card').forEach(c=>{const w=c.parentNode.querySelector('.rpl-go');let sx=0,dx=0,on=false;
+  c.onpointerdown=e=>{on=true;sx=e.clientX;dx=0;c.style.transition='none';try{c.setPointerCapture(e.pointerId)}catch(_){}};
+  c.onpointermove=e=>{if(!on)return;dx=Math.max(0,sx-e.clientX);c.style.transform='translateX('+(-Math.min(dx,200))+'px)';w.style.opacity=Math.min(1,dx/60)};
+  const end=()=>{if(!on)return;on=false;c.style.transition='transform .22s ease';if(dx>=90){c.style.transform='translateX(-120%)';setTimeout(()=>go(c.dataset.rpl),180)}else{c.style.transform='';w.style.opacity=0;if(dx<6){rpsSel=c.dataset.rpl;$$('.rpl-card').forEach(x=>x.classList.toggle('sel',x===c))}}};
+  c.onpointerup=end;c.onpointercancel=end});
+ const sl=$('#rpl-sl'),kn=$('#rpl-kn'),tx=$('#rpl-tx');
+ if(sl&&kn){let sx=0,x=0,on=false;const max=()=>sl.clientWidth-kn.offsetWidth-8;
+  kn.onpointerdown=e=>{on=true;sx=e.clientX-x;kn.style.transition='none';try{kn.setPointerCapture(e.pointerId)}catch(_){}};
+  kn.onpointermove=e=>{if(!on)return;x=Math.min(max(),Math.max(0,e.clientX-sx));kn.style.transform='translateX('+x+'px)';tx.style.opacity=Math.max(0,1-x/max()*1.4)};
+  const end=()=>{if(!on)return;on=false;kn.style.transition='transform .25s ease';if(x>=max()*.85&&rpsSel){go(rpsSel)}else{x=0;kn.style.transform='';tx.style.opacity=1}};
+  kn.onpointerup=end;kn.onpointercancel=end}
+}
+function rpsApp(id,store){const a=ROLE_PHONE_APPS.find(x=>x.id===id),d=RPS_IC[id];if(!a||!d)return'';return`<button class="rps-app" data-rp-app="${id}"><span class="rps-ic" style="--g:${d.g}">${d.h}</span>${store.apps[id]?'':'<span class="rps-bd">!</span>'}<b>${d.l}</b></button>`}
+function rpsHome(p,store){
+ const n=rpsNow(),w=rpsWp('home',p.id),wd=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][n.d.getDay()];
+ const nums=Array.from({length:12},(_,i)=>{const a=(i+1)*30*Math.PI/180;return`<text x="${(50+32*Math.sin(a)).toFixed(1)}" y="${(50-32*Math.cos(a)+3).toFixed(1)}" text-anchor="middle" font-size="9" font-weight="500" fill="#111" font-family="Helvetica,Arial,sans-serif">${i+1}</text>`}).join('');
+ const wi=(rolePhoneStore(p.id).wgImgs||[]);
+ const wg=`<div class="rps-wg"><div class="rps-wt">Dos almas no se encuentran por casualidad.</div><div class="rps-ws">Ya formas parte del corazón mío.</div><div class="rps-wi">${[0,1,2].map(k=>`<i data-rps-img="${k}"${wi[k]?` style="background-image:url(${wi[k]})"`:''}></i>`).join('')}</div></div>`;
+ return`<div class="rps${w.l?' lt':''}" style="${rpsWpStyle(w)}"><div class="rps-sb"><div class="rps-sbi"><div class="rps-sbl"><span>无服务</span>${RPS_WIFI}</div><span class="rps-t" id="rps-t">${n.t}</span><div class="rps-sbr">${RPS_BAT(.88)}</div></div></div>
+<div class="rps-in"><div class="rps-grid">
+<div class="rps-app"><span class="rps-ic cal" style="--g:#fff"><span class="rps-cw">${wd}</span><span class="rps-cd">${n.d.getDate()}</span></span><b>Calendar</b></div>
+<div class="rps-app"><span class="rps-ic" style="--g:#000"><svg class="full" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#fff"/>${nums}<line id="rps-h" x1="50" y1="50" x2="50" y2="29" stroke="#111" stroke-width="3.6" stroke-linecap="round" transform="rotate(${n.h} 50 50)"/><line id="rps-m" x1="50" y1="50" x2="50" y2="17" stroke="#111" stroke-width="2.6" stroke-linecap="round" transform="rotate(${n.m} 50 50)"/><circle cx="50" cy="50" r="2.8" fill="#ff3b30"/></svg></span><b>Clock</b></div>
+${rpsApp('notes',store)}${rpsApp('monologue',store)}
+<button class="rps-app" data-rps-settings><span class="rps-ic" style="--g:linear-gradient(#c9cbd1,#8e9098)">${RPS_GEAR}</span><b>Settings</b></button>
+<button class="rps-app" data-rps-contacts><span class="rps-ic" style="--g:linear-gradient(#f0f1f5,#cfd2da)">${RPS_USER}</span><b>Contacts</b></button>
+<div class="rps-app"><span class="rps-ic" style="--g:#fff">${RPS_SHOP}</span><b>Shopping</b></div>
+<div class="rps-app"><span class="rps-ic" style="--g:#fff">${RPS_SAFARI}</span><b>Safari</b></div>
+</div>${wg}<div class="rps-dots"><i class="on"></i><i></i></div></div>
+<div class="rps-dockbar"><div class="rps-dock">${rpsApp('phone',store)}${rpsApp('message',store)}${rpsApp('twitter',store)}${rpsApp('music',store)}</div></div></div>`}
+function rpsWgPick(pid,i){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=()=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);const st=rolePhoneStore(pid);st.wgImgs=st.wgImgs||['','',''];st.wgImgs[i]=c.toDataURL('image/jpeg',.82);save();rolePhoneRender()};im.onerror=()=>toast('图片读取失败');im.src=r.result};r.readAsDataURL(f)};inp.click()}
+function rpsHomeBind(p){
+ $$('[data-rps-img]').forEach(e=>e.onclick=()=>{const i=+e.dataset.rpsImg,st=rolePhoneStore(p.id);if(!(st.wgImgs||[])[i])return rpsWgPick(p.id,i);iosSheet({items:[{label:'更换图片',run:()=>rpsWgPick(p.id,i)},{label:'移除图片',red:1,run:()=>{st.wgImgs[i]='';save();rolePhoneRender()}}]})});
+ const c=$('[data-rps-contacts]');if(c)c.onclick=()=>{rolePhonePersonaId='';rolePhoneActiveApp='';rolePhoneRender()};
+ const s=$('[data-rps-settings]');if(s)s.onclick=()=>iosSheet({title:'设置',items:[{label:'更换主屏幕壁纸',run:()=>rpsWpSheet('home',p.id)},{label:'更换锁屏壁纸',run:()=>rpsWpSheet('lock')},{label:'一键生成全部内容',run:()=>rolePhoneGenerateAll(p.id)}]})}
+if(!window.__rpsTick)window.__rpsTick=setInterval(()=>{const n=rpsNow();['rps-t','rpl-t'].forEach(i=>{const e=document.getElementById(i);if(e)e.textContent=n.t});const h=document.getElementById('rps-h'),m=document.getElementById('rps-m');if(h)h.setAttribute('transform','rotate('+n.h+' 50 50)');if(m)m.setAttribute('transform','rotate('+n.m+' 50 50)')},10000);
 function rolePhoneRender(){
- const root=$('#rp-body');if(!root)return;
- if(!rolePhonePersonaId){$('#rp-title').textContent='iPhone';$('#rp-actions').innerHTML='';const ps=S.personas.filter(p=>!p.blocked);root.innerHTML='<p class="note">选择一位角色，进入对方的手机。你可以一次性生成这部手机里的全部软件内容，也可以只生成某一个软件。生成结果会保存在本机。</p>'+ps.map(p=>`<div class="rolephone-launch" data-rp-persona="${p.id}"><div class="av">${av(p)}</div><div class="rp-main"><b>${esc(p.name)}</b><small>${esc(p.bio||'点击进入这部手机')}</small></div><span>›</span></div>`).join('')+(ps.length?'':'<div class="empty">请先创建联系人角色</div>');
+ const root=$('#rp-body');if(!root)return;{const v=$('#v-rolephones');if(v)v.classList.toggle('rpk',!rolePhoneActiveApp||!['message','monologue','notes','phone','music'].includes(rolePhoneActiveApp))}
+ if(!rolePhonePersonaId){$('#rp-title').textContent='iPhone';$('#rp-actions').innerHTML='';const ps=S.personas.filter(p=>!p.blocked&&p.boundUser===S.activeUserProfile);root.innerHTML=rpsLock(ps);rpsLockBind(ps);
    return;
  }
  const p=P(rolePhonePersonaId);if(!p){rolePhonePersonaId='';rolePhoneRender();return}
  const store=rolePhoneStore(p.id),apps=ROLE_PHONE_APPS;
  $('#rp-title').textContent=p.name+' 的手机';$('#rp-actions').innerHTML=`<button id="rp-back-list">角色列表</button>`;
- if(!rolePhoneActiveApp){root.innerHTML=`<div class="rolephone-launch"><div class="av">${av(p)}</div><div class="rp-main"><b>${esc(p.name)} 的 iPhone</b><small>选择一个软件查看内容，也可以一次生成整部手机</small></div></div><button class="btn fill" id="rp-generate-all">${apps.every(a=>store.apps[a.id])?'重新生成全部内容':'一次性生成全部内容'}</button><div class="rolephone-grid">${apps.map(a=>`<button class="rolephone-app" data-rp-app="${a.id}"><span class="rp-icon">${a.icon}</span><b style="font-size:12px">${a.name}</b><small>${store.apps[a.id]?'已生成 · 点击查看':'尚未生成'}</small></button>`).join('')}</div><p class="note">使用副 API；副 API 地址、Key 或模型留空时，对应字段自动回退到主 API。所有内容都是按角色设定生成的虚构内容，不会读取真实手机数据。</p>`;
-  $('#rp-back-list').onclick=()=>{rolePhonePersonaId='';rolePhoneActiveApp='';rolePhoneRender()};$('#rp-generate-all').onclick=()=>rolePhoneGenerateAll(p.id);return;
+ if(!rolePhoneActiveApp){root.innerHTML=rpsHome(p,store);rpsHomeBind(p);
+  $('#rp-back-list').onclick=()=>{rolePhonePersonaId='';rolePhoneActiveApp='';rolePhoneRender()};return;
  }
  const app=apps.find(a=>a.id===rolePhoneActiveApp);if(!app){rolePhoneActiveApp='';rolePhoneRender();return}
  $('#rp-title').textContent=app.name;const content=store.apps[app.id];
@@ -2607,8 +2811,8 @@ function rolePhoneContentHTML(id,data){
  return `<div class="rolephone-content">${esc(String(data||''))}</div>`;
 }
 function rolePhoneParse(raw){let t=String(raw||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');try{return JSON.parse(t)}catch(e){return t}}
-async function rolePhoneGenerateAll(id){const p=P(id);if(!p)return;const btn=$('#rp-generate-all');if(btn){btn.disabled=true;btn.textContent='正在生成整部手机…'}try{const apps=ROLE_PHONE_APPS.map(a=>({id:a.id,name:a.name,description:a.desc}));const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n你要一次性生成角色手机里全部软件的数据。必须输出严格 JSON 对象，键名使用指定 app id：message, notes, twitter, phone, rednote, monologue, music。message 为 14-20 条微信聊天记录数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）；notes（每项含 title、content、date 如 2026/10/18，由近到远）、twitter、rednote 用有意义的数组，每项可含 title/content；phone 为 8-12 条通话记录数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；music 为对象，含 playlists（2-4 个，每项 name、mood、tracks 歌曲名数组）和 recentlyPlayed（8-12 首，每项 title、artist）；monologue 为 6-10 条自言自语数组（像对自己说的小计划或碎碎念，可带结尾 emoji），每项含 text、done（true/false，约三分之一已完成）、time（如 08:00）。各软件内容要彼此一致、细节丰富但不过度夸张。只输出 JSON。'}, {role:'user',content:'请生成全部软件内容。软件列表：'+JSON.stringify(apps)}],null,{max_tokens:6500},rolePhoneConfig());const data=rolePhoneParse(raw);if(!data||typeof data!=='object')throw new Error('返回内容不是 JSON 对象');const store=rolePhoneStore(id);for(const a of ROLE_PHONE_APPS){if(data[a.id]!==undefined)store.apps[a.id]=data[a.id]}store.generatedAt=Date.now();save();toast('手机内容生成完成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-generate-all');if(b){b.disabled=false;b.textContent='重新生成全部内容'}}}
-async function rolePhoneGenerateOne(id,appId){const p=P(id),app=ROLE_PHONE_APPS.find(a=>a.id===appId);if(!p||!app)return;const btn=$('#rp-regenerate');if(btn){btn.disabled=true;btn.textContent='生成中…'}try{const prompts={message:'生成 14-20 条微信聊天记录，JSON 数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）。要有来有回，不要伪装成真实历史。',notes:'生成 6-10 条 iPhone 备忘录，JSON 数组，每项含 title、content、date（如 2026/10/18，由近到远，跨度几周到几个月）。包括个人待办、生活琐事、和用户日常相关的细节、想和用户一起做的事。',twitter:'生成 5-8 条个人 Twitter 帖子/草稿，JSON 数组，每项含 content 和可选 time。语气符合角色，像个人账号而不是营销号。',phone:'生成 8-12 条通话记录，JSON 数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；其中 2-3 条未接。',rednote:'生成 5-8 条小红书笔记、收藏或浏览记录，JSON 数组，每项含 title、content、type。',monologue:'生成 6-10 条自言自语，像对自己说的小计划或碎碎念，可带结尾 emoji，JSON 数组，每项含 text、done（true/false，约三分之一已完成）、time（如 08:00）；更坦诚，包含角色不一定会对用户说出口的心事，但保持角色设定。',music:'生成 2-4 个 Apple Music 歌单以及 8-12 首最近播放歌曲，JSON 对象，包含 playlists（数组，每项 name、mood、tracks）和 recentlyPlayed（数组，每项 title、artist、reason）。歌曲可以是真实存在的歌曲，但不要捏造具体播放数据来源。'};const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n只生成软件「'+app.name+'」的数据。'+prompts[appId]+' 严格按要求输出 JSON，不要 Markdown。'}, {role:'user',content:'为 '+p.name+' 的「'+app.name+'」生成内容。'}],null,{max_tokens:3500},rolePhoneConfig());const data=rolePhoneParse(raw);if(data===undefined||data===null||data==='')throw new Error('返回内容为空');rolePhoneStore(id).apps[appId]=data;rolePhoneStore(id).generatedAt=Date.now();save();toast(app.name+'已生成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-regenerate');if(b){b.disabled=false;b.textContent='重新生成'}}}
+async function rolePhoneGenerateAll(id){const p=P(id);if(!p)return;const btn=$('#rp-generate-all');if(btn){btn.disabled=true;btn.classList.add('busy')}toast('正在生成整部手机…');try{const apps=ROLE_PHONE_APPS.map(a=>({id:a.id,name:a.name,description:a.desc}));const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n你要一次性生成角色手机里全部软件的数据。必须输出严格 JSON 对象，键名使用指定 app id：message, notes, twitter, phone, monologue, music。message 为 14-20 条微信聊天记录数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）；notes（每项含 title、content、date 如 2026/10/18，由近到远）、twitter 用有意义的数组，每项可含 title/content；phone 为 8-12 条通话记录数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；music 为对象，含 playlists（2-4 个，每项 name、mood、tracks 歌曲名数组）和 recentlyPlayed（8-12 首，每项 title、artist）；monologue 为 6-10 条自言自语数组（像对自己说的小计划或碎碎念，可带结尾 emoji），每项含 text、done（true/false，约三分之一已完成）、time（如 08:00）。各软件内容要彼此一致、细节丰富但不过度夸张。只输出 JSON。'}, {role:'user',content:'请生成全部软件内容。软件列表：'+JSON.stringify(apps)}],null,{max_tokens:6500},rolePhoneConfig());const data=rolePhoneParse(raw);if(!data||typeof data!=='object')throw new Error('返回内容不是 JSON 对象');const store=rolePhoneStore(id);for(const a of ROLE_PHONE_APPS){if(data[a.id]!==undefined)store.apps[a.id]=data[a.id]}store.generatedAt=Date.now();save();toast('手机内容生成完成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-generate-all');if(b){b.disabled=false;b.classList.remove('busy')}}}
+async function rolePhoneGenerateOne(id,appId){const p=P(id),app=ROLE_PHONE_APPS.find(a=>a.id===appId);if(!p||!app)return;const btn=$('#rp-regenerate');if(btn){btn.disabled=true;btn.textContent='生成中…'}try{const prompts={message:'生成 14-20 条微信聊天记录，JSON 数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）。要有来有回，不要伪装成真实历史。',notes:'生成 6-10 条 iPhone 备忘录，JSON 数组，每项含 title、content、date（如 2026/10/18，由近到远，跨度几周到几个月）。包括个人待办、生活琐事、和用户日常相关的细节、想和用户一起做的事。',twitter:'生成 5-8 条个人 Twitter 帖子/草稿，JSON 数组，每项含 content 和可选 time。语气符合角色，像个人账号而不是营销号。',phone:'生成 8-12 条通话记录，JSON 数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；其中 2-3 条未接。',monologue:'生成 6-10 条自言自语，像对自己说的小计划或碎碎念，可带结尾 emoji，JSON 数组，每项含 text、done（true/false，约三分之一已完成）、time（如 08:00）；更坦诚，包含角色不一定会对用户说出口的心事，但保持角色设定。',music:'生成 2-4 个 Apple Music 歌单以及 8-12 首最近播放歌曲，JSON 对象，包含 playlists（数组，每项 name、mood、tracks）和 recentlyPlayed（数组，每项 title、artist、reason）。歌曲可以是真实存在的歌曲，但不要捏造具体播放数据来源。'};const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n只生成软件「'+app.name+'」的数据。'+prompts[appId]+' 严格按要求输出 JSON，不要 Markdown。'}, {role:'user',content:'为 '+p.name+' 的「'+app.name+'」生成内容。'}],null,{max_tokens:3500},rolePhoneConfig());const data=rolePhoneParse(raw);if(data===undefined||data===null||data==='')throw new Error('返回内容为空');rolePhoneStore(id).apps[appId]=data;rolePhoneStore(id).generatedAt=Date.now();save();toast(app.name+'已生成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-regenerate');if(b){b.disabled=false;b.textContent='重新生成'}}}
 
 /* Desktop customization: wallpapers, app icons, home widgets and touch-friendly reordering */
 function desktopApply(){
@@ -3734,6 +3938,7 @@ function rProf(){
   $$('[data-profile-tab]').forEach(b=>b.onclick=()=>{profileTab=b.dataset.profileTab;renderTab()});
   function bindProfileContent(){
     if(profileTab==='stickers')renderStickerManager('profile');
+    if(profileTab==='media'&&PID==='me')avLibBind(renderTab);
     $$('[data-decor-slot]').forEach(el=>el.onclick=e=>{if(e.target.closest('[data-decor-del]'))return;const i=+el.dataset.decorSlot;pickImage(src=>{S.postDecorations[i]=src;S.postDecorations=S.postDecorations.slice(0,2);save();renderTab()})});
     $$('[data-decor-del]').forEach(b=>b.onclick=e=>{e.stopPropagation();S.postDecorations[+b.dataset.decorDel]=null;save();renderTab()});
     const link=$('#decor-add-url-open');if(link)link.onclick=()=>{const url=prompt('粘贴图片链接（http/https）');if(!url)return;if(!/^https?:\/\//i.test(url.trim()))return toast('请输入有效的图片链接');const idx=S.postDecorations.findIndex(x=>!x);S.postDecorations[idx<0?0:idx]=url.trim();S.postDecorations=S.postDecorations.slice(0,2);save();renderTab()};
@@ -3754,7 +3959,7 @@ function playVoice(src,transcript=''){if(src==='simulated-voice'){if('speechSynt
 let busy=0;const setBusy=v=>{busy=v;$('#send').disabled=v};
 let pendingQuote=null;
 function bub(m,i,first,last){
-  const me=m.role==='user',u=me?who('me'):P(cur),r=document.createElement('div');
+  const me=m.role==='user',u=chatAvU(me?who('me'):P(cur),me),r=document.createElement('div');
   if(m.recalled){r.className='recalled-row';if(i>=0)r.dataset.i=i;r.innerHTML='<div class="dd">'+(me?'你撤回了一条消息':'对方撤回了一条消息')+'</div>';$('#msgs').appendChild(r);return r;}
   if(m.narr){r.className='narr-row';if(i>=0){r.dataset.i=i;r.onclick=()=>{if(multiSelectMode)return;if(confirm('删除这条旁白？')){S.chats[cur].splice(i,1);save();draw()}}}r.textContent=m.content;$('#msgs').appendChild(r);return r;}
   r.className='r '+(me?'me':'ai')+(first?' first':'');if(i>=0)r.dataset.i=i;
@@ -3935,14 +4140,14 @@ async function summarizeRange(chatId,start,end,automatic){
 }
 async function maybeAutoSummarize(chatId){const cc=CC(chatId),h=S.chats[chatId]||[],interval=Math.max(20,Math.min(2000,Number(cc.summaryInterval)||200));if(!cc.autoSummary)return;const last=Number(cc.lastAutoSummaryCount)||0;if(h.length-last<interval)return;const end=h.length;try{await summarizeRange(chatId,last,end,true);toast('已自动总结聊天记忆')}catch(e){toast('自动记忆总结失败：'+e.message)}}
 const SONG_PROMPT='【心声歌曲】在输出的 JSON 里再加一个 song 字段：{"title":"歌名","artist":"歌手","lyric":"一小句歌词","tag":"专辑或曲风，可留空"}。song 是你此刻的内心想法让你联想到的一首歌，要贴合 thought 和当前对话的气氛；歌曲不限语言和形式（真实存在的歌、纯音乐、童谣、你自己编的歌都可以）；lyric 只写一小句（不超过一行），也可以是你自己仿写的一句；歌名、歌手、歌词都不要加书名号或引号。另外再加一个 thought_tr 字段：把 thought 翻译成简体中文；如果 thought 本身就是简体中文，thought_tr 留空字符串。';
-const NARR_PROMPT='【线上旁白已开启】messages 数组里，除普通聊天消息外，可以穿插旁白条目，写成对象 {"narr":"旁白内容"}：用第三人称或省略主语，描写你的动作、神态、语气、心理或周围环境（例如：他低头笑了一下，指尖在屏幕上停了很久），每条 10-40 字，不要加括号，不要写成台词。旁白一律使用简体中文书写，不受「输出语言」设置影响，也不需要翻译。旁白要自然穿插，通常 1-2 条，不要每次都出现。用户发来的以 [旁白] 开头的内容是用户的动作或神态描写，请当作剧情自然地回应。';
+const NARR_PROMPT='【线上旁白已开启】messages 数组里，除普通聊天消息外，可以穿插旁白条目，写成对象 {"narr":"旁白内容"}：用第三人称描写你的动作、神态、语气、心理或周围环境，每条都必须写出主语：用你的名字或「他/她」，提到用户时用用户的名字，不要省略主语，不要写成没有主语的碎句（例如：他低头笑了一下，指尖在屏幕上停了很久），每条 10-40 字，不要加括号，不要写成台词。旁白一律使用简体中文书写，不受「输出语言」设置影响，也不需要翻译。旁白要自然穿插，通常 1-2 条，不要每次都出现。用户发来的以 [旁白] 开头的内容是用户的动作或神态描写，请当作剧情自然地回应。';
 const trMsgPrompt=lang=>'【随消息附带译文】翻译已开启：messages 里的每条聊天消息都必须写成对象 {"text":"消息原文","tr":"译成「'+lang+'」的译文"}，不要再写成普通字符串；需要引用时可再加 quote 字段。译文要保留语气和表情符号；如果原文本身已经是「'+lang+'」，tr 原样重复原文。tr 只是给用户点开查看的译文，不要在 text 里夹带翻译或括号注释。旁白条目 {"narr":"…"} 不需要 tr。';
 async function gen(){
   const p=P(cur),h=S.chats[cur];setBusy(1);const el=bub({role:'assistant',content:'···'},-1,1,0);
   try{
-    const basePrompt=build(p,h,true);if((S.cfg.memoryMode||'traditional')==='vector'){try{const vm=await vectorMemoryPrompt(p,h);if(vm)basePrompt.push({role:'system',content:vm})}catch(memErr){toast('向量记忆检索失败，本次继续普通聊天：'+memErr.message)}}const prompt=basePrompt.concat([{role:'system',content:'在保持角色人设和自然对话的前提下，请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条独立聊天消息","第二条独立聊天消息"],"reply":"兼容字段","thought":"角色此刻未说出口的内心想法","image_prompt":""}。messages 是角色按真实聊天节奏连续发送的消息数组：结合语境，适合分开发的内容就拆成 2-5 条短消息，每条只放一个自然聊天气泡；不要把几句话用换行或一大段塞进同一个气泡。只有确实一句就能说清时才只输出一条。不要机械地每次都拆成多条。reply 可作为 messages 的兼容备用字段。thought 是简短内心活动。若用户明确要求生成/发图片，image_prompt 填画面描述，否则留空。如果某条回复是针对对话里某一条具体消息的回应（用户说的或你自己之前说的都可以），可以偶尔（不要每条都用）把这一条写成对象 {"text":"回复内容","quote":"被引用消息的原文片段，原样摘抄，不超过30字"}，其余条目仍写成普通字符串。'},{role:'system',content:TRF_PROMPT()}].concat([{role:'system',content:SONG_PROMPT}]).concat((window.__callPrompt&&window.__callPrompt(cur))?[{role:'system',content:window.__callPrompt(cur)}]:[]).concat(CC(cur).narrOn?[{role:'system',content:NARR_PROMPT}]:[]).concat(CC(cur).trOn?[{role:'system',content:trMsgPrompt(CC(cur).trTo||'简体中文')}]:[]));
+    const basePrompt=build(p,h,true);if((S.cfg.memoryMode||'traditional')==='vector'){try{const vm=await vectorMemoryPrompt(p,h);if(vm)basePrompt.push({role:'system',content:vm})}catch(memErr){toast('向量记忆检索失败，本次继续普通聊天：'+memErr.message)}}const prompt=basePrompt.concat([{role:'system',content:'在保持角色人设和自然对话的前提下，请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条独立聊天消息","第二条独立聊天消息"],"reply":"兼容字段","thought":"角色此刻未说出口的内心想法","image_prompt":""}。messages 是角色按真实聊天节奏连续发送的消息数组：结合语境，适合分开发的内容就拆成 2-5 条短消息，每条只放一个自然聊天气泡；不要把几句话用换行或一大段塞进同一个气泡。只有确实一句就能说清时才只输出一条。不要机械地每次都拆成多条。reply 可作为 messages 的兼容备用字段。thought 是简短内心活动。若用户明确要求生成/发图片，image_prompt 填画面描述，否则留空。如果某条回复是针对对话里某一条具体消息的回应（用户说的或你自己之前说的都可以），可以偶尔（不要每条都用）把这一条写成对象 {"text":"回复内容","quote":"被引用消息的原文片段，原样摘抄，不超过30字"}，其余条目仍写成普通字符串。'},{role:'system',content:TRF_PROMPT()}].concat([{role:'system',content:SONG_PROMPT}]).concat(avPrompt(cur)).concat((window.__callPrompt&&window.__callPrompt(cur))?[{role:'system',content:window.__callPrompt(cur)}]:[]).concat(CC(cur).narrOn?[{role:'system',content:NARR_PROMPT}]:[]).concat(CC(cur).trOn?[{role:'system',content:trMsgPrompt(CC(cur).trTo||'简体中文')}]:[]));
     prompt.push({role:'system',content:FMT_RULE});if(h.length&&h[h.length-1].role==='assistant')prompt.push({role:'user',content:proNudge(p,0,'cont')});const raw=await ask(prompt,null);const data=parseAI(raw)
-    let replyQuotes=[],replies=[],replyNarr=[],replyTr=[];if(Array.isArray(data.messages)){data.messages.forEach(x=>{const isO=x&&typeof x==='object',nr=isO&&x.narr?String(x.narr).trim():'',tx=nr||String(isO?(x.text||x.content||x.reply||''):(x||'')).trim();if(tx){replies.push(tx);replyQuotes.push(isO&&!nr?String(x.quote||'').trim():'');replyNarr.push(!!nr);replyTr.push(isO&&!nr?String(x.tr||x.translation||'').trim():'')}})}if(!replies.length){const out=String(data.reply||raw).trim();replies=out.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);if(replies.length===1&&out.length>180){const parts=out.match(/[^。！？!?]+[。！？!?]?/g)||[out];if(parts.length>=3)replies=parts.map(x=>x.trim()).filter(Boolean)}}if(!replies.length)replies=[String(data.reply||raw).trim()];if(el&&el.parentNode)el.remove();const thoughtTr=String(data.thought_tr||data.thoughtTr||'').trim();const songObj=(()=>{const x=data.song;if(!x||typeof x!=='object')return null;const t=String(x.title||'').trim();return t?{title:t,artist:String(x.artist||'').trim(),lyric:String(x.lyric||'').trim(),tag:String(x.tag||'').trim()}:null})();for(let k=0;k<replies.length;k++)if(replyNarr[k])replies[k]=await narrCN(replies[k]);const replyChatId=cur;let thoughtDone=0;for(let idx=0;idx<replies.length;idx++){if(cur!==replyChatId)break;if(idx>0){await new Promise(resolve=>setTimeout(resolve,520+Math.floor(Math.random()*420)));}const isN=!!replyNarr[idx];h.push({role:'assistant',content:replies[idx],...(isN?{narr:1}:((!thoughtDone&&(thoughtDone=1))?{thought:String(data.thought||'').trim(),...(thoughtTr&&thoughtTr!==String(data.thought||'').trim()?{thoughtTr}:{}),...(songObj?{song:songObj}:{})}:{thought:''})),t:Date.now(),...(isN?{}:findQuote(h,replyQuotes[idx])),...(!isN&&replyTr[idx]?{tr:replyTr[idx],trLang:CC(cur).trTo||'简体中文'}:{})});save();draw();}trfApplyAI(h,data);try{window.__callApplyAI&&window.__callApplyAI(replyChatId,data)}catch(_){}if(S.cfg.imageEnabled&&String(data.image_prompt||'').trim()){try{const im=await generateImage(String(data.image_prompt).trim());h.push({role:'assistant',content:'',image:im,thought:'我把刚才描述的画面生成出来了。',t:Date.now()})}catch(imgErr){h.push({role:'assistant',content:'图片生成失败：'+imgErr.message,t:Date.now()})}}save();try{await maybeAutoSummarize(cur)}catch(_){}
+    let replyQuotes=[],replies=[],replyNarr=[],replyTr=[];if(Array.isArray(data.messages)){data.messages.forEach(x=>{const isO=x&&typeof x==='object',nr=isO&&x.narr?String(x.narr).trim():'',tx=nr||String(isO?(x.text||x.content||x.reply||''):(x||'')).trim();if(tx){replies.push(tx);replyQuotes.push(isO&&!nr?String(x.quote||'').trim():'');replyNarr.push(!!nr);replyTr.push(isO&&!nr?String(x.tr||x.translation||'').trim():'')}})}if(!replies.length){const out=String(data.reply||raw).trim();replies=out.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);if(replies.length===1&&out.length>180){const parts=out.match(/[^。！？!?]+[。！？!?]?/g)||[out];if(parts.length>=3)replies=parts.map(x=>x.trim()).filter(Boolean)}}if(!replies.length)replies=[String(data.reply||raw).trim()];if(el&&el.parentNode)el.remove();const thoughtTr=String(data.thought_tr||data.thoughtTr||'').trim();const songObj=(()=>{const x=data.song;if(!x||typeof x!=='object')return null;const t=String(x.title||'').trim();return t?{title:t,artist:String(x.artist||'').trim(),lyric:String(x.lyric||'').trim(),tag:String(x.tag||'').trim()}:null})();for(let k=0;k<replies.length;k++)if(replyNarr[k])replies[k]=await narrCN(replies[k]);const replyChatId=cur;let thoughtDone=0;for(let idx=0;idx<replies.length;idx++){if(cur!==replyChatId)break;if(idx>0){await new Promise(resolve=>setTimeout(resolve,520+Math.floor(Math.random()*420)));}const isN=!!replyNarr[idx];h.push({role:'assistant',content:replies[idx],...(isN?{narr:1}:((!thoughtDone&&(thoughtDone=1))?{thought:String(data.thought||'').trim(),...(thoughtTr&&thoughtTr!==String(data.thought||'').trim()?{thoughtTr}:{}),...(songObj?{song:songObj}:{})}:{thought:''})),t:Date.now(),...(isN?{}:findQuote(h,replyQuotes[idx])),...(!isN&&replyTr[idx]?{tr:replyTr[idx],trLang:CC(cur).trTo||'简体中文'}:{})});save();draw();}trfApplyAI(h,data);try{avApplyAI(replyChatId,data)}catch(_){}try{window.__callApplyAI&&window.__callApplyAI(replyChatId,data)}catch(_){}if(S.cfg.imageEnabled&&String(data.image_prompt||'').trim()){try{const im=await generateImage(String(data.image_prompt).trim());h.push({role:'assistant',content:'',image:im,thought:'我把刚才描述的画面生成出来了。',t:Date.now()})}catch(imgErr){h.push({role:'assistant',content:'图片生成失败：'+imgErr.message,t:Date.now()})}}save();try{await maybeAutoSummarize(cur)}catch(_){}
   }catch(e){el.textContent='请求失败：'+e.message;el.classList.add('err');setBusy(0);return}
   setBusy(0);draw();
 }
@@ -4036,6 +4241,8 @@ function rCset(){
     <div class="is-c"><span class="is-i" style="background:#ff2d55">${rpSvg('br')}</span><span class="is-t"><b>当前美化</b></span><select id="cs-css" class="is-sel"><option value="">默认</option>${S.themes.map(t=>`<option value="${t.id}"${cc.css===t.id?' selected':''}>${esc(t.name)}</option>`).join('')}</select></div>
     <div class="is-c is-tap" data-go="css"><span class="is-t"><b>管理美化</b><small>自己写 CSS，保存后在这里切换</small></span><span class="is-chev">${rpSvg('chr')}</span></div>
   </div>
+  <div class="is-h">聊天头像</div>
+  <div class="is-g"><div class="is-c is-tap" id="cs-av-char"><div class="av">${av(chatAvU(p,false))}</div><span class="is-t"><b>角色头像</b><small>仅此聊天，不影响联系人页</small></span></div><div class="is-c is-tap" id="cs-av-me"><div class="av">${av(chatAvU(S.me,true))}</div><span class="is-t"><b>我的头像</b><small>从相册或头像库选择</small></span></div></div>
   <div class="is-h">聊天记录</div>
   <div class="is-g"><div class="is-c is-tap" id="cs-chat-exp"><span class="is-t"><b>导出此聊天记录</b><small>HTML 或 JSON</small></span></div><div class="is-c is-tap" id="cs-chat-imp"><span class="is-t"><b>导入聊天记录</b><small>支持 HTML / JSON</small></span></div></div>
   <div class="is-h">隐私</div>
@@ -4052,6 +4259,7 @@ function rCset(){
   $('#cs-bl').onchange=e=>{p.blocked=e.target.checked;save()};
   $('#cs-chat-exp').onclick=()=>iosSheet({title:'导出聊天记录',items:[{label:'导出为 HTML（可阅读，也能再导入）',run:()=>xsjChatExport(cur,'html')},{label:'导出为 JSON',run:()=>xsjChatExport(cur,'json')}]});
   $('#cs-chat-imp').onclick=()=>xsjChatImport(cur);
+  $('#cs-av-char').onclick=()=>avChatPick(false);$('#cs-av-me').onclick=()=>avChatPick(true);
   $('#cs-wall').onclick=()=>pickWall(u=>{cc.wall=u;save();applyChatWall();rCset()});
   {const a=$('#cs-wall-all');if(a)a.onclick=()=>{S.chatWall=cc.wall;save();toast('已应用到所有聊天');rCset()}}
   {const c=$('#cs-wall-clear');if(c)c.onclick=()=>{cc.wall='';S.chatWall='';save();applyChatWall();rCset();toast('已恢复默认壁纸')}}
@@ -4402,7 +4610,7 @@ function notifyMsg(pid,m){
 /* ===== v9.57 主动发消息 / 接着说 ===== */
 const FMT_RULE='【输出格式硬性规定，每次都必须遵守】1. 只输出一个 JSON 对象，前后不要有任何文字、解释或 Markdown 代码块（不要出现 ```）。2. 必须有 messages 数组：每个元素是一个聊天气泡，写成字符串，或对象（{"text":"内容","quote":"引用原文"}、带译文的 {"text":..,"tr":..}、旁白 {"narr":"内容"}，对象写法以其他提示的要求为准）；不要把多个气泡塞进同一个字符串，也不要用换行硬拆。3. 字符串里的双引号必须转义，换行写成 \\n，括号和引号必须闭合。4. messages 里只放角色说的话（开启旁白时的旁白除外），不要出现字段名、系统提示、括号里的格式说明，也不要加「角色名：」前缀。5. 旁白（narr）一律使用简体中文，即使角色的输出语种是日语、英语等外语也不例外，旁白不翻译。6. 其他提示要求的可选字段（thought、narr、song、call、tr、image_prompt 等）仍按各自要求放在对应位置，没有就留空或不写。7. 始终保持角色人设，不要跳出角色去解释格式。';
 function parseAI(raw){raw=String(raw||'');const t=raw.replace(/^\s*```(?:json)?\s*/i,'').replace(/\s*```\s*$/,'').trim();try{return JSON.parse(t)}catch(_){}const a=t.indexOf('{'),b=t.lastIndexOf('}');if(a>=0&&b>a){try{return JSON.parse(t.slice(a,b+1))}catch(_){}}const m=t.match(/"messages"\s*:\s*\[([\s\S]*?)(\]|$)/);if(m&&!/\{/.test(m[1])){const arr=[...m[1].matchAll(/"((?:[^"\\]|\\.)*)"/g)].map(x=>{try{return JSON.parse('"'+x[1]+'"')}catch(_){return x[1]}}).filter(Boolean);if(arr.length){const th=t.match(/"thought"\s*:\s*"((?:[^"\\]|\\.)*)"/);return{messages:arr,thought:th?th[1]:''}}}return{reply:raw,thought:''}}
-async function narrCN(t){t=String(t||'');if(!(/[\u3040-\u30ff\uac00-\ud7af]/.test(t)||!/[\u4e00-\u9fff]/.test(t)))return t;try{const o=await ask([{role:'system',content:'把用户给的旁白翻译成简体中文，保持第三人称、语气和长度，只输出译文，不加引号、括号和解释。'},{role:'user',content:t}],null);const r=String(o||'').trim();return r||t}catch(_){return t}}
+async function narrCN(t){t=String(t||'');if(!(/[\u3040-\u30ff\uac00-\ud7af]/.test(t)||!/[\u4e00-\u9fff]/.test(t)))return t;try{const o=await ask([{role:'system',content:'把用户给的旁白翻译成简体中文，保持第三人称、每句的主语、语气和长度，不要省略主语，只输出译文，不加引号、括号和解释。'},{role:'user',content:t}],null);const r=String(o||'').trim();return r||t}catch(_){return t}}
 function proWish(p){try{const u=S.userProfiles.find(x=>x.id===S.activeUserProfile),d=u&&S.cp&&S.cp.by&&S.cp.by[u.id+'|'+p.id];if(!d||p.boundUser!==u.id)return'';const w=(d.wishes||[]).filter(x=>!x.done);return w.length?w[Math.floor(Math.random()*w.length)].t:''}catch(e){return''}}
 function proNudge(p,idle,mode){
   const wish=Math.random()<0.5?proWish(p):'';
