@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Mio水汪汪">
+<meta name="apple-mobile-web-app-title" content="Mio水汪汪'">
 <meta name="theme-color" id="theme-color" content="#ffffff">
 <title>Mio水汪汪</title>
 <style>
@@ -298,6 +298,18 @@ div.rps-app:active .rps-ic{filter:none}
 .rpl-cam{flex:none;width:46px;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:0;color:#fff}
 .rpl-cam::before,.rpl-cam::after{content:"";width:100%;border-top:2px solid #6f7178;border-bottom:2px solid #6f7178;height:6px;box-sizing:border-box}
 .rpl-cam svg{width:30px;height:24px}
+.rpl-al,.rpl-card{background:linear-gradient(rgba(0,0,0,.24),rgba(0,0,0,.12))}
+.rpl-card.sel{background:linear-gradient(rgba(255,255,255,.24),rgba(255,255,255,.12))}
+.rpl-w,.rpl-al{border-bottom:1px solid rgba(255,255,255,.16)}
+.rpl-m,.rpl-al{text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.rpl-m i{color:#e4e6ea}
+.rpl-dk{color:#111}
+.rpl-dk .rpl-al,.rpl-dk .rpl-card{background:linear-gradient(rgba(255,255,255,.3),rgba(255,255,255,.16))}
+.rpl-dk .rpl-card.sel{background:linear-gradient(rgba(0,0,0,.16),rgba(0,0,0,.08))}
+.rpl-dk .rpl-w,.rpl-dk .rpl-al{border-bottom-color:rgba(0,0,0,.16)}
+.rpl-dk .rpl-m,.rpl-dk .rpl-al,.rpl-dk .rpl-tip{text-shadow:none}
+.rpl-dk .rpl-m i{color:#3a3a3c}
+.rpl-go{inset:0 0 0 auto;width:0;padding:0;opacity:1;overflow:hidden;white-space:nowrap}.rpl-go span{margin-right:18px}
 /* 查手机：微信 / 自言自语 */
 .wx{--wbg:#ededed;--wbar:#ededed;--wo:#fff;--wm:#95ec69;--wt:#111;--wl:#e3e3e3;--wsub:#8a8a8a;--wg:#07c160;position:fixed;inset:0;max-width:640px;margin:0 auto;z-index:5;background:var(--wbg);color:var(--wt);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 [data-theme=dark] .wx{--wbg:#111;--wbar:#191919;--wo:#1f1f1f;--wm:#3eb575;--wt:#e6e6e6;--wl:#2a2a2a;--wsub:#777}
@@ -2614,19 +2626,19 @@ function rpsLock(ps){
  const n=rpsNow(),wd=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][n.d.getDay()];
  const u=S.userProfiles.find(x=>x.id===S.activeUserProfile)||S.userProfiles[0]||{};
  if(!ps.some(p=>p.id===rpsSel))rpsSel=ps[0]?ps[0].id:'';
- const rows=ps.length?ps.map(p=>`<div class="rpl-w"><div class="rpl-go">进入手机 ›</div><div class="rpl-card${p.id===rpsSel?' sel':''}" data-rpl="${p.id}"><div class="rpl-av">${av(p)}</div><div class="rpl-m"><b>${esc(p.name)}</b><p>${esc(p.bio||'左滑进入这部手机')}</p><i>现在</i></div></div></div>`).join('')+(ps.length>1?'<div class="rpl-tip">点选角色，左滑通知进入对方的手机</div>':''):'<div class="rpl-empty">这个用户还没有绑定角色，可以切换用户，或在通讯录里绑定</div>';
+ const rows=ps.length?ps.map(p=>`<div class="rpl-w"><div class="rpl-go"><span>进入手机 ›</span></div><div class="rpl-card${p.id===rpsSel?' sel':''}" data-rpl="${p.id}"><div class="rpl-av">${av(p)}</div><div class="rpl-m"><b>${esc(p.name)}</b><p>${esc(p.bio||'左滑进入这部手机')}</p><i>现在</i></div></div></div>`).join('')+(ps.length>1?'<div class="rpl-tip">点选角色，左滑通知进入对方的手机</div>':''):'<div class="rpl-empty">这个用户还没有绑定角色，可以切换用户，或在通讯录里绑定</div>';
  return`<div class="rpl" style="${rpsWpStyle(rpsWp('lock'))}"><div class="rpl-sb"><div class="rpl-sbi"><span class="g">无 SIM 卡${RPS_WIFI}</span><svg viewBox="0 0 12 14" style="height:11px"><rect x="1" y="6" width="10" height="7.5" rx="1.5" fill="#fff"/><path d="M3.2 6V4.2a2.8 2.8 0 0 1 5.6 0V6" fill="none" stroke="#fff" stroke-width="1.5"/></svg><span class="g">88%${RPS_BAT(.88)}</span></div></div>
 <div class="rpl-top"><button class="rpl-bk" data-back>‹</button><button class="rpl-us" data-rpl-user><span class="a">${av(u)}</span><span class="n">${esc(u.name||'未命名')}</span><span>▾</span></button><div class="rpl-t" id="rpl-t">${n.t}</div><div class="rpl-d">${n.d.getMonth()+1}月${n.d.getDate()}日${wd}</div></div>
-<div class="rpl-list"><div class="rpl-al"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M12 6.5v7" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.3" fill="#fff"/></svg>未安装 SIM 卡</div>${rows}</div>
+<div class="rpl-list${S.rolePhoneLockText==='dark'?' rpl-dk':''}"><div class="rpl-al"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 6.5v7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.3" fill="currentColor"/></svg>未安装 SIM 卡</div>${rows}</div>
 <div class="rpl-bot"><div class="rpl-sl" id="rpl-sl"><div class="rpl-tx" id="rpl-tx">移动滑块来解锁</div><div class="rpl-kn" id="rpl-kn"><svg viewBox="0 0 40 24"><path d="M2 9h22V2l14 10-14 10v-7H2z" fill="#8a8e97"/></svg></div></div><button class="rpl-cam" data-rpl-wp><svg viewBox="0 0 28 22"><path d="M3 5h5l2-3h8l2 3h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="#f2f3f5"/><circle cx="14" cy="13" r="5" fill="#2b2d33"/><circle cx="14" cy="13" r="3.2" fill="#f2f3f5"/></svg></button></div></div>`}
 function rpsLockBind(ps){
  const ub=$('[data-rpl-user]');if(ub)ub.onclick=rpsPickUser;
  const cam=$('[data-rpl-wp]');if(cam)cam.onclick=()=>rpsWpSheet('lock');
  const go=id=>{rolePhonePersonaId=id;rolePhoneActiveApp='';rolePhoneRender()};
  $$('.rpl-card').forEach(c=>{const w=c.parentNode.querySelector('.rpl-go');let sx=0,dx=0,on=false;
-  c.onpointerdown=e=>{on=true;sx=e.clientX;dx=0;c.style.transition='none';try{c.setPointerCapture(e.pointerId)}catch(_){}};
-  c.onpointermove=e=>{if(!on)return;dx=Math.max(0,sx-e.clientX);c.style.transform='translateX('+(-Math.min(dx,200))+'px)';w.style.opacity=Math.min(1,dx/60)};
-  const end=()=>{if(!on)return;on=false;c.style.transition='transform .22s ease';if(dx>=90){c.style.transform='translateX(-120%)';setTimeout(()=>go(c.dataset.rpl),180)}else{c.style.transform='';w.style.opacity=0;if(dx<6){rpsSel=c.dataset.rpl;$$('.rpl-card').forEach(x=>x.classList.toggle('sel',x===c))}}};
+  c.onpointerdown=e=>{on=true;sx=e.clientX;dx=0;c.style.transition='none';w.style.transition='none';try{c.setPointerCapture(e.pointerId)}catch(_){}};
+  c.onpointermove=e=>{if(!on)return;dx=Math.max(0,sx-e.clientX);c.style.transform='translateX('+(-Math.min(dx,200))+'px)';w.style.width=Math.min(dx,200)+'px'};
+  const end=()=>{if(!on)return;on=false;c.style.transition='transform .22s ease';w.style.transition='width .22s ease';if(dx>=90){c.style.transform='translateX(-120%)';setTimeout(()=>go(c.dataset.rpl),180)}else{c.style.transform='';w.style.width='0px';if(dx<6){rpsSel=c.dataset.rpl;$$('.rpl-card').forEach(x=>x.classList.toggle('sel',x===c))}}};
   c.onpointerup=end;c.onpointercancel=end});
  const sl=$('#rpl-sl'),kn=$('#rpl-kn'),tx=$('#rpl-tx');
  if(sl&&kn){let sx=0,x=0,on=false;const max=()=>sl.clientWidth-kn.offsetWidth-8;
@@ -2653,10 +2665,11 @@ ${rpsApp('notes',store)}${rpsApp('monologue',store)}
 </div>${wg}<div class="rps-dots"><i class="on"></i><i></i></div></div>
 <div class="rps-dockbar"><div class="rps-dock">${rpsApp('phone',store)}${rpsApp('message',store)}${rpsApp('twitter',store)}${rpsApp('music',store)}</div></div></div>`}
 function rpsWgPick(pid,i){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=()=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);const st=rolePhoneStore(pid);st.wgImgs=st.wgImgs||['','',''];st.wgImgs[i]=c.toDataURL('image/jpeg',.82);save();rolePhoneRender()};im.onerror=()=>toast('图片读取失败');im.src=r.result};r.readAsDataURL(f)};inp.click()}
+function rpsTxSheet(){const cur=S.rolePhoneLockText==='dark'?'dark':'light';iosSheet({title:'锁屏消息文字颜色',items:[{label:'白字',on:cur==='light',run:()=>{S.rolePhoneLockText='light';save();toast('锁屏消息已设为白字')}},{label:'黑字',on:cur==='dark',run:()=>{S.rolePhoneLockText='dark';save();toast('锁屏消息已设为黑字')}}]})}
 function rpsHomeBind(p){
  $$('[data-rps-img]').forEach(e=>e.onclick=()=>{const i=+e.dataset.rpsImg,st=rolePhoneStore(p.id);if(!(st.wgImgs||[])[i])return rpsWgPick(p.id,i);iosSheet({items:[{label:'更换图片',run:()=>rpsWgPick(p.id,i)},{label:'移除图片',red:1,run:()=>{st.wgImgs[i]='';save();rolePhoneRender()}}]})});
  const c=$('[data-rps-contacts]');if(c)c.onclick=()=>{rolePhonePersonaId='';rolePhoneActiveApp='';rolePhoneRender()};
- const s=$('[data-rps-settings]');if(s)s.onclick=()=>iosSheet({title:'设置',items:[{label:'更换主屏幕壁纸',run:()=>rpsWpSheet('home',p.id)},{label:'更换锁屏壁纸',run:()=>rpsWpSheet('lock')},{label:'一键生成全部内容',run:()=>rolePhoneGenerateAll(p.id)}]})}
+ const s=$('[data-rps-settings]');if(s)s.onclick=()=>iosSheet({title:'设置',items:[{label:'更换主屏幕壁纸',run:()=>rpsWpSheet('home',p.id)},{label:'更换锁屏壁纸',run:()=>rpsWpSheet('lock')},{label:'锁屏消息文字颜色',run:()=>rpsTxSheet()},{label:'一键生成全部内容',run:()=>rolePhoneGenerateAll(p.id)}]})}
 if(!window.__rpsTick)window.__rpsTick=setInterval(()=>{const n=rpsNow();['rps-t','rpl-t'].forEach(i=>{const e=document.getElementById(i);if(e)e.textContent=n.t});const h=document.getElementById('rps-h'),m=document.getElementById('rps-m');if(h)h.setAttribute('transform','rotate('+n.h+' 50 50)');if(m)m.setAttribute('transform','rotate('+n.m+' 50 50)')},10000);
 function rolePhoneRender(){
  const root=$('#rp-body');if(!root)return;{const v=$('#v-rolephones');if(v)v.classList.toggle('rpk',!rolePhoneActiveApp||!['message','monologue','notes','phone','music'].includes(rolePhoneActiveApp))}
