@@ -1094,6 +1094,63 @@ button.feed-follow-plus{padding:0;cursor:pointer}
 [data-theme=dark] #v-chat.has-wall .bar{background:rgba(0,0,0,.5)}
 #v-chat.has-wall #msgs,#v-chat.has-wall #inp,#v-chat.has-wall #qbar{background:transparent}
 
+/* ===== 线下 ===== */
+#v-offline{background:var(--bg)}
+.of-wrap{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;width:100%}
+.of-top{display:flex;align-items:center;justify-content:space-between;padding:10px 24px 6px;flex:none;min-height:66px;background:var(--bg)}
+.of-top h1{margin:0;font-size:22px;font-weight:700;display:flex;align-items:center;gap:6px;color:var(--ink)}
+.of-bk{border:0;background:none;color:var(--ink);font-size:21px;font-weight:700;letter-spacing:.06em;line-height:1;padding:0;cursor:pointer;font-family:inherit}
+.of-tr{display:flex;gap:10px}
+.of-av{width:36px;height:36px;border-radius:50%;border:0;padding:0;overflow:hidden;background:var(--av);color:var(--ink);display:grid;place-items:center;font-size:15px;cursor:pointer}
+.of-av img{width:100%;height:100%;object-fit:cover}
+.of-av.empty{border:1px dashed var(--sub);background:none;color:var(--sub);font-size:20px}
+.of-seg{position:relative;display:flex;margin:4px 24px 10px;padding:4px;background:var(--p);border-radius:18px;flex:none}
+.of-seg button{position:relative;z-index:1;flex:1;border:0;background:none;color:var(--sub);padding:11px 0;font-size:15px;cursor:pointer;transition:color .25s;font-family:inherit}
+.of-seg button.on{color:var(--ink);font-weight:600}
+.of-pill{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:var(--bg);border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.12);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+[data-theme=dark] .of-pill{background:#48484a;box-shadow:none}
+.of-body{flex:1;min-height:0;display:flex;flex-direction:column}
+.of-list{flex:1;min-height:0;overflow:auto;padding:6px 20px 12px;-webkit-overflow-scrolling:touch}
+.of-m{margin:14px 0}.of-m.me{text-align:right}
+.of-n{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);margin-bottom:5px}.of-m.me .of-n{justify-content:flex-end}
+.of-na{width:20px;height:20px;border-radius:50%;overflow:hidden;background:var(--av);color:var(--ink);display:grid;place-items:center;font-size:11px;flex:none;font-style:normal}.of-na img{width:100%;height:100%;object-fit:cover}
+.of-q{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.of-zh{margin-top:6px}.of-zh:first-child{margin-top:0}.of-or{font-size:12.5px;line-height:1.6;color:var(--sub);margin-top:2px}
+.of-wb{display:flex;align-items:center;gap:10px;padding:12px 14px}.of-wb small{margin-left:auto}.of-sub .of-mini{margin-left:auto}
+.of-b{font-size:15px;line-height:1.85;color:var(--ink);word-break:break-word}
+.of-m.me .of-b{display:inline-block;text-align:left;background:var(--p);border-radius:14px;padding:10px 14px}
+.of-empty{color:var(--sub);text-align:center;font-size:14px;margin:40px 24px;line-height:1.7}
+.of-bar{display:flex;gap:8px;padding:6px 20px;flex:none}
+.of-mini,.of-bar button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer}
+.of-in{display:flex;gap:8px;align-items:flex-end;padding:6px 20px calc(12px + env(safe-area-inset-bottom,0px));flex:none}
+.of-in textarea,.of-fan textarea{flex:1;width:100%;box-sizing:border-box;resize:none;border:1px solid var(--line);background:var(--fld);color:var(--ink);border-radius:18px;padding:10px 14px;font-size:15px;line-height:1.5;max-height:120px;font-family:inherit}
+.of-in button,.of-gen{border:0;background:var(--ink);color:var(--bg);border-radius:18px;padding:10px 16px;font-size:14px;cursor:pointer;flex:none}
+.of-gen{width:100%;margin:10px 0 4px}
+.of-bar button:disabled,.of-in button:disabled,.of-gen:disabled,.of-mini:disabled{opacity:.5}
+.of-fan{flex:1;min-height:0;overflow:auto;padding:4px 20px 24px}
+.of-sub{display:flex;gap:18px;margin:2px 0 10px}.of-sub button{border:0;background:none;color:var(--sub);padding:2px 0;font-size:14px;cursor:pointer;border-bottom:2px solid transparent}.of-sub button.on{color:var(--ink);font-weight:600;border-color:var(--ink)}
+.of-card{border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:12px 0}
+.of-card h3{margin:0 0 2px;font-size:16px;color:var(--ink)}.of-card small{color:var(--sub);font-size:12px}.of-card .of-b{margin-top:10px}
+.of-ops{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.of-ov{position:absolute;inset:0;background:var(--bg);z-index:5;display:flex;flex-direction:column}
+.of-ov .of-fan textarea{max-height:none;border-radius:12px}
+.of-gh{font-size:13px;color:var(--sub);margin:4px 6px 8px}
+.of-g{background:var(--p);border-radius:16px;overflow:hidden;margin:0 0 18px}
+.of-r{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;min-height:50px;box-sizing:border-box;color:var(--ink);font-size:15px;margin:0}
+.of-r+.of-r{border-top:1px solid var(--line)}.of-r .v{color:var(--sub);font-size:14px}.of-tap{cursor:pointer}
+.of-sw{position:relative;width:46px;height:28px;flex:none;display:block}
+.of-sw input{-webkit-appearance:none;appearance:none;position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;background:transparent;opacity:0;z-index:2;cursor:pointer}
+.of-sw i{position:absolute;inset:0;background:var(--line);border-radius:14px;transition:background .2s}
+.of-sw i:before{content:"";position:absolute;left:2px;top:2px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+.of-sw input:checked+i{background:#34c759}.of-sw input:checked+i:before{transform:translateX(18px)}
+.of-m3{display:flex;gap:3px;background:var(--bg);border-radius:12px;padding:3px;width:100%}
+.of-m3 button{flex:1;border:0;background:none;padding:9px 0;border-radius:9px;font-size:14px;color:var(--sub);cursor:pointer;font-family:inherit}
+.of-m3 button.on{background:var(--ink);color:var(--bg)}
+.of-num{width:76px;text-align:right;border:0;background:var(--bg);color:var(--ink);border-radius:8px;padding:7px 10px;font-size:15px;box-sizing:border-box;-webkit-appearance:none;appearance:none}
+.of-css{width:100%;box-sizing:border-box;min-height:150px;border:0;background:var(--bg);color:var(--ink);border-radius:12px;padding:10px 12px;font:12.5px/1.55 ui-monospace,Menlo,monospace;resize:vertical;max-height:none}
+.of-hint{font-size:12px;line-height:1.6;color:var(--sub);margin:8px 2px 0}
+.of-wbt{flex:1;min-width:0}.of-wbt b{display:block;font-size:15px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.of-wbt small{display:block;color:var(--sub);font-size:12px;margin-top:3px}
+.of-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.of-chip{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:inherit}.of-chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 /* ===== 共读 ===== */
 #v-coread,#v-crread{background:var(--bg)}
 .cr-wrap{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;width:100%}
@@ -1728,6 +1785,7 @@ button.feed-follow-plus{padding:0;cursor:pointer}
       <button class="app home-app" data-go="wallet"><i class="diary-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18v3"/><rect x="3" y="7.5" width="18" height="12" rx="2.5"/><circle cx="16.5" cy="13.5" r="1.2" fill="currentColor"/></svg></i><span>钱包</span></button>
       <button class="app home-app p3-decor-app" data-go="couple"><i class="diary-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.8c0 5.2-8.8 10-8.8 10S3.2 14 3.2 8.8A4.3 4.3 0 0 1 12 6.9a4.3 4.3 0 0 1 8.8 1.9Z"/></svg></i><span>情侣空间</span></button>
       <button class="app home-app p3-decor-app" data-go="coread"><i class="diary-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.6C10.1 5.1 7.5 4.6 4 4.6v12.8c3.5 0 6.1.5 8 2 1.9-1.5 4.5-2 8-2V4.6c-3.5 0-6.1.5-8 2Z"/><path d="M12 6.6v12.8"/></svg></i><span>共读</span></button>
+      <button class="app home-app p3-decor-app" data-go="offline"><i class="diary-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-10.2a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10.6" r="2.2"/></svg></i><span>线下</span></button>
       <button class="app home-app" data-go="msgs"><i class="diary-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M6.5 10h8M6.5 13h5"/><circle cx="17.5" cy="14.5" r=".9" fill="currentColor"/></svg></i><span>讯息</span></button>
       <button class="app home-app p3-decor-app" data-p3-decor="MCP"><i class="diary-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8 15V9l4 4 4-4v6"/></svg></i><span>MCP</span></button>
     </div>
@@ -1746,6 +1804,7 @@ button.feed-follow-plus{padding:0;cursor:pointer}
 
 <section class="view" id="v-music"><div class="ms" id="ms-root"></div></section>
 <section class="view" id="v-coread"></section>
+<section class="view" id="v-offline"></section>
   <section class="view" id="v-crread"></section>
 <section class="view" id="v-couple"><div id="cp-root"></div></section>
 <section class="view" id="v-msgs"><div id="mg-root"></div></section>
@@ -2046,6 +2105,174 @@ function xsjChatImport(pid){
     }catch(e){toast('导入失败：'+e.message)}};
   i.click();
 }
+
+/* ===== 线下 ===== */
+const OF={busy:0,mem:0,theme:''};
+const ofS=()=>S.off||(S.off={char:'',tab:'main',fanSub:'gen',by:{}});
+function ofD(){const o=ofS();if(!o.char)return null;const k=(S.activeUserProfile||'u')+'|'+o.char;const d=o.by[k]||(o.by[k]={msgs:[],mem:[],fan:[],fav:[],lastSum:0,auto:true,every:30});d.msgs=d.msgs||[];d.mem=d.mem||[];d.fan=d.fan||[];d.fav=d.fav||[];return d}
+function offlineCtx(p){try{const o=S.off,d=o&&o.by&&o.by[(S.activeUserProfile||'u')+'|'+p.id];if(!d)return'';let r='';const mem=(d.mem||[]).slice(-5).map(m=>{const t=m.createdAt?new Date(m.createdAt).toLocaleDateString('zh-CN'):'';return(t?'['+t+'] ':'')+String(m.text||'').trim().slice(0,600)}).join('\n---\n').slice(-3000);if(mem)r+='【线下记忆】这是你和用户线下面对面相处时发生的事，你清楚这些，线上聊天时也记得：\n'+mem;const rec=(d.msgs||[]).slice(d.lastSum||0).slice(-4).map(m=>(m.role==='user'?(S.me.name||'用户'):p.name)+'：'+ofZh(m.content).slice(0,200)).join('\n');if(rec)r+=(r?'\n\n':'')+'【最近的线下片段（还没整理成记忆）】\n'+rec;return r}catch(e){return''}}
+function ofCopy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('已复制'),()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('已复制')}catch(e){toast('复制失败')}a.remove()})}
+function ofPickChar(){const b=momentBound();if(!b.length)return toast('当前用户还没有绑定的联系人');iosSheet({title:'选择线下的角色',items:b.map(p=>({label:p.name||'未命名',av:av(p),on:ofS().char===p.id,run:()=>{ofS().char=p.id;save();ofRender()}}))})}
+function ofPickUser(){iosSheet({title:'切换账号',items:S.userProfiles.map(u=>({label:u.name||'未命名',av:av(u),on:u.id===S.activeUserProfile,run:()=>{if(u.id===S.activeUserProfile)return;switchUser(u.id);S.me={name:u.name||'',handle:u.handle||'',bio:u.bio||'',avatar:u.avatar||''};const c=P(ofS().char);if(!c||c.boundUser!==u.id)ofS().char='';saveNow();ofRender();toast('已切换到 '+(u.name||'未命名'))}}))})}
+const ofForeign=p=>{const c=p&&CC(p.id);return !!(c&&c.trOn&&(c.trOut||[]).length)};
+const ofZh=t=>String(t||'').split('\n').map(l=>{const k=l.indexOf('|||');return k<0?l:(l.slice(k+3).trim()||l.slice(0,k).trim())}).join('\n');
+function ofFmt(t){t=String(t||'');let r='',i=0,m;const re=/「[^」]*」|『[^』]*』|“[^”]*”|"[^"]*"/g;while((m=re.exec(t))){r+=esc(t.slice(i,m.index))+'<u class="of-q">'+esc(m[0])+'</u>';i=m.index+m[0].length}return r+esc(t.slice(i))}
+function ofRich(text){const t=String(text||'');if(!/\|\|\|/.test(t))return ofFmt(t).replace(/\n/g,'<br>');const d=ofD(),show=!d||d.showTr!==false;return t.split('\n').filter(l=>l.trim()).map(l=>{const k=l.indexOf('|||');if(k<0)return'<div class="of-zh">'+ofFmt(l.trim())+'</div>';const o=l.slice(0,k).trim(),z=l.slice(k+3).trim();return z?'<div class="of-zh">'+ofFmt(o||z)+'</div>'+(show&&o?'<div class="of-or">'+ofFmt(z)+'</div>':''):'<div class="of-zh">'+ofFmt(o)+'</div>'}).join('')}
+function ofTrNote(p,fan){const c=CC(p.id),to=c.trTo||'简体中文';return '\n\n【外语与翻译格式】你（'+p.name+'）的设定语种是「'+c.trOut.join('、')+'」，'+(fan?'整篇番外':'对白和叙述')+'都用该语种写。按行（段落）输出，每一行写成：原文 ||| '+to+'译文。每一行都必须带译文，不能省略，译文要自然准确；||| 只用来分隔原文和译文，不要用在别处，也不要另外附加说明。'+(fan?'第一行标题也写成：标题原文 ||| 标题译文。':'')}
+function ofApplyCss(){let e=document.getElementById('ofcss');if(!e){e=document.createElement('style');e.id='ofcss';document.head.appendChild(e)}e.textContent=(S.off&&S.off.css)||''}
+function ofRender(){
+  const root=$('#v-offline');if(!root)return;const o=ofS();
+  if(!P(o.char)){const b=momentBound();o.char=b.length?b[0].id:''}
+  const p=P(o.char),tab=o.tab==='fan'?'fan':'main';
+  root.innerHTML=`<div class="of-wrap"><div class="of-top"><h1><button class="of-bk" data-back type="button" aria-label="返回">OFFLINE</button></h1><div class="of-tr"><button class="of-av${p?'':' empty'}" id="of-cav" type="button" aria-label="选择角色">${p?av(p):'+'}</button><button class="of-av" id="of-uav" type="button" aria-label="切换账号">${av(S.me)}</button></div></div><div class="of-seg"><i class="of-pill" id="of-pill" style="${tab==='fan'?'transform:translateX(100%)':''}"></i><button id="of-t1" class="${tab==='main'?'on':''}" type="button">线下</button><button id="of-t2" class="${tab==='fan'?'on':''}" type="button">番外</button></div><div class="of-body" id="of-body"></div></div>`;
+  $('#of-cav').onclick=ofPickChar;$('#of-uav').onclick=ofPickUser;
+  const sw=t=>{if(o.tab===t)return;o.tab=t;save();$('#of-pill').style.transform=t==='fan'?'translateX(100%)':'';$('#of-t1').classList.toggle('on',t==='main');$('#of-t2').classList.toggle('on',t==='fan');ofBody()};
+  $('#of-t1').onclick=()=>sw('main');$('#of-t2').onclick=()=>sw('fan');
+  ofApplyCss();ofBody();
+}
+function ofBody(){const o=ofS(),p=P(o.char);if(!p||!ofD()){$('#of-body').innerHTML='<p class="of-empty">先点右上角的头像，选择一个角色</p>';return}o.tab==='fan'?ofFanView():ofMainView()}
+function ofNameHtml(me,p){const nm=esc(me?(S.me.name||'我'):(p.name||''));return me?`<span>${nm}</span><i class="of-na">${av(S.me)}</i>`:`<i class="of-na">${av(p)}</i><span>${nm}</span>`}
+function ofMsgHtml(m,i){const me=m.role==='user',p=P(ofS().char)||{};return `<div class="of-m ${me?'me':'ta'}" data-i="${i}"><div class="of-n">${ofNameHtml(me,p)}</div><div class="of-b">${me?ofFmt(m.content||'').replace(/\n/g,'<br>'):ofRich(m.content)}</div></div>`}
+function ofMainView(){
+  const d=ofD(),box=$('#of-body');
+  box.innerHTML=`<div class="of-list" id="of-list">${d.msgs.length?d.msgs.map(ofMsgHtml).join(''):'<p class="of-empty">线下场景还没开始。<br>写下你的动作或第一句话，或直接点发送，让 TA 先开场。</p>'}</div><div class="of-bar"><button id="of-re" type="button">重回</button><button id="of-cont" type="button">继续</button><button id="of-memb" type="button">记忆 ${d.mem.length}</button><button id="of-set" type="button">设置</button></div><div class="of-in"><textarea id="of-ta" rows="1" placeholder="写下你的动作或对白…"></textarea><button id="of-send" type="button">${OF.busy&&OF.kind==='main'?'终止':'发送'}</button></div>`;
+  const l=$('#of-list');l.scrollTop=l.scrollHeight;
+  const ta=$('#of-ta');ta.oninput=()=>{ta.style.height='auto';ta.style.height=Math.min(120,ta.scrollHeight)+'px'};
+  $('#of-send').onclick=ofSend;$('#of-re').onclick=()=>ofGen('redo');$('#of-cont').onclick=()=>ofGen('cont');$('#of-memb').onclick=ofMemMenu;$('#of-set').onclick=ofSettings;
+  l.onclick=e=>{const m=e.target.closest('.of-m[data-i]');if(!m||OF.busy)return;const i=+m.dataset.i;iosSheet({title:'这条消息',items:[{label:'复制',run:()=>ofCopy(ofZh(d.msgs[i].content))},{label:'删除',red:true,run:()=>{d.msgs.splice(i,1);save();ofRender()}}]})};
+}
+function ofStop(){if(OF.ctl){OF.stopped=1;OF.ctl.abort()}}
+function ofSend(){if(OF.busy){if(OF.kind==='main'&&OF.ctl)ofStop();else toast('番外正在生成中，请稍等');return}const d=ofD(),ta=$('#of-ta');if(!d)return;const t=(ta&&ta.value||'').trim();if(t){d.msgs.push({role:'user',content:t,t:Date.now()});ta.value='';save()}ofGen('reply')}
+function ofSys(p){
+  const online=(S.chats[p.id]||[]).slice(-10).map(m=>(m.role==='user'?(S.me.name||'用户'):p.name)+'：'+qc(m)).join('\n');
+  const dd=ofD();let sys=build(p,[...(S.chats[p.id]||[]).slice(-4),...dd.msgs.slice(-6)],false,{noTr:true,wbIds:dd.wb||undefined})[0].content;
+  sys+='\n\n【线下模式】现在你和用户「'+(S.me.name||'用户')+'」不是在手机上聊天，而是线下面对面。请用小说式的叙述回应：'+ofPov(dd)+'对白放进引号里（日语用「」，其他语言用“”），叙述和对白分开写，保持你的人设和你们的关系。只写你自己（'+p.name+'）的行动、感受和台词，不替用户决定动作、台词或内心。不输出 JSON、不用 Markdown、不加「角色名：」前缀，篇幅 150-400 字，自然收尾，给用户留出接话的空间。';
+  if(ofForeign(p))sys+=ofTrNote(p,0);
+  if(online)sys+='\n\n【最近的线上聊天（仅供参考，线下可自然承接）】\n'+online;
+  return sys;
+}
+async function ofGen(mode){
+  if(OF.busy)return toast('正在生成中，请稍等');
+  const p=P(ofS().char),d=ofD();if(!p||!d)return;if(!S.cfg.key)return toast('请先在设置里填写 API Key');
+  const removed=[],sep=ofForeign(p)?'\n':'\n\n';let base='';
+  if(mode==='redo'){while(d.msgs.length&&d.msgs[d.msgs.length-1].role==='assistant')removed.push(d.msgs.pop())}
+  if(mode==='cont'){const l=d.msgs[d.msgs.length-1];if(l&&l.role==='assistant')base=l.content;else mode='reply'}
+  OF.busy=1;OF.kind='main';OF.stopped=0;OF.ctl=new AbortController();
+  ['#of-re','#of-cont'].forEach(q=>{const b=$(q);if(b)b.disabled=true});const sb=$('#of-send');if(sb)sb.textContent='终止';
+  const shown=base?d.msgs.slice(0,-1):d.msgs,draw=t=>{const l=$('#of-list');if(!l)return;l.innerHTML=shown.map(ofMsgHtml).join('')+`<div class="of-m ta"><div class="of-n">${ofNameHtml(0,p)}</div><div class="of-b">${t?ofRich(t):'<span style="color:var(--sub)">…</span>'}</div></div>`;l.scrollTop=l.scrollHeight};
+  draw(base);
+  try{
+    const hist=[];d.msgs.slice(-40).forEach(m=>{const l=hist[hist.length-1];if(l&&l.role===m.role)l.content+='\n'+m.content;else hist.push({role:m.role,content:m.content})});
+    if(!hist.length)hist.push({role:'user',content:'（线下场景开始，请你先开场。）'});
+    else if(hist[0].role==='assistant')hist.unshift({role:'user',content:'（线下场景开始）'});
+    if(hist[hist.length-1].role==='assistant')hist.push({role:'user',content:mode==='cont'?'（请紧接上文继续往下写，不要重复已有内容，不要总结，不要重新开头。）':'（请继续推进这一幕。）'});
+    const out=String(await ask([{role:'system',content:ofSys(p)},...hist],t=>draw(base?base+sep+t:t),undefined,undefined,OF.ctl.signal)||'').trim();
+    if(!out)throw new Error('模型没有返回内容');
+    if(base){const l=d.msgs[d.msgs.length-1];l.content=base+sep+out}else d.msgs.push({role:'assistant',content:out,t:Date.now()});
+    save();
+  }catch(e){removed.reverse().forEach(m=>d.msgs.push(m));save();toast(OF.stopped||(e&&e.name==='AbortError')?'已终止':'线下回复失败：'+e.message)}
+  finally{OF.busy=0;OF.ctl=null;OF.stopped=0;ofRender()}
+  ofAutoSum();
+}
+async function ofSummarize(){
+  const p=P(ofS().char),d=ofD();if(!p||!d)throw new Error('先选择角色');
+  const seg=d.msgs.slice(d.lastSum||0);if(seg.length<2)throw new Error('线下内容太少，暂时不用总结');
+  const tr=seg.map(m=>(m.role==='user'?(S.me.name||'我'):p.name)+': '+ofZh(m.content)).join('\n').slice(-30000);
+  const sec={base:(S.cfg.secondaryBase||'').trim()||S.cfg.base,key:(S.cfg.secondaryKey||'').trim()||S.cfg.key,model:(S.cfg.secondaryModel||'').trim()||S.cfg.model,temp:0.2,stream:false};
+  if(!sec.base||!sec.key||!sec.model)throw new Error('请先在「设置 → 模型与 API」配置主 API');
+  const ins='今天是'+new Date().toLocaleDateString('zh-CN')+'。你是线下见面的记忆整理助手。下面是用户和角色线下面对面的互动。写一张给“下一段的自己”看的纸条，严格按格式输出，不要开场白：\n【睁开眼】一行：此刻在哪、气氛如何、还欠对方一句什么。\n【事实】3～6条，每条以具体日期开头；只写线下发生的确定事件、关系变化、称呼、约定，区分谁说的，不臆测。\n【答应过】没做到的承诺和未解决的事。\n【没说完的】话到一半、情绪没收的地方。\n全文不超过600字。';
+  const text=await ask([{role:'system',content:ins},{role:'user',content:'角色：'+p.name+'\n已有线下记忆（避免重复）：\n'+d.mem.slice(-3).map(m=>m.text).join('\n')+'\n\n本次线下内容：\n'+tr+'\n\n请生成一条新的纸条。'}],null,{max_tokens:1800},sec);
+  if(!String(text||'').trim())throw new Error('模型返回了空总结');
+  d.mem.push({id:uid(),text:String(text).trim(),createdAt:Date.now(),from:d.lastSum||0,to:d.msgs.length});d.lastSum=d.msgs.length;save();return seg.length;
+}
+async function ofAutoSum(){const d=ofD();if(!d||d.auto===false||OF.mem||OF.busy)return;if(d.msgs.length-(d.lastSum||0)<(d.every||30))return;OF.mem=1;try{await ofSummarize();toast('已自动总结线下记忆');if($('#of-memb'))ofRender()}catch(e){toast('线下记忆总结失败：'+e.message)}finally{OF.mem=0}}
+function ofMemMenu(){
+  const d=ofD();if(!d)return;
+  iosSheet({title:'线下记忆',items:[
+    {label:'立即总结线下记忆',run:()=>ofSumNow(()=>ofRender())},
+    {label:'查看 / 编辑记忆（'+d.mem.length+'）',run:ofMemView},
+    {label:'清空此角色的线下记录',red:true,run:()=>{if(!confirm('清空这个角色的线下聊天记录？已生成的记忆和番外会保留。'))return;d.msgs=[];d.lastSum=0;save();ofRender()}}]});
+}
+function ofMemView(cb){
+  const d=ofD(),w=$('#v-offline .of-wrap');if(!d||!w)return;const ov=document.createElement('div');ov.className='of-ov';
+  const paint=()=>{ov.innerHTML=`<div class="of-top"><h1><button class="of-bk" id="of-ovx" type="button">线下记忆</button></h1></div><div class="of-fan">${d.mem.length?d.mem.map((m,i)=>`<div class="of-card"><small>记忆 ${i+1} · ${m.createdAt?new Date(m.createdAt).toLocaleDateString('zh-CN'):'日期未知'}</small><textarea rows="6" data-t="${m.id}" style="margin-top:8px;max-height:none">${esc(m.text||'')}</textarea><div class="of-ops"><button class="of-mini" data-s="${m.id}" type="button">保存修改</button><button class="of-mini" data-d="${m.id}" type="button">删除</button></div></div>`).join(''):'<p class="of-empty">还没有线下记忆。</p>'}</div>`;
+    ov.querySelector('#of-ovx').onclick=()=>{ov.remove();cb?cb():ofRender()};
+    ov.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const m=d.mem.find(x=>x.id===b.dataset.s),t=ov.querySelector('[data-t="'+b.dataset.s+'"]');if(m&&t){m.text=t.value;save();toast('已保存')}});
+    ov.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{if(!confirm('删除这条记忆？'))return;d.mem=d.mem.filter(x=>x.id!==b.dataset.d);ofFixSum(d);save();paint()})};
+  paint();w.appendChild(ov);
+}
+
+const OFP=[];
+function ofFixSum(d){if(!d.mem.length){d.lastSum=0;return}const t=d.mem.map(m=>m.to).filter(x=>typeof x==='number');if(t.length)d.lastSum=Math.min(d.msgs.length,Math.max(...t))}
+async function ofSumNow(done){if(OF.mem)return toast('正在总结，请稍等');const d0=ofD();if(d0&&d0.msgs.length-(d0.lastSum||0)<2){if(d0.msgs.length<2)return toast('线下内容太少，暂时不用总结');if(!confirm('没有未总结的新内容。要从头重新总结全部线下记录吗？'))return;d0.lastSum=0}OF.mem=1;toast('开始总结，请稍等，不用重复点击');try{const n=await ofSummarize();toast('已生成线下记忆（读取 '+n+' 条）');done&&done()}catch(e){toast('总结失败：'+e.message)}finally{OF.mem=0}}
+function ofPov(d){const n=S.me.name||'用户',k=d&&d.pov||'3';
+  if(k==='1')return '用第一人称写：「我」就是你自己（角色），写你的动作、神态、心理和所见所闻，称呼用户为「你」或用户的名字（'+n+'）；每一句叙述都要写出主语（我/你），不要省略主语，不要写成没有主语的碎句。';
+  if(k==='2')return '用第二人称写：用「你」指代用户（'+n+'），角色（你自己）用自己的名字或「他/她」；只叙述你对用户做了什么、用户外在可见的反应和环境，不替用户决定动作、台词或内心；每一句叙述都要写出主语，不要省略主语，不要写成没有主语的碎句。';
+  return '用第三人称写动作、神态、环境和心理，每一句叙述都必须写出主语：用你的名字或「他/她」，提到用户时用用户的名字；不要省略主语，不要写成没有主语的碎句。'}
+function ofSettings(){
+  const d=ofD(),p=P(ofS().char),w=$('#v-offline .of-wrap');if(!d||!p||!w)return;
+  const ov=document.createElement('div');ov.className='of-ov';
+  const sw=(id,on)=>`<span class="of-sw"><input type="checkbox" id="${id}" ${on?'checked':''}><i></i></span>`,wbTxt=()=>(d.wb?'已选 '+d.wb.length+' 个':'默认')+' ›';
+  const pov=d.pov||'3',fr=ofForeign(p);
+  ov.innerHTML=`<div class="of-top"><h1><button class="of-bk" id="of-ovx" type="button">设置</button></h1></div><div class="of-fan">
+    <div class="of-gh">叙述人称</div><div class="of-g"><div class="of-r"><div class="of-m3" id="of-pov">${[['1','第一人称'],['2','第二人称'],['3','第三人称']].map(([k,l])=>`<button data-k="${k}" class="${pov===k?'on':''}" type="button">${l}</button>`).join('')}</div></div></div>
+    <div class="of-gh">记忆</div><div class="of-g"><label class="of-r"><span>自动总结记忆</span>${sw('of-sa',d.auto!==false)}</label><div class="of-r"><span>总结间隔（线下消息条数）</span><input class="of-num" id="of-ev" type="number" min="10" max="500" value="${d.every||30}"></div><div class="of-r of-tap" id="of-sumnow"><span>立即总结记忆</span><span class="v" id="of-sumv"></span></div><div class="of-r of-tap" id="of-memv"><span>查看 / 编辑记忆</span><span class="v" id="of-memc"></span></div></div>
+    <div class="of-gh">世界书</div><div class="of-g"><div class="of-r of-tap" id="of-wbo"><span>生效的世界书</span><span class="v" id="of-wbv">${wbTxt()}</span></div></div>
+    ${fr?`<div class="of-gh">翻译</div><div class="of-g"><label class="of-r"><span>显示中文翻译</span>${sw('of-st',d.showTr!==false)}</label></div>`:''}
+    <div class="of-gh">线下专属 CSS（与线上美化互不影响）</div><div class="of-g" style="padding:12px"><div class="of-chips" id="of-chips"></div><textarea class="of-css" id="of-css" spellcheck="false" placeholder="例如：.of-b{font-size:16px}">${esc((S.off&&S.off.css)||'')}</textarea><p class="of-hint">可用类名：.of-list .of-m .of-m.me .of-m.ta .of-n .of-na .of-b .of-q（对白下划线） .of-zh .of-or .of-bar .of-in .of-top .of-seg .of-pill .of-card</p><div class="of-ops"><button class="of-mini" id="of-cssa" type="button">保存并应用</button><button class="of-mini" id="of-cssn" type="button">另存为预设</button><button class="of-mini" id="of-cssd" type="button">删除预设</button><button class="of-mini" id="of-cssc" type="button">清空</button></div></div></div>`;
+  ov.querySelector('#of-ovx').onclick=()=>{ov.remove();ofRender()};
+  ov.querySelectorAll('#of-pov [data-k]').forEach(b=>b.onclick=()=>{d.pov=b.dataset.k;save();ov.querySelectorAll('#of-pov [data-k]').forEach(x=>x.classList.toggle('on',x===b));toast('下一次生成起生效')});
+  ov.querySelector('#of-sa').onchange=e=>{d.auto=e.target.checked;save()};
+  ov.querySelector('#of-ev').onchange=e=>{d.every=Math.max(10,Math.min(500,Number(e.target.value)||30));e.target.value=d.every;save()};
+  const refMem=()=>{ov.querySelector('#of-sumv').textContent='未总结 '+Math.max(0,d.msgs.length-(d.lastSum||0))+' 条 ›';ov.querySelector('#of-memc').textContent=d.mem.length+' 条 ›'};refMem();
+  ov.querySelector('#of-sumnow').onclick=()=>ofSumNow(refMem);
+  ov.querySelector('#of-memv').onclick=()=>ofMemView(refMem);
+  ov.querySelector('#of-wbo').onclick=()=>ofWbView(()=>{ov.querySelector('#of-wbv').textContent=wbTxt()});
+  const st=ov.querySelector('#of-st');if(st)st.onchange=e=>{d.showTr=e.target.checked;save()};
+  {const o=ofS();if(/^b[1-4]$/.test(o.presetId||''))o.presetId='';const chips=ov.querySelector('#of-chips'),ta=ov.querySelector('#of-css'),lst=()=>[...OFP,...(o.presets||[])];
+  const draw=()=>{chips.innerHTML='<button class="of-chip'+((o.css||o.presetId)?'':' on')+'" data-id="" type="button">无</button>'+lst().map(x=>'<button class="of-chip'+(o.presetId===x.id?' on':'')+'" data-id="'+x.id+'" type="button">'+esc(x.name)+'</button>').join('')};draw();
+  chips.onclick=e=>{const b=e.target.closest('.of-chip');if(!b)return;const x=lst().find(i=>i.id===b.dataset.id);o.presetId=x?x.id:'';o.css=x?x.css:'';ta.value=o.css;save();ofApplyCss();draw()};
+  ov.querySelector('#of-cssa').onclick=()=>{o.css=ta.value;const u=(o.presets||[]).find(i=>i.id===o.presetId);if(u)u.css=ta.value;else o.presetId='';save();ofApplyCss();draw();toast(u?'已保存到预设「'+u.name+'」并应用':'已应用')};
+  ov.querySelector('#of-cssn').onclick=()=>{if(!ta.value.trim())return toast('先写点 CSS 再保存预设');sgPrompt('预设名称','','例如：暗调小说').then(n=>{n=(n||'').trim();if(!n)return;const x={id:uid(),name:n.slice(0,12),css:ta.value};(o.presets=o.presets||[]).push(x);o.presetId=x.id;o.css=ta.value;save();ofApplyCss();draw();toast('已保存预设')})};
+  ov.querySelector('#of-cssd').onclick=()=>{const x=(o.presets||[]).find(i=>i.id===o.presetId);if(!x)return toast('先选中一个自己保存的预设');if(!confirm('删除预设「'+x.name+'」？当前样式会保留。'))return;o.presets=o.presets.filter(i=>i.id!==x.id);o.presetId='';save();draw();toast('已删除预设')};
+  ov.querySelector('#of-cssc').onclick=()=>{o.css='';o.presetId='';ta.value='';save();ofApplyCss();draw();toast('已清空')}}
+  w.appendChild(ov);
+}
+function ofWbView(cb){
+  const d=ofD(),p=P(ofS().char),w=$('#v-offline .of-wrap');if(!d||!p||!w)return;
+  const all=(S.worlds||[]).filter(x=>x.on!==false&&x.content),def=x=>((x.scope||'global')==='global'||(x.scope==='contact'&&(x.contacts||[]).includes(p.id)));
+  const ov=document.createElement('div');ov.className='of-ov';
+  const paint=()=>{const sel=new Set(d.wb||all.filter(def).map(x=>x.id));
+    ov.innerHTML=`<div class="of-top"><h1><button class="of-bk" id="of-ovx" type="button">世界书</button></h1></div><div class="of-fan"><p class="of-hint" style="margin:2px 6px 12px">勾选的世界书会在线下和番外里生效；关键词触发的仍按关键词判断。</p><div class="of-g">${all.map(x=>`<label class="of-r"><span class="of-wbt"><b>${esc(x.title||'未命名世界书')}</b><small>${x.scope==='contact'?'局部':'全局'}${x.keys&&x.keys.trim()?' · 关键词触发':' · 常驻'}</small></span><span class="of-sw"><input type="checkbox" data-w="${x.id}" ${sel.has(x.id)?'checked':''}><i></i></span></label>`).join('')||'<div class="of-r"><span class="v">还没有可用的世界书，先去世界书里创建并启用。</span></div>'}</div><div class="of-ops"><button class="of-mini" id="of-wbd" type="button">恢复默认</button></div></div>`;
+    ov.querySelector('#of-ovx').onclick=()=>{ov.remove();cb&&cb()};
+    ov.querySelectorAll('[data-w]').forEach(c=>c.onchange=()=>{d.wb=[...ov.querySelectorAll('[data-w]:checked')].map(x=>x.dataset.w);save()});
+    ov.querySelector('#of-wbd').onclick=()=>{delete d.wb;save();paint();toast('已恢复默认')}};
+  paint();w.appendChild(ov);
+}
+function ofFanView(){
+  const d=ofD(),o=ofS(),sub=o.fanSub==='fav'?'fav':'gen',box=$('#of-body');
+  const card=(x,fav)=>`<div class="of-card" data-id="${x.id}"><h3>${esc(x.titleOr||x.title||'无题')}</h3>${x.titleOr&&x.title&&d.showTr!==false?`<small>${esc(x.title)}</small><br>`:''}<small>${x.createdAt?new Date(x.createdAt).toLocaleString('zh-CN',{hour12:false}):''}${x.theme?' · '+esc(x.theme):''}</small><div class="of-b">${ofRich(x.body)}</div><div class="of-ops"><button class="of-mini" data-a="fav" type="button">${d.fav.some(f=>f.id===x.id)?'取消收藏':'收藏'}</button><button class="of-mini" data-a="copy" type="button">复制</button>${fav?'':'<button class="of-mini" data-a="del" type="button">删除</button>'}</div></div>`;
+  const head=`<div class="of-sub"><button id="of-s1" class="${sub==='gen'?'on':''}" type="button">生成</button><button id="of-s2" class="${sub==='fav'?'on':''}" type="button">收藏夹（${d.fav.length}）</button><button class="of-mini" id="of-fset" type="button">设置</button></div>`;
+  const gen=`<textarea id="of-theme" rows="3" placeholder="想看什么番外？例如：下雨天的便利店、平行世界、后日谈。留空则由 TA 自由发挥">${esc(OF.theme)}</textarea><button class="of-gen" id="of-fgen" type="button">${OF.busy&&OF.kind==='fan'?'终止':'生成番外'}</button><div class="of-card" id="of-flive" style="display:none"><div class="of-b"></div></div>`;
+  box.innerHTML=`<div class="of-fan">${head}${sub==='gen'?gen+(d.fan.map(x=>card(x,0)).join('')||'<p class="of-empty">还没有番外，写个主题或直接点「生成番外」。</p>'):(d.fav.map(x=>card(x,1)).join('')||'<p class="of-empty">收藏夹是空的。在「生成」里点「收藏」，喜欢的番外会存在这里。</p>')}</div>`;
+  $('#of-s1').onclick=()=>{o.fanSub='gen';save();ofRender()};$('#of-s2').onclick=()=>{o.fanSub='fav';save();ofRender()};$('#of-fset').onclick=ofSettings;
+  const th=$('#of-theme');if(th){th.oninput=()=>{OF.theme=th.value};$('#of-fgen').onclick=()=>{if(OF.busy){if(OF.kind==='fan'&&OF.ctl)ofStop();else toast('正在生成中，请稍等');return}ofFanGen(th.value.trim())}}
+  box.querySelector('.of-fan').onclick=e=>{const b=e.target.closest('[data-a]'),c=e.target.closest('.of-card[data-id]');if(!b||!c)return;const id=c.dataset.id,x=d.fan.find(i=>i.id===id)||d.fav.find(i=>i.id===id);if(!x)return;const a=b.dataset.a;
+    if(a==='copy')ofCopy((x.title?x.title+'\n\n':'')+ofZh(x.body));
+    else if(a==='fav'){const k=d.fav.findIndex(f=>f.id===id);if(k>=0)d.fav.splice(k,1);else d.fav.unshift({...x,favAt:Date.now()});save();ofRender();toast(k>=0?'已取消收藏':'已收藏')}
+    else if(a==='del'){if(!confirm('删除这篇番外？（已收藏的副本不受影响）'))return;d.fan=d.fan.filter(i=>i.id!==id);save();ofRender()}};
+}
+async function ofFanGen(theme){
+  if(OF.busy)return toast('正在生成中，请稍等');const p=P(ofS().char),d=ofD();if(!p||!d)return;if(!S.cfg.key)return toast('请先在设置里填写 API Key');
+  OF.busy=1;OF.kind='fan';OF.stopped=0;OF.ctl=new AbortController();const btn=$('#of-fgen'),live=$('#of-flive');if(btn)btn.textContent='终止';if(live){live.style.display='block';live.querySelector('.of-b').innerHTML='<span style="color:var(--sub)">…</span>'}
+  try{
+    const sys=build(p,[...(S.chats[p.id]||[]).slice(-4),...d.msgs.slice(-6)],false,{noTr:true,wbIds:d.wb||undefined})[0].content+(ofForeign(p)?ofTrNote(p,1):'')+'\n\n【番外创作】请用小说笔法写。'+ofPov(d)+'对白放进引号里（日语用「」，其他语言用“”），为你（'+p.name+'）和用户「'+(S.me.name||'用户')+'」写一篇番外（日常、平行世界、后日谈或某个未被写出的片段都可以），贴合人设和你们已有的关系与共同经历，可自然参考线上聊天和线下记忆，但不要照抄。第一行只写标题（不加书名号、引号、井号），空一行后是正文，正文 500-1000 字。不输出 JSON 和 Markdown，不替用户做过多决定。';
+    const out=String(await ask([{role:'system',content:sys},{role:'user',content:theme?('番外主题：'+theme):'（请自由发挥，写一篇番外。）'}],t=>{const l=$('#of-flive .of-b');if(l)l.innerHTML=ofRich(t)},undefined,undefined,OF.ctl.signal)||'').trim();
+    const lines=out.split('\n'),t0=(lines.shift()||'').replace(/^[#\s《「"“]+|[》」"”\s]+$/g,''),k0=t0.indexOf('|||'),titleOr=k0<0?'':t0.slice(0,k0).trim().slice(0,60),title=(k0<0?t0:(t0.slice(k0+3).trim()||t0.slice(0,k0).trim())).slice(0,60),body=lines.join('\n').trim();
+    if(!body)throw new Error('模型没有返回正文');
+    d.fan.unshift({id:uid(),title,titleOr,body,theme:theme||'',createdAt:Date.now()});OF.theme='';save();toast('番外已生成');
+  }catch(e){toast(OF.stopped||(e&&e.name==='AbortError')?'已终止':'番外生成失败：'+e.message)}finally{OF.busy=0;OF.ctl=null;OF.stopped=0;ofRender()}
+}
 const CC=id=>S.cc[id]||(S.cc[id]={wb:[],stk:[],sys:'',css:''});
 const who=id=>id==='me'?Object.assign({id:'me'},S.me,{handle:S.me.handle||'me'}):(P(id)?Object.assign({},P(id),{handle:P(id).handle||id}):{id,name:'已删除',handle:''});
 const av=p=>p&&p.avatar?`<img src="${p.avatar}" alt="">`:esc(((p&&p.name)||'?')[0]);
@@ -2067,8 +2294,8 @@ function modal(t,cb){const m=$('#modal'),ta=m.querySelector('textarea');ta.value
 function askText(title,placeholder='可留空'){return new Promise(resolve=>{const m=$('#modal'),ta=m.querySelector('textarea'),old=ta.placeholder;ta.placeholder=placeholder;ta.value='';m.classList.add('on');setTimeout(()=>ta.focus(),50);m.querySelector('.ok').onclick=()=>{m.classList.remove('on');ta.placeholder=old;resolve(ta.value)};m.querySelector('.no').onclick=()=>{m.classList.remove('on');ta.placeholder=old;resolve(null)}})}
 
 /* API */
-async function ask(msgs,onD,opt,configOverride){
-  const c=configOverride||S.cfg,r=await fetch((c.base||'').replace(/\/+$/,'')+'/chat/completions',{method:'POST',
+async function ask(msgs,onD,opt,configOverride,signal){
+  const c=configOverride||S.cfg,r=await fetch((c.base||'').replace(/\/+$/,'')+'/chat/completions',{method:'POST',signal,
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+c.key},
     body:JSON.stringify(Object.assign({model:c.model,temperature:+c.temp,stream:!!onD,messages:msgs},opt))});
   if(!r.ok){let m;try{m=(await r.json()).error.message}catch(e){}throw new Error(m||'HTTP '+r.status)}
@@ -2082,9 +2309,9 @@ async function ask(msgs,onD,opt,configOverride){
 }
 const NOTE_KEEP=8,NOTE_CHARS=600,NOTE_TOTAL=4800;
 function dailyRecall(cc){const seen=new Set(),pool=[...(cc.memoryEntries||[]).slice(0,-NOTE_KEEP),...(cc.vectorMemories||[])].filter(m=>{const t=String(m&&m.text||'').trim();if(!t||seen.has(t))return false;seen.add(t);return true});if(!pool.length)return'';const day=Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/864e5),m=pool[day%pool.length],dt=m.createdAt?new Date(m.createdAt).toLocaleDateString('zh-CN'):'';return'【今天忽然想起的旧事】（这是旧事，日期按原文算，别当成刚发生的；不必硬提）\n'+(dt?'记于 '+dt+'：':'')+String(m.text).trim().slice(0,300)}
-function build(p,h,split){
+function build(p,h,split,opt){
   const recent=h.slice(-6).map(m=>m.content).join('\n');
-  const cc=CC(p.id),wb=S.worlds.filter(w=>w.on!==false&&w.content&&((w.scope||'global')==='global'||(w.scope==='contact'&&(w.contacts||[]).includes(p.id)))&&(!w.keys.trim()||(w.trigger==='keyword'&&w.keys.split(/[,，\s]+/).filter(Boolean).some(k=>recent.includes(k))))).map(w=>({content:w.content,position:w.position||'after'}));
+  const cc=CC(p.id),wb=S.worlds.filter(w=>w.on!==false&&w.content&&(opt&&opt.wbIds?opt.wbIds.includes(w.id):((w.scope||'global')==='global'||(w.scope==='contact'&&(w.contacts||[]).includes(p.id))))&&(!w.keys.trim()||(w.trigger==='keyword'&&w.keys.split(/[,，\s]+/).filter(Boolean).some(k=>recent.includes(k))))).map(w=>({content:w.content,position:w.position||'after'}));
   const manualMem=(cc.traditionalMemories||[]).filter(m=>m&&String(m.text||'').trim()).map((m,i)=>`${i+1}. ${m.text}`);if(!manualMem.length&&cc.traditionalMemory&&String(cc.traditionalMemory).trim())manualMem.push(cc.traditionalMemory);
   /* L1 固定前缀：几乎不变的放最前 */
   let sys=p.prompt||'';
@@ -2092,10 +2319,11 @@ function build(p,h,split){
   if(S.globalPrompt)sys+='\n\n【全局 AI 扮演提示词】\n'+S.globalPrompt;
   if(cc.sys)sys+='\n\n'+cc.sys;
   if(manualMem.length)sys+='\n\n【传统记忆】\n'+manualMem.join('\n');
-  if(cc.trOn&&(cc.trOut||[]).length)sys+='\n\n【输出语言】请用以下语言回复用户：'+cc.trOut.join('、')+'。'+(cc.trOut.length>1?'可以在同一条消息里自然地混用这些语言。':'')+'不要在回复里自行附带翻译或括号注释。';
+  if(!(opt&&opt.noTr)&&cc.trOn&&(cc.trOut||[]).length)sys+='\n\n【输出语言】请用以下语言回复用户：'+cc.trOut.join('、')+'。'+(cc.trOut.length>1?'可以在同一条消息里自然地混用这些语言。':'')+'不要在回复里自行附带翻译或括号注释。';
   /* L2/L3 换段才变：最近几张纸条 */
   const notes=(cc.memoryEntries||[]).filter(m=>m&&String(m.text||'').trim()).slice(-NOTE_KEEP).map(m=>{const d=m.createdAt?new Date(m.createdAt).toLocaleDateString('zh-CN'):'';return(d?'['+d+'] ':'')+String(m.text).trim().slice(0,NOTE_CHARS)});
   if(notes.length)sys+='\n\n【最近的纸条】\n'+notes.join('\n---\n').slice(-NOTE_TOTAL);
+  {const offm=offlineCtx(p);if(offm)sys+='\n\n'+offm}
   /* L4/L5 尾巴：每轮可能变，放缓存断点之后 */
   let tail=String(msTogetherCtx(p)||'')+String(cpWishCtx(p)||'')+String(npcCtx(p)||'')+String(coreadCtx(p)||'');
   const wbB=wb.filter(w=>w.position==='before').map(w=>w.content),wbA=wb.filter(w=>w.position!=='before').map(w=>w.content);
@@ -2873,8 +3101,8 @@ cpr.addEventListener('click',async e=>{const b=e.target.closest('[data-act]');
  else if(a==='setsave'){const bd=cpBound(),s=cpN.sp||(bd.find(x=>x.id===cpD.partner)||bd[0]||{}).id,d=g('#cpf-s');if(!s||!bd.some(x=>x.id===s))return toast('只能选择已绑定到当前用户的联系人');S.cp.sel[cpUser().id]=s;cpD=cpOpen(cpUser().id,s);cpD.since=d||cpISO(new Date());const f=cpD.ann.find(x=>x.fixed);if(f)f.date=cpD.since;else cpD.ann.unshift({id:'since',name:'在一起',date:cpD.since,rep:true,fixed:true});cpN.sp=null;cpSave();cpN.sub=[];cpR()}
 });
 
-const R={msgs:()=>msgRender(),couple:()=>cpRender(),coread:()=>crRender(),crread:()=>crReadRender(),music:()=>msRender(),wallet:()=>wlRender(),home:rHome,app:rApp,prof:rProf,chat:draw,deco:rDeco,cset:rCset,css:rCss,personas:rPersonas,worlds:rWorlds,settings:rSettings,roleprompt:rSettings,diary:rDiary,stickers:rProfileStickers,postdetail:rPostDetail,rolephones:rolePhoneRender,desktopcustom:renderDesktopCustomizer};
-function go(v,push=true){if(v==='chat'&&!P(cur))return;if(v==='settings'&&stack[stack.length-1]!=='settings')settingsPage='main';if(v!=='chat')$('#ucss').textContent='';
+const R={offline:()=>ofRender(),msgs:()=>msgRender(),couple:()=>cpRender(),coread:()=>crRender(),crread:()=>crReadRender(),music:()=>msRender(),wallet:()=>wlRender(),home:rHome,app:rApp,prof:rProf,chat:draw,deco:rDeco,cset:rCset,css:rCss,personas:rPersonas,worlds:rWorlds,settings:rSettings,roleprompt:rSettings,diary:rDiary,stickers:rProfileStickers,postdetail:rPostDetail,rolephones:rolePhoneRender,desktopcustom:renderDesktopCustomizer};
+function go(v,push=true){if(v==='chat'&&!P(cur))return;if(v==='settings'&&stack[stack.length-1]!=='settings')settingsPage='main';if(v!=='chat')$('#ucss').textContent='';if(v!=='offline'){const oe=document.getElementById('ofcss');if(oe)oe.textContent=''}
   $$('.view').forEach(e=>e.classList.toggle('on',e.id==='v-'+v));if(push)stack.push(v);R[v]()}
 function back(){if(stack[stack.length-1]==='cset'&&csetPage==='memory'){csetPage='main';rCset();return}if(stack[stack.length-1]==='settings'&&settingsPage!=='main'){settingsPage='main';rSettings();return}stack.pop();go(stack[stack.length-1]||'home',false)}
 document.addEventListener('click',e=>{
