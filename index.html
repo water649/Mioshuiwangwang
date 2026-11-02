@@ -2450,6 +2450,22 @@ const NOTE_KEEP=8,NOTE_CHARS=600,NOTE_TOTAL=4800;
 function dailyRecall(cc){const seen=new Set(),pool=[...(cc.memoryEntries||[]).slice(0,-NOTE_KEEP),...(cc.vectorMemories||[])].filter(m=>{const t=String(m&&m.text||'').trim();if(!t||seen.has(t))return false;seen.add(t);return true});if(!pool.length)return'';const day=Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/864e5),m=pool[day%pool.length],dt=m.createdAt?new Date(m.createdAt).toLocaleDateString('zh-CN'):'';return'【今天忽然想起的旧事】（这是旧事，日期按原文算，别当成刚发生的；不必硬提）\n'+(dt?'记于 '+dt+'：':'')+String(m.text).trim().slice(0,300)}
 const chatPre=id=>{const x=S.apiPresets.find(y=>y.id===(CC(id)||{}).apiPreset);return x||null};
 const chatCfg=id=>{const x=chatPre(id);return x?Object.assign({},S.cfg,{base:x.base,key:x.key,model:x.model,temp:x.temp!=null?x.temp:S.cfg.temp}):undefined};
+function showLastPrompt(){
+  const lp=window.__lastPrompt;if(!lp)return toast('先让 TA 回复一次，再来查看');
+  const txt=m=>typeof m.content==='string'?m.content:(Array.isArray(m.content)?m.content.map(x=>x.text||'[图片]').join('\n'):String(m.content||''));
+  const all=lp.msgs.map((m,i)=>({i,role:m.role,t:txt(m)})),ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:99999;background:#fff;color:#111;display:flex;flex-direction:column;font-size:14px';
+  ov.innerHTML='<div style="display:flex;gap:8px;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 10px;border-bottom:1px solid #ddd"><button id="lp-x" style="border:0;background:none;font-size:22px;color:#111">‹</button><input id="lp-q" value="饺子" placeholder="搜索词，留空看全文" style="flex:1;min-width:0;padding:8px 10px;border:1px solid #ddd;border-radius:10px;font-size:15px;color:#111;background:#fff"><button id="lp-cp" style="border:0;background:#eee;border-radius:10px;padding:8px 10px;color:#111">复制全文</button></div><div id="lp-b" style="flex:1;overflow:auto;padding:12px;white-space:pre-wrap;word-break:break-word;line-height:1.5"></div>';
+  document.body.appendChild(ov);
+  const lab=x=>x.i===0?'系统提示（人设/记忆/世界书等）':x.role==='system'?'系统附加提示':x.role==='user'?'聊天记录·用户':'聊天记录·AI';
+  const render=()=>{const q=ov.querySelector('#lp-q').value.trim(),b=ov.querySelector('#lp-b');
+    if(!q){b.textContent=all.map(x=>'#'+x.i+' '+lab(x)+'\n'+x.t).join('\n\n————\n\n');return}
+    const out=[];all.forEach(x=>{const c=x.t.split(q).length-1;if(!c)return;const sn=[];let k=-1;while(sn.length<4&&(k=x.t.indexOf(q,k+1))>=0)sn.push('…'+x.t.slice(Math.max(0,k-50),k+q.length+50).replace(/\n/g,' ')+'…');out.push('#'+x.i+' '+lab(x)+'（'+c+' 处）\n'+sn.join('\n'))});
+    b.textContent=out.length?'「'+q+'」出现在：\n\n'+out.join('\n\n'):'这次发给 AI 的内容里没有「'+q+'」。'};
+  ov.querySelector('#lp-q').oninput=render;ov.querySelector('#lp-x').onclick=()=>ov.remove();
+  ov.querySelector('#lp-cp').onclick=()=>{const t=all.map(x=>'#'+x.i+' '+lab(x)+'\n'+x.t).join('\n\n————\n\n');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('已复制')).catch(()=>toast('复制失败'))};
+  render();
+}
 const TS_GAP=20*60000;
 const stripTs=t=>String(t==null?'':t).replace(/\[\d{1,2}月\d{1,2}日[^\]\n]{0,60}\]\s*/g,'');
 const tsAI=t=>{const d=new Date(t),h=d.getHours(),z=x=>String(x).padStart(2,'0'),p=h<5?'凌晨':h<9?'早上':h<12?'上午':h<14?'中午':h<18?'下午':h<23?'晚上':'深夜';return(d.getMonth()+1)+'月'+d.getDate()+'日 周'+'日一二三四五六'[d.getDay()]+' '+p+z(h)+':'+z(d.getMinutes())};
@@ -4172,7 +4188,7 @@ async function gen(){
   const p=P(cur),h=S.chats[cur];setBusy(1);const el=bub({role:'assistant',content:'···'},-1,1,0);
   try{
     const basePrompt=build(p,h,true);if((S.cfg.memoryMode||'traditional')==='vector'){try{const vm=await vectorMemoryPrompt(p,h);if(vm)basePrompt.push({role:'system',content:vm})}catch(memErr){toast('向量记忆检索失败，本次继续普通聊天：'+memErr.message)}}const prompt=basePrompt.concat([{role:'system',content:'在保持角色人设和自然对话的前提下，请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条独立聊天消息","第二条独立聊天消息"],"reply":"兼容字段","thought":"角色此刻未说出口的内心想法","image_prompt":""}。messages 是角色按真实聊天节奏连续发送的消息数组：结合语境，适合分开发的内容就拆成 2-5 条短消息，每条只放一个自然聊天气泡；不要把几句话用换行或一大段塞进同一个气泡。只有确实一句就能说清时才只输出一条。不要机械地每次都拆成多条。reply 可作为 messages 的兼容备用字段。thought 是简短内心活动。若用户明确要求生成/发图片，image_prompt 填画面描述，否则留空。如果某条回复是针对对话里某一条具体消息的回应（用户说的或你自己之前说的都可以），可以偶尔（不要每条都用）把这一条写成对象 {"text":"回复内容","quote":"被引用消息的原文片段，原样摘抄，不超过30字"}，其余条目仍写成普通字符串。'},{role:'system',content:TRF_PROMPT()}].concat([{role:'system',content:SONG_PROMPT}]).concat(avPrompt(cur)).concat((window.__callPrompt&&window.__callPrompt(cur))?[{role:'system',content:window.__callPrompt(cur)}]:[]).concat(CC(cur).narrOn?[{role:'system',content:NARR_PROMPT}]:[]).concat(CC(cur).trOn?[{role:'system',content:trMsgPrompt(CC(cur).trTo||'简体中文')}]:[]));
-    prompt.push({role:'system',content:FMT_RULE});if(h.length&&h[h.length-1].role==='assistant')prompt.push({role:'user',content:proNudge(p,0,'cont')});const raw=stripTs(await ask(prompt,null,undefined,chatCfg(p.id)));const data=parseAI(raw)
+    prompt.push({role:'system',content:FMT_RULE});if(h.length&&h[h.length-1].role==='assistant')prompt.push({role:'user',content:proNudge(p,0,'cont')});window.__lastPrompt={t:Date.now(),id:p.id,msgs:prompt};const raw=stripTs(await ask(prompt,null,undefined,chatCfg(p.id)));const data=parseAI(raw)
     let replyQuotes=[],replies=[],replyNarr=[],replyTr=[];if(Array.isArray(data.messages)){data.messages.forEach(x=>{const isO=x&&typeof x==='object',nr=isO&&x.narr?String(x.narr).trim():'',tx=nr||String(isO?(x.text||x.content||x.reply||''):(x||'')).trim();if(tx){replies.push(tx);replyQuotes.push(isO&&!nr?String(x.quote||'').trim():'');replyNarr.push(!!nr);replyTr.push(isO&&!nr?String(x.tr||x.translation||'').trim():'')}})}if(!replies.length){const out=String(data.reply||raw).trim();replies=out.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);if(replies.length===1&&out.length>180){const parts=out.match(/[^。！？!?]+[。！？!?]?/g)||[out];if(parts.length>=3)replies=parts.map(x=>x.trim()).filter(Boolean)}}if(!replies.length)replies=[String(data.reply||raw).trim()];if(el&&el.parentNode)el.remove();const thoughtTr=String(data.thought_tr||data.thoughtTr||'').trim();const songObj=(()=>{const x=data.song;if(!x||typeof x!=='object')return null;const t=String(x.title||'').trim();return t?{title:t,artist:String(x.artist||'').trim(),lyric:String(x.lyric||'').trim(),tag:String(x.tag||'').trim()}:null})();for(let k=0;k<replies.length;k++)if(replyNarr[k])replies[k]=await narrCN(replies[k]);const replyChatId=cur;let thoughtDone=0;for(let idx=0;idx<replies.length;idx++){if(cur!==replyChatId)break;if(idx>0){await new Promise(resolve=>setTimeout(resolve,520+Math.floor(Math.random()*420)));}const isN=!!replyNarr[idx];h.push({role:'assistant',content:replies[idx],...(isN?{narr:1}:((!thoughtDone&&(thoughtDone=1))?{thought:String(data.thought||'').trim(),...(thoughtTr&&thoughtTr!==String(data.thought||'').trim()?{thoughtTr}:{}),...(songObj?{song:songObj}:{})}:{thought:''})),t:Date.now(),...(isN?{}:findQuote(h,replyQuotes[idx])),...(!isN&&replyTr[idx]?{tr:replyTr[idx],trLang:CC(cur).trTo||'简体中文'}:{})});save();draw();}trfApplyAI(h,data);try{avApplyAI(replyChatId,data)}catch(_){}try{window.__callApplyAI&&window.__callApplyAI(replyChatId,data)}catch(_){}if(S.cfg.imageEnabled&&String(data.image_prompt||'').trim()){try{const im=await generateImage(String(data.image_prompt).trim());h.push({role:'assistant',content:'',image:im,thought:'我把刚才描述的画面生成出来了。',t:Date.now()})}catch(imgErr){h.push({role:'assistant',content:'图片生成失败：'+imgErr.message,t:Date.now()})}}save();try{await maybeAutoSummarize(cur)}catch(_){}
   }catch(e){el.textContent='请求失败：'+e.message;el.classList.add('err');setBusy(0);return}
   setBusy(0);draw();
@@ -4275,6 +4291,8 @@ function rCset(){
   <div class="is-g"><div class="is-c is-tap" id="cs-av-char"><div class="av">${av(chatAvU(p,false))}</div><span class="is-t"><b>角色头像</b><small>仅此聊天，不影响联系人页</small></span></div><div class="is-c is-tap" id="cs-av-me"><div class="av">${av(chatAvU(S.me,true))}</div><span class="is-t"><b>我的头像</b><small>从相册或头像库选择</small></span></div></div>
   <div class="is-h">聊天记录</div>
   <div class="is-g"><div class="is-c is-tap" id="cs-chat-exp"><span class="is-t"><b>导出此聊天记录</b><small>HTML 或 JSON</small></span></div><div class="is-c is-tap" id="cs-chat-imp"><span class="is-t"><b>导入聊天记录</b><small>支持 HTML / JSON</small></span></div></div>
+  <div class="is-h">调试</div>
+  <div class="is-g"><div class="is-c is-tap" id="cs-lastp"><span class="is-t"><b>查看发给 AI 的内容</b><small>最近一次回复实际发送的提示词，可搜索</small></span><span class="is-chev">${rpSvg('chr')}</span></div></div>
   <div class="is-h">隐私</div>
   <div class="is-g"><div class="is-c"><span class="is-i" style="background:#8e8e93">${rpSvg('no')}</span><span class="is-t"><b>拉黑此联系人</b></span><span class="is-sw"><input type="checkbox" id="cs-bl" ${p.blocked?'checked':''}><i></i></span></div></div>
   <div class="is-f">拉黑后不能发消息或请求回复，可在「联系人」里解除。</div>
@@ -4296,6 +4314,7 @@ function rCset(){
   {const c=$('#cs-wall-clear');if(c)c.onclick=()=>{cc.wall='';S.chatWall='';save();applyChatWall();rCset();toast('已恢复默认壁纸')}}
   $('#cs-narr-on').onchange=e=>{cc.narrOn=e.target.checked;save();draw()};
   $('#cs-api').onchange=e=>{cc.apiPreset=e.target.value;save();const x=chatPre(cur);toast(x?'此聊天改用：'+x.name:'此聊天跟随主 API')};
+  $('#cs-lastp').onclick=showLastPrompt;
   $('#cs-ts').onchange=e=>{cc.tsMode=e.target.value;save();draw()};
   $('#cs-pro-on').onchange=e=>{cc.proOn=e.target.checked;if(!cc.proMin)cc.proMin=60;cc.proLast=Date.now();save();if(cc.proOn){try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission()}catch(_){}}};
   $('#cs-pro-min').onchange=e=>{cc.proMin=+e.target.value||60;save()};
@@ -4655,7 +4674,7 @@ async function proSend(id){
   try{
     const idle=Math.max(1,Math.round((Date.now()-(h[h.length-1].t||Date.now()))/60000));
     const prompt=build(p,h).concat([{role:'system',content:'请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条消息","第二条消息"],"thought":"此刻未说出口的内心想法"}。messages 是你主动发出的聊天消息，按真实聊天节奏想发几条就发几条，每条一个气泡，不要塞成一大段。'},{role:'system',content:FMT_RULE}]).concat(cc.trOn?[{role:'system',content:trMsgPrompt(cc.trTo||'简体中文')}]:[]).concat(cc.narrOn?[{role:'system',content:NARR_PROMPT}]:[]).concat([{role:'user',content:proNudge(p,idle,'idle')}]);
-    const raw=stripTs(await ask(prompt,null,undefined,chatCfg(id)));const data=parseAI(raw)
+    window.__lastPrompt={t:Date.now(),id:id,msgs:prompt};const raw=stripTs(await ask(prompt,null,undefined,chatCfg(id)));const data=parseAI(raw)
     let rs=[];if(Array.isArray(data.messages))data.messages.forEach(x=>{const o=x&&typeof x==='object',nr=o&&x.narr?String(x.narr).trim():'',t=nr||String(o?(x.text||x.content||''):(x||'')).trim();if(t)rs.push({t,narr:!!nr,tr:o&&!nr?String(x.tr||x.translation||'').trim():''})});
     if(!rs.length){const t=String(data.reply||'').trim();if(t)rs=[{t,tr:''}]}
     if(!rs.length)return;for(const r of rs)if(r.narr)r.t=await narrCN(r.t);const batch=uid(),th=String(data.thought||'').trim(),base=Date.now();
