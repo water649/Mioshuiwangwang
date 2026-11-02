@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Mio水汪汪'">
+<meta name="apple-mobile-web-app-title" content="Mio水汪汪">
 <meta name="theme-color" id="theme-color" content="#ffffff">
 <title>Mio水汪汪</title>
 <style>
@@ -133,6 +133,7 @@ function playVoice(src,transcript=''){if(src==='simulated-voice'){if('speechSynt
 #msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:4px;--chat-font-size:14px}
 .dd{align-self:center;display:flex;align-items:center;gap:6px;background:var(--ai);color:var(--t2);border-radius:16px;padding:7px 14px;font-size:13px;margin:14px 0 8px}
 .dd svg{width:15px;height:15px}
+.wxt{align-self:center;color:var(--sub);font-size:12px;margin:12px 0 6px;padding:0 8px}
 .r{display:flex;gap:8px;align-items:flex-start}
 .r.first{margin-top:10px}
 .r.me{justify-content:flex-end}
@@ -832,6 +833,7 @@ button.feed-follow-plus{padding:0;cursor:pointer}
 .is-chev svg{width:16px;height:16px}
 .is-col{flex-direction:column;align-items:stretch;gap:6px}
 .is-col>b{font-weight:400;font-size:17px}
+.is-inp{margin-left:auto;flex:1;min-width:0;max-width:60%;background:none!important;border:0!important;outline:0;padding:0!important;text-align:right;font-size:17px;color:#8e8e93}
 .is-c textarea{background:none;border:0;border-radius:0;padding:4px 0;font-size:16px;width:100%;color:var(--ink)}
 .is-c input[type=range]{width:100%;padding:0;background:none;border:0;accent-color:#007aff}
 .is-prof{padding:14px 16px}
@@ -2446,6 +2448,13 @@ async function ask(msgs,onD,opt,configOverride,signal){
 }
 const NOTE_KEEP=8,NOTE_CHARS=600,NOTE_TOTAL=4800;
 function dailyRecall(cc){const seen=new Set(),pool=[...(cc.memoryEntries||[]).slice(0,-NOTE_KEEP),...(cc.vectorMemories||[])].filter(m=>{const t=String(m&&m.text||'').trim();if(!t||seen.has(t))return false;seen.add(t);return true});if(!pool.length)return'';const day=Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/864e5),m=pool[day%pool.length],dt=m.createdAt?new Date(m.createdAt).toLocaleDateString('zh-CN'):'';return'【今天忽然想起的旧事】（这是旧事，日期按原文算，别当成刚发生的；不必硬提）\n'+(dt?'记于 '+dt+'：':'')+String(m.text).trim().slice(0,300)}
+const chatPre=id=>{const x=S.apiPresets.find(y=>y.id===(CC(id)||{}).apiPreset);return x||null};
+const chatCfg=id=>{const x=chatPre(id);return x?Object.assign({},S.cfg,{base:x.base,key:x.key,model:x.model,temp:x.temp!=null?x.temp:S.cfg.temp}):undefined};
+const TS_GAP=20*60000;
+const tsAI=t=>{const d=new Date(t),h=d.getHours(),z=x=>String(x).padStart(2,'0'),p=h<5?'凌晨':h<9?'早上':h<12?'上午':h<14?'中午':h<18?'下午':h<23?'晚上':'深夜';return(d.getMonth()+1)+'月'+d.getDate()+'日 周'+'日一二三四五六'[d.getDay()]+' '+p+z(h)+':'+z(d.getMinutes())};
+const gapTxt=ms=>{const m=Math.round(ms/60000);return m<60?m+'分钟':m<1440?(Math.round(m/6)/10)+'小时':Math.round(m/144)/10+'天'};
+const tsMark=(t,pt)=>'['+tsAI(t)+'｜距上一条已过去'+gapTxt(t-pt)+']';
+const TIME_RULE=()=>'【时间感】现在是'+tsAI(Date.now())+'。对话记录里用户消息前面形如 [日期 时段｜距上一条已过去…] 的标注是系统自动加的，不是用户写的，不要在回复里复述或模仿。标注显示已隔了几个小时以上时，说明这是一段新的对话：之前没聊完的话题（比如问吃什么、约饭、做饭、等回复）视为已经过去，不要硬接、不要继续催、不要当成刚发生；按当前时间和用户这条消息自然回应，除非用户自己提起旧话题。';
 function build(p,h,split,opt){
   const recent=h.slice(-6).map(m=>m.content).join('\n');
   const cc=CC(p.id),wb=S.worlds.filter(w=>w.on!==false&&w.content&&(opt&&opt.wbIds?opt.wbIds.includes(w.id):((w.scope||'global')==='global'||(w.scope==='contact'&&(w.contacts||[]).includes(p.id))))&&(!w.keys.trim()||(w.trigger==='keyword'&&w.keys.split(/[,，\s]+/).filter(Boolean).some(k=>recent.includes(k))))).map(w=>({content:w.content,position:w.position||'after'}));
@@ -2466,8 +2475,9 @@ function build(p,h,split,opt){
   const wbB=wb.filter(w=>w.position==='before').map(w=>w.content),wbA=wb.filter(w=>w.position!=='before').map(w=>w.content);
   if(wbB.length||wbA.length)tail+='\n\n【世界书】\n'+[...wbB,...wbA].join('\n\n');
   const rc=dailyRecall(cc);if(rc)tail+='\n\n'+rc;
+  if(h&&h.length)tail+='\n\n'+TIME_RULE();
   tail=tail.trim();
-  const o=[];h.slice(-(+S.cfg.hist||30)).forEach(m=>{const l=o[o.length-1];if(l&&l.role===m.role)l.content+='\n'+qc(m);else o.push({role:m.role,content:m.image?[{type:'text',text:qc(m)||'用户发送了一张图片，请结合图片内容回复。'},{type:'image_url',image_url:{url:m.image}}]:qc(m)})});
+  const o=[],hs=h.slice(-((chatPre(p.id)&&+chatPre(p.id).hist)||+S.cfg.hist||30));hs.forEach((m,k)=>{const pm=hs[k-1],mk=(m.role==='user'&&pm&&m.t&&pm.t&&m.t-pm.t>=TS_GAP)?tsMark(m.t,pm.t)+'\n':'';const l=o[o.length-1];if(l&&l.role===m.role)l.content+='\n'+mk+qc(m);else o.push({role:m.role,content:m.image?[{type:'text',text:mk+(qc(m)||'用户发送了一张图片，请结合图片内容回复。')},{type:'image_url',image_url:{url:m.image}}]:qc(m)})});
   const out=[{role:'system',content:sys},...o];
   if(split){if(tail)out.push({role:'system',content:tail});return out}
   if(tail)out[0].content+='\n\n'+tail;return out;
@@ -3976,7 +3986,7 @@ function bub(m,i,first,last){
   if(m.recalled){r.className='recalled-row';if(i>=0)r.dataset.i=i;r.innerHTML='<div class="dd">'+(me?'你撤回了一条消息':'对方撤回了一条消息')+'</div>';$('#msgs').appendChild(r);return r;}
   if(m.narr){r.className='narr-row';if(i>=0){r.dataset.i=i;r.onclick=()=>{if(multiSelectMode)return;if(confirm('删除这条旁白？')){S.chats[cur].splice(i,1);save();draw()}}}r.textContent=m.content;$('#msgs').appendChild(r);return r;}
   r.className='r '+(me?'me':'ai')+(first?' first':'');if(i>=0)r.dataset.i=i;
-  r.innerHTML=`<div class="av" ${!me&&i>=0?'data-thought-i="'+i+'" title="查看角色内心想法"':''}>${av(u)}</div><div class="col">${first&&!me?`<div class="nm">${esc(u.name)}</div>`:''}${quoteHTML(m,me)}<div class="bw"><div class="m"></div>${last&&m.t?`<span class="tm">${hm(m.t)}</span>`:''}</div></div>`;
+  r.innerHTML=`<div class="av" ${!me&&i>=0?'data-thought-i="'+i+'" title="查看角色内心想法"':''}>${av(u)}</div><div class="col">${first&&!me?`<div class="nm">${esc((CC(cur).roleNote||'').trim()||u.name)}</div>`:''}${quoteHTML(m,me)}<div class="bw"><div class="m"></div>${last&&m.t&&CC(cur).tsMode!=='wx'?`<span class="tm">${hm(m.t)}</span>`:''}</div></div>`;
   const el=r.querySelector('.m'),sk=m.stk&&S.stickers.find(x=>x.id===m.stk);
   if(m.fcard){el.classList.add('fc-msg');el.innerHTML=fmCardHTML(m.fcard)}else if(m.transfer){el.classList.add('tf-msg');el.innerHTML=trfCardHTML(m)}else if(m.image){el.classList.add('image-msg');el.innerHTML=`${m.content?`<div>${esc(m.content)}</div>`:''}<img src="${m.image}" alt="聊天图片" style="display:block;max-width:min(240px,62vw);max-height:320px;object-fit:contain;border-radius:12px;margin-top:${m.content?'6px':'0'}">`}else if(sk){el.classList.add('stk');el.innerHTML=`<img src="${sk.src}" alt="">`}else if(m.audio){el.classList.add('voice-msg');el.innerHTML=`<button type="button" class="voice-play" data-play-audio="${i}" aria-label="展开或收起语音文字"><span class="voice-arrow" aria-hidden="true"></span><span class="voice-wave" aria-hidden="true">${'<i></i>'.repeat(9)}</span></button><span class="voice-transcript">${esc(m.content||'语音消息')}</span>`;el.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();el.classList.toggle('show-text')})}else {el.textContent=m.content}if(CC(cur).trOn&&m.trOpen&&m.role==='assistant'&&!m.image&&!m.audio&&!sk)r.querySelector('.col').insertAdjacentHTML('beforeend',trBoxHTML(m));$('#msgs').appendChild(r);$('#msgs').scrollTop=1e9;return el;
 }
@@ -3992,10 +4002,12 @@ function draw(){
   const box=$('#msgs');const _keepTop=box.scrollTop;box.innerHTML='';
   if(multiSelectMode){const bar=document.createElement('div');bar.className='msg-selectbar';bar.innerHTML=`<span>已选 ${selectedMsgIndices.size} 条</span><button type="button" data-ms-all>全选</button><button type="button" data-ms-forward>转发</button><button type="button" class="danger" data-ms-delete>删除</button><button type="button" data-ms-cancel>取消</button>`;box.appendChild(bar);}
   const day=t=>new Date(t).toDateString();
-  h.forEach((m,i)=>{if(m.recalled){bub(m,i,false,false);return}const anyBefore=h.slice(0,i).filter(x=>!x.recalled),pa=anyBefore[anyBefore.length-1],na=h.slice(i+1).filter(x=>!x.recalled)[0],brk=m.t&&(!pa||!pa.t||day(pa.t)!==day(m.t));
-    if(m.narr){if(brk)box.insertAdjacentHTML('beforeend',`<div class="dd">${ic('ca')}${new Date(m.t).toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'})} ›</div>`);bub(m,i,false,false);return}
+  const tsWx=CC(cur).tsMode==='wx',WX_GAP=5*60000,wxT=t=>{const d=new Date(t),n=new Date(),z=x=>String(x).padStart(2,'0'),H=z(d.getHours())+':'+z(d.getMinutes()),k=Math.round((new Date(n.getFullYear(),n.getMonth(),n.getDate())-new Date(d.getFullYear(),d.getMonth(),d.getDate()))/864e5);if(k===0)return H;if(k===1)return'昨天 '+H;if(k>1&&k<7)return'周'+'日一二三四五六'[d.getDay()]+' '+H;if(d.getFullYear()===n.getFullYear())return(d.getMonth()+1)+'月'+d.getDate()+'日 '+H;return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日 '+H};
+  const dvH=m=>tsWx?`<div class="wxt">${wxT(m.t)}</div>`:`<div class="dd">${ic('ca')}${new Date(m.t).toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'})} ›</div>`;
+  h.forEach((m,i)=>{if(m.recalled){bub(m,i,false,false);return}const anyBefore=h.slice(0,i).filter(x=>!x.recalled),pa=anyBefore[anyBefore.length-1],na=h.slice(i+1).filter(x=>!x.recalled)[0],brk=tsWx?(m.t&&(!pa||!pa.t||m.t-pa.t>=WX_GAP)):(m.t&&(!pa||!pa.t||day(pa.t)!==day(m.t)));
+    if(m.narr){if(brk)box.insertAdjacentHTML('beforeend',dvH(m));bub(m,i,false,false);return}
     const visibleBefore=h.slice(0,i).filter(x=>!x.recalled&&!x.narr),visibleAfter=h.slice(i+1).filter(x=>!x.recalled&&!x.narr),pv=visibleBefore[visibleBefore.length-1],nx=visibleAfter[0];
-    if(brk)box.insertAdjacentHTML('beforeend',`<div class="dd">${ic('ca')}${new Date(m.t).toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'})} ›</div>`);
+    if(brk)box.insertAdjacentHTML('beforeend',dvH(m));
     bub(m,i,!pv||pv.role!==m.role||brk||!!(pa&&pa.narr),!nx||nx.role!==m.role||!!(na&&na.narr));if(selectedMsgIndices.has(i)){const rr=box.querySelector(`.r[data-i="${i}"]`);if(rr)rr.classList.add('multi-picked')}});
   box.scrollTop=multiSelectMode?_keepTop:1e9;
 }
@@ -4159,7 +4171,7 @@ async function gen(){
   const p=P(cur),h=S.chats[cur];setBusy(1);const el=bub({role:'assistant',content:'···'},-1,1,0);
   try{
     const basePrompt=build(p,h,true);if((S.cfg.memoryMode||'traditional')==='vector'){try{const vm=await vectorMemoryPrompt(p,h);if(vm)basePrompt.push({role:'system',content:vm})}catch(memErr){toast('向量记忆检索失败，本次继续普通聊天：'+memErr.message)}}const prompt=basePrompt.concat([{role:'system',content:'在保持角色人设和自然对话的前提下，请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条独立聊天消息","第二条独立聊天消息"],"reply":"兼容字段","thought":"角色此刻未说出口的内心想法","image_prompt":""}。messages 是角色按真实聊天节奏连续发送的消息数组：结合语境，适合分开发的内容就拆成 2-5 条短消息，每条只放一个自然聊天气泡；不要把几句话用换行或一大段塞进同一个气泡。只有确实一句就能说清时才只输出一条。不要机械地每次都拆成多条。reply 可作为 messages 的兼容备用字段。thought 是简短内心活动。若用户明确要求生成/发图片，image_prompt 填画面描述，否则留空。如果某条回复是针对对话里某一条具体消息的回应（用户说的或你自己之前说的都可以），可以偶尔（不要每条都用）把这一条写成对象 {"text":"回复内容","quote":"被引用消息的原文片段，原样摘抄，不超过30字"}，其余条目仍写成普通字符串。'},{role:'system',content:TRF_PROMPT()}].concat([{role:'system',content:SONG_PROMPT}]).concat(avPrompt(cur)).concat((window.__callPrompt&&window.__callPrompt(cur))?[{role:'system',content:window.__callPrompt(cur)}]:[]).concat(CC(cur).narrOn?[{role:'system',content:NARR_PROMPT}]:[]).concat(CC(cur).trOn?[{role:'system',content:trMsgPrompt(CC(cur).trTo||'简体中文')}]:[]));
-    prompt.push({role:'system',content:FMT_RULE});if(h.length&&h[h.length-1].role==='assistant')prompt.push({role:'user',content:proNudge(p,0,'cont')});const raw=await ask(prompt,null);const data=parseAI(raw)
+    prompt.push({role:'system',content:FMT_RULE});if(h.length&&h[h.length-1].role==='assistant')prompt.push({role:'user',content:proNudge(p,0,'cont')});const raw=await ask(prompt,null,undefined,chatCfg(p.id));const data=parseAI(raw)
     let replyQuotes=[],replies=[],replyNarr=[],replyTr=[];if(Array.isArray(data.messages)){data.messages.forEach(x=>{const isO=x&&typeof x==='object',nr=isO&&x.narr?String(x.narr).trim():'',tx=nr||String(isO?(x.text||x.content||x.reply||''):(x||'')).trim();if(tx){replies.push(tx);replyQuotes.push(isO&&!nr?String(x.quote||'').trim():'');replyNarr.push(!!nr);replyTr.push(isO&&!nr?String(x.tr||x.translation||'').trim():'')}})}if(!replies.length){const out=String(data.reply||raw).trim();replies=out.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);if(replies.length===1&&out.length>180){const parts=out.match(/[^。！？!?]+[。！？!?]?/g)||[out];if(parts.length>=3)replies=parts.map(x=>x.trim()).filter(Boolean)}}if(!replies.length)replies=[String(data.reply||raw).trim()];if(el&&el.parentNode)el.remove();const thoughtTr=String(data.thought_tr||data.thoughtTr||'').trim();const songObj=(()=>{const x=data.song;if(!x||typeof x!=='object')return null;const t=String(x.title||'').trim();return t?{title:t,artist:String(x.artist||'').trim(),lyric:String(x.lyric||'').trim(),tag:String(x.tag||'').trim()}:null})();for(let k=0;k<replies.length;k++)if(replyNarr[k])replies[k]=await narrCN(replies[k]);const replyChatId=cur;let thoughtDone=0;for(let idx=0;idx<replies.length;idx++){if(cur!==replyChatId)break;if(idx>0){await new Promise(resolve=>setTimeout(resolve,520+Math.floor(Math.random()*420)));}const isN=!!replyNarr[idx];h.push({role:'assistant',content:replies[idx],...(isN?{narr:1}:((!thoughtDone&&(thoughtDone=1))?{thought:String(data.thought||'').trim(),...(thoughtTr&&thoughtTr!==String(data.thought||'').trim()?{thoughtTr}:{}),...(songObj?{song:songObj}:{})}:{thought:''})),t:Date.now(),...(isN?{}:findQuote(h,replyQuotes[idx])),...(!isN&&replyTr[idx]?{tr:replyTr[idx],trLang:CC(cur).trTo||'简体中文'}:{})});save();draw();}trfApplyAI(h,data);try{avApplyAI(replyChatId,data)}catch(_){}try{window.__callApplyAI&&window.__callApplyAI(replyChatId,data)}catch(_){}if(S.cfg.imageEnabled&&String(data.image_prompt||'').trim()){try{const im=await generateImage(String(data.image_prompt).trim());h.push({role:'assistant',content:'',image:im,thought:'我把刚才描述的画面生成出来了。',t:Date.now()})}catch(imgErr){h.push({role:'assistant',content:'图片生成失败：'+imgErr.message,t:Date.now()})}}save();try{await maybeAutoSummarize(cur)}catch(_){}
   }catch(e){el.textContent='请求失败：'+e.message;el.classList.add('err');setBusy(0);return}
   setBusy(0);draw();
@@ -4237,10 +4249,14 @@ function rCset(){
   <div class="is-h">聊天</div>
   <div class="is-g">
     <div class="is-c is-tap" id="open-chat-memory"><span class="is-i" style="background:#af52de">${rpSvg('mm')}</span><span class="is-t"><b>记忆管理</b><small>生成总结条目、编辑删除记忆、自定义总结指令</small></span><span class="is-chev">${rpSvg('chr')}</span></div>
-    <div class="is-c is-col"><b>角色备注</b><textarea id="cs-role-note" rows="2" placeholder="替换聊天顶栏的角色名字，留空显示原名">${esc(cc.roleNote||'')}</textarea></div>
+    <div class="is-c"><span class="is-t"><b>时间戳样式</b></span><select id="cs-ts" style="max-width:150px"><option value="">默认</option><option value="wx"${cc.tsMode==='wx'?' selected':''}>微信式</option></select></div>
+    <div class="is-c"><span class="is-t"><b>角色备注</b></span><input id="cs-role-note" class="is-inp" placeholder="留空显示原名" value="${esc(cc.roleNote||'')}"></div>
     <div class="is-c is-col"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-weight:400;font-size:17px">聊天字体大小</b><span class="is-v" id="cs-font-value">${Number(cc.fontSize)||14}px</span></div><input id="cs-font-size" type="range" min="11" max="20" step="1" value="${Number(cc.fontSize)||14}"></div>
   </div>
   <div class="is-f">角色备注只用于界面显示，不会作为台词发送；字体大小只对当前聊天生效。</div>
+  <div class="is-h">角色专属 API</div>
+  <div class="is-g"><div class="is-c"><span class="is-t"><b>使用预设</b></span><select id="cs-api" class="is-sel"><option value="">跟随主 API</option>${S.apiPresets.map(x=>`<option value="${esc(x.id)}"${cc.apiPreset===x.id?' selected':''}>${esc(x.name)}</option>`).join('')}</select></div></div>
+  <div class="is-f">只覆盖这个聊天的回复、主动消息和通话，副 API 不受影响。</div>
   <div class="is-h">附加系统提示</div>
   <div class="is-g"><div class="is-c is-col"><textarea id="cs-sys" rows="4" placeholder="只对这个聊天生效，接在人设提示词后面">${esc(cc.sys)}</textarea></div></div>
   <div class="is-h">绑定世界书</div>
@@ -4263,6 +4279,7 @@ function rCset(){
   <div class="is-f">拉黑后不能发消息或请求回复，可在「联系人」里解除。</div>
 </div>`;
   $('#open-chat-memory').onclick=()=>{csetPage='memory';rChatMemory()};
+  $('#cs-role-note').onchange=()=>draw();
   $('#cs-role-note').oninput=e=>{cc.roleNote=e.target.value;save();const title=$('#ctitle');if(title)title.textContent=cc.roleNote.trim()||((S.personas.find(p=>p.id===cur)||{}).name||'聊天');const note=$('#chat-role-note');if(note)note.textContent=''};
   $('#cs-font-size').oninput=e=>{cc.fontSize=Number(e.target.value);$('#cs-font-value').textContent=cc.fontSize+'px';applyChatFont();save()};
   $('#cs-sys').oninput=e=>{cc.sys=e.target.value;save()};
@@ -4277,6 +4294,8 @@ function rCset(){
   {const a=$('#cs-wall-all');if(a)a.onclick=()=>{S.chatWall=cc.wall;save();toast('已应用到所有聊天');rCset()}}
   {const c=$('#cs-wall-clear');if(c)c.onclick=()=>{cc.wall='';S.chatWall='';save();applyChatWall();rCset();toast('已恢复默认壁纸')}}
   $('#cs-narr-on').onchange=e=>{cc.narrOn=e.target.checked;save();draw()};
+  $('#cs-api').onchange=e=>{cc.apiPreset=e.target.value;save();const x=chatPre(cur);toast(x?'此聊天改用：'+x.name:'此聊天跟随主 API')};
+  $('#cs-ts').onchange=e=>{cc.tsMode=e.target.value;save();draw()};
   $('#cs-pro-on').onchange=e=>{cc.proOn=e.target.checked;if(!cc.proMin)cc.proMin=60;cc.proLast=Date.now();save();if(cc.proOn){try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission()}catch(_){}}};
   $('#cs-pro-min').onchange=e=>{cc.proMin=+e.target.value||60;save()};
   $('#cs-pro-q').onchange=e=>{cc.proQuiet=e.target.checked;save()};
@@ -4635,7 +4654,7 @@ async function proSend(id){
   try{
     const idle=Math.max(1,Math.round((Date.now()-(h[h.length-1].t||Date.now()))/60000));
     const prompt=build(p,h).concat([{role:'system',content:'请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条消息","第二条消息"],"thought":"此刻未说出口的内心想法"}。messages 是你主动发出的聊天消息，按真实聊天节奏想发几条就发几条，每条一个气泡，不要塞成一大段。'},{role:'system',content:FMT_RULE}]).concat(cc.trOn?[{role:'system',content:trMsgPrompt(cc.trTo||'简体中文')}]:[]).concat(cc.narrOn?[{role:'system',content:NARR_PROMPT}]:[]).concat([{role:'user',content:proNudge(p,idle,'idle')}]);
-    const raw=await ask(prompt,null);const data=parseAI(raw)
+    const raw=await ask(prompt,null,undefined,chatCfg(id));const data=parseAI(raw)
     let rs=[];if(Array.isArray(data.messages))data.messages.forEach(x=>{const o=x&&typeof x==='object',nr=o&&x.narr?String(x.narr).trim():'',t=nr||String(o?(x.text||x.content||''):(x||'')).trim();if(t)rs.push({t,narr:!!nr,tr:o&&!nr?String(x.tr||x.translation||'').trim():''})});
     if(!rs.length){const t=String(data.reply||'').trim();if(t)rs=[{t,tr:''}]}
     if(!rs.length)return;for(const r of rs)if(r.narr)r.t=await narrCN(r.t);const batch=uid(),th=String(data.thought||'').trim(),base=Date.now();
@@ -4863,7 +4882,7 @@ async function respond(){
   msgs.push({role:'system',content:callSys(C)});
   const turns=[{role:'user',content:C.dir==='out'?'（电话接通了，你接起电话，请说第一句话。）':'（用户接起了你打去的电话，你是打电话的一方，请先开口。）'}];
   C.lines.slice(-40).forEach(l=>{const role=l.r==='u'?'user':'assistant',last=turns[turns.length-1];if(last.role===role)last.content+='\n'+l.c;else turns.push({role,content:l.c})});
-  const raw=await ask(msgs.concat(turns),null,{max_tokens:500});
+  const raw=await ask(msgs.concat(turns),null,{max_tokens:500},chatCfg(C.pid));
   if(CALL!==C||tok!==C.token)return;
   let txt=cleanReply(raw),bye=false;
   if(/\[挂断\]/.test(txt)){bye=true;txt=txt.replace(/\[挂断\]/g,'').trim()}
@@ -6926,7 +6945,7 @@ setInterval(dyTick,30000);document.addEventListener('visibilitychange',()=>{if(!
 /* v76 quote / recall */
 .recalled-row{cursor:pointer;-webkit-user-select:none;user-select:none}
 .qt{display:flex;align-items:flex-start;gap:6px;max-width:100%;color:var(--sub);font-size:12px;line-height:1.45;cursor:pointer;-webkit-user-select:none;user-select:none}
-.qt-t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;white-space:normal}
+.qt-t{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .qt-d{flex:none;width:6px;height:6px;border-radius:50%;background:var(--ink);margin-top:.52em}
 .me .qt{justify-content:flex-end;text-align:right}
 .ai .qt{justify-content:flex-start;text-align:left}
