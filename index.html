@@ -2454,7 +2454,7 @@ const TS_GAP=20*60000;
 const tsAI=t=>{const d=new Date(t),h=d.getHours(),z=x=>String(x).padStart(2,'0'),p=h<5?'凌晨':h<9?'早上':h<12?'上午':h<14?'中午':h<18?'下午':h<23?'晚上':'深夜';return(d.getMonth()+1)+'月'+d.getDate()+'日 周'+'日一二三四五六'[d.getDay()]+' '+p+z(h)+':'+z(d.getMinutes())};
 const gapTxt=ms=>{const m=Math.round(ms/60000);return m<60?m+'分钟':m<1440?(Math.round(m/6)/10)+'小时':Math.round(m/144)/10+'天'};
 const tsMark=(t,pt)=>'['+tsAI(t)+'｜距上一条已过去'+gapTxt(t-pt)+']';
-const TIME_RULE=()=>'【时间感】现在是'+tsAI(Date.now())+'。对话记录里用户消息前面形如 [日期 时段｜距上一条已过去…] 的标注是系统自动加的，不是用户写的，不要在回复里复述或模仿。标注显示已隔了几个小时以上时，说明这是一段新的对话：之前没聊完的话题（比如问吃什么、约饭、做饭、等回复）视为已经过去，不要硬接、不要继续催、不要当成刚发生；按当前时间和用户这条消息自然回应，除非用户自己提起旧话题。';
+const TIME_RULE=h=>{const now=Date.now(),l=[...(h||[])].reverse().find(m=>m&&!m.recalled&&m.t);let s='【时间感】现在是'+tsAI(now)+'。';if(l&&now-l.t>=TS_GAP)s+='这段对话的最后一条消息是'+tsAI(l.t)+'发的（'+(l.role==='user'?'用户':'你')+'），距现在已过去'+gapTxt(now-l.t)+'。你这次开口是在这么久之后：此前即时性的情境（做饭、叫人过来吃饭、等人回复、“马上到”、正在做的事）都已经结束，绝不能当作还在进行，也不要把之前说过的话再说一遍；请按现在的时间点和你们的关系自然开口（比如早安、晚安、隔了这么久想起对方），只在确有必要时才接上之前真正没聊完的事。';return s+'对话记录里用户消息前面形如 [日期 时段｜距上一条已过去…] 的标注是系统自动加的，不是用户写的，不要在回复里复述或模仿。标注显示已隔了几个小时以上时，说明这是新的一段对话，之前没聊完的即时话题视为已经过去，除非用户自己提起。'};
 function build(p,h,split,opt){
   const recent=h.slice(-6).map(m=>m.content).join('\n');
   const cc=CC(p.id),wb=S.worlds.filter(w=>w.on!==false&&w.content&&(opt&&opt.wbIds?opt.wbIds.includes(w.id):((w.scope||'global')==='global'||(w.scope==='contact'&&(w.contacts||[]).includes(p.id))))&&(!w.keys.trim()||(w.trigger==='keyword'&&w.keys.split(/[,，\s]+/).filter(Boolean).some(k=>recent.includes(k))))).map(w=>({content:w.content,position:w.position||'after'}));
@@ -2475,7 +2475,7 @@ function build(p,h,split,opt){
   const wbB=wb.filter(w=>w.position==='before').map(w=>w.content),wbA=wb.filter(w=>w.position!=='before').map(w=>w.content);
   if(wbB.length||wbA.length)tail+='\n\n【世界书】\n'+[...wbB,...wbA].join('\n\n');
   const rc=dailyRecall(cc);if(rc)tail+='\n\n'+rc;
-  if(h&&h.length)tail+='\n\n'+TIME_RULE();
+  if(h&&h.length)tail+='\n\n'+TIME_RULE(h);
   tail=tail.trim();
   const o=[],hs=h.slice(-((chatPre(p.id)&&+chatPre(p.id).hist)||+S.cfg.hist||30));hs.forEach((m,k)=>{const pm=hs[k-1],mk=(m.role==='user'&&pm&&m.t&&pm.t&&m.t-pm.t>=TS_GAP)?tsMark(m.t,pm.t)+'\n':'';const l=o[o.length-1];if(l&&l.role===m.role)l.content+='\n'+mk+qc(m);else o.push({role:m.role,content:m.image?[{type:'text',text:mk+(qc(m)||'用户发送了一张图片，请结合图片内容回复。')},{type:'image_url',image_url:{url:m.image}}]:qc(m)})});
   const out=[{role:'system',content:sys},...o];
