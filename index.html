@@ -468,12 +468,119 @@ div.rps-app:active .rps-ic{filter:none}
 .tw.busy .tw-gen{opacity:.35;pointer-events:none}
 .tw-e{color:var(--ts);text-align:center;padding:60px 24px;font-size:14px;line-height:1.7}
 .tw-d{padding:12px 14px 0}
-.tw-d .tw-tx{font-size:19px;margin-top:10px}
-.tw-d .tw-tr{font-size:18px}
+.tw-d .tw-tx{font-size:15.5px;margin-top:10px}
+.tw-d .tw-tr{font-size:15.5px}
+.tw-c .tw-tx,.tw-c .tw-tr{font-size:14.5px}
 .tw-dt{color:var(--ts);font-size:14px;padding:12px 0;border-bottom:1px solid var(--tl)}
 .tw-dt b,.tw-st b{color:var(--tt)}
 .tw-st{display:flex;gap:18px;padding:12px 0;border-bottom:1px solid var(--tl);font-size:14px;color:var(--ts)}
 .tw-rh{font-size:14px;font-weight:700;padding:12px 14px;border-bottom:1px solid var(--tl)}
+.sh{--sa:#ff5000;--st:#333;--ss:#999;position:fixed;inset:0;max-width:640px;margin:0 auto;z-index:5;background:#fff;color:var(--st);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);font-size:14px;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif}
+.sh svg{display:block}
+.sh button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer}
+.sh-top{flex:none;display:flex;align-items:center;justify-content:space-between;height:46px;padding:0 6px;background:#fff;border-bottom:1px solid #eee}
+.sh-top b{font-size:17px;font-weight:600;letter-spacing:.5px}
+.sh-c{width:40px;height:40px;display:grid;place-items:center;color:#444}
+.sh-c svg{width:22px;height:22px}
+.sh.busy .sh-gen{opacity:.35;pointer-events:none}
+.sh-sc{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#f5f5f5;padding-bottom:calc(26px + env(safe-area-inset-bottom,0px))}
+.sh-e{color:#999;text-align:center;padding:90px 24px;font-size:14px;line-height:1.8}
+.sh-e svg{width:84px;height:84px;margin:0 auto 14px}
+.sh-me{display:flex;align-items:center;gap:13px;padding:16px 16px 12px;background:#fff}
+.sh-av{width:56px;height:56px;border-radius:50%;overflow:hidden;flex:none;border:2px solid #ffd9c7;background:#fff3ec;display:grid;place-items:center;font-weight:700;font-size:22px;color:var(--sa)}
+.sh-av img{width:100%;height:100%;object-fit:cover;display:block}
+.sh-mi{min-width:0}
+.sh-mi b{font-size:17px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sh-mi span{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11.5px;color:#d9632b;background:#fff1e8;border:1px solid #ffd9c3;border-radius:9px;padding:1px 8px}
+.sh-mi span svg{width:11px;height:11px}
+.sh-sts{display:flex;background:#fff;padding:4px 0 14px}
+.sh-sts div{flex:1;text-align:center;position:relative}
+.sh-sts div+div::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:1px;background:#f0f0f0}
+.sh-sts b{display:block;font-size:18px;font-weight:600;color:#222}
+.sh-sts b i{font-style:normal;font-size:12px;font-weight:500;margin-right:1px}
+.sh-sts small{color:#999;font-size:12px}
+.sh-od{background:#fff;margin-top:8px}
+.sh-odh{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 4px;font-size:14.5px;font-weight:600}
+.sh-odh small{font-size:12px;font-weight:400;color:#999;display:flex;align-items:center;gap:2px}
+.sh-odh small svg{width:11px;height:11px}
+.sh-oi{display:flex;padding:8px 0 14px}
+.sh-oi div{flex:1;text-align:center;position:relative;font-size:12px;color:#555}
+.sh-oi svg{width:29px;height:29px;margin:0 auto 5px}
+.sh-oi em{position:absolute;top:-4px;left:calc(50% + 8px);min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--sa);color:#fff;font-style:normal;font-size:10.5px;line-height:16px;font-weight:600;box-sizing:border-box;border:1.5px solid #fff;height:17px;line-height:14px}
+.sh-tabs{display:flex;background:#fff;border-bottom:1px solid #eee;margin-top:8px;position:sticky;top:0;z-index:2}
+.sh-tabs button{flex:1;height:44px;font-size:14.5px;color:#666;position:relative;background:none;border:0}
+.sh-tabs button small{font-size:12px;margin-left:2px;color:#aaa}
+.sh-tabs button.on{color:var(--sa);font-weight:600}
+.sh-tabs button.on small{color:var(--sa)}
+.sh-tabs button.on::after{content:"";position:absolute;left:50%;bottom:0;width:42px;height:2.5px;margin-left:-21px;background:var(--sa);border-radius:2px}
+.sh-o{background:#fff;margin-top:8px}
+.sh-oh{display:flex;align-items:center;padding:11px 14px 9px;gap:8px}
+.sh-sn{flex:1;min-width:0;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:6px}
+.sh-sn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sh-sn svg{width:17px;height:17px;flex:none}
+.sh svg.ch{width:11px;height:11px;color:#bbb;flex:none}
+.sh-ss{font-size:13px;color:var(--sa);flex:none}
+.sh-ss.ok{color:#999}
+.sh-pr{display:flex;gap:11px;padding:4px 14px 12px}
+.sh-th{width:84px;height:84px;border-radius:4px;flex:none;display:grid;place-items:center;border:1px solid rgba(0,0,0,.05);overflow:hidden;box-sizing:border-box}
+.sh-th svg{width:100%;height:100%}
+.sh-pm{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start}
+.sh-ti{font-size:13.5px;line-height:1.45;max-height:2.9em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:#333}
+.sh-sp{margin-top:6px;font-size:12px;color:#999;background:#f7f7f7;padding:2px 7px;border-radius:2px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-sizing:border-box}
+.sh-pp{text-align:right;flex:none;padding-left:4px;font-size:14px;color:#333}
+.sh-pp i,.sh-of i,.sh-ir i{font-style:normal;font-size:11px;margin-right:1px}
+.sh-pp small{display:block;color:#999;font-size:12px;margin-top:3px}
+.sh-of{padding:0 14px 11px;text-align:right;font-size:12.5px;color:#666}
+.sh-of b{font-size:16px;font-weight:600;color:#222}
+.sh-ob{display:flex;justify-content:flex-end;gap:8px;padding:0 14px 13px}
+.sh-bt{height:28px;padding:0 13px;border:1px solid #d5d5d5;border-radius:3px;font-size:12.5px;color:#555;display:flex;align-items:center;gap:4px;background:#fff}
+.sh-bt svg{width:13px;height:13px}
+.sh-bt.o{border-color:var(--sa);color:var(--sa)}
+.sh-cg{background:#fff;margin-top:8px}
+.sh-cgh{display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid #f3f3f3;font-weight:600;font-size:13.5px}
+.sh-cgh span.n{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
+.sh-cgh span.n em{font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sh-cgh svg.st{width:17px;height:17px;flex:none}
+.sh-ck{width:19px;height:19px;border-radius:50%;border:1.5px solid #cfcfcf;flex:none;display:grid;place-items:center;box-sizing:border-box;background:#fff}
+.sh-ck.on{background:var(--sa);border-color:var(--sa)}
+.sh-ck svg{width:11px;height:11px;color:#fff}
+.sh-ci{display:flex;align-items:stretch;gap:10px;padding:12px 14px}
+.sh-ci+.sh-ci{border-top:1px solid #f6f6f6}
+.sh-ci .sh-ck{align-self:center}
+.sh-ci .sh-th{width:90px;height:90px}
+.sh-cp{display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:6px;width:100%}
+.sh-cp b{color:var(--sa);font-size:16px;font-weight:600}
+.sh-cp b i{font-style:normal;font-size:11px;margin-right:1px}
+.sh-q{display:flex;border:1px solid #e3e3e3;border-radius:3px;font-size:13px;color:#888}
+.sh-q span{width:24px;height:22px;display:grid;place-items:center}
+.sh-q span:nth-child(2){width:32px;border-left:1px solid #e3e3e3;border-right:1px solid #e3e3e3;color:#333}
+.sh-ad{margin-top:5px;font-size:11.5px;color:#d9632b;display:flex;align-items:center;gap:3px}
+.sh-ad svg{width:12px;height:12px}
+.sh-bar{flex:none;display:flex;align-items:center;gap:10px;padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid #eee}
+.sh-bar .all{display:flex;align-items:center;gap:7px;font-size:13px;color:#666}
+.sh-bar .sum{flex:1;text-align:right;font-size:12.5px;color:#666}
+.sh-bar .sum b{color:var(--sa);font-size:17px;font-weight:600}
+.sh-bar .go{height:38px;padding:0 22px;border-radius:3px;background:linear-gradient(90deg,#ff8a3a,#ff5000);color:#fff;font-weight:600;font-size:14.5px;display:flex;align-items:center}
+.sh-sb{padding:18px 18px 20px;background:linear-gradient(135deg,#fff1e6,#fff8f2 65%,#fff);position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;border-bottom:1px solid #fbe8db}
+.sh-sb .ic{width:48px;height:48px;flex:none}
+.sh-sb b{font-size:19px;color:var(--sa);display:block;font-weight:700}
+.sh-sb small{color:#b88f78;font-size:12.5px;margin-top:3px;display:block;line-height:1.5}
+.sh-sb .wm{position:absolute;right:-10px;bottom:-16px;width:104px;height:104px;opacity:.09;color:var(--sa)}
+.sh-why{margin:10px 12px 0;background:#fffdf8;border:1px dashed #f1c6a8;border-radius:6px;padding:14px 16px 12px;position:relative}
+.sh-why h4{margin:0 0 9px;display:flex;align-items:center;gap:7px;color:var(--sa);font-size:14px;font-weight:700;}
+.sh-why h4 svg{width:19px;height:19px}
+.sh-why p{margin:0;font-size:15px;line-height:1.9;color:#444;white-space:pre-wrap;overflow-wrap:anywhere}
+.sh-why em{display:block;text-align:right;font-style:normal;color:#bba998;font-size:12px;margin-top:9px}
+.sh-dp{background:#fff;margin-top:10px}
+.sh-dp .sh-th{width:96px;height:96px}
+.sh-ir{display:flex;justify-content:space-between;gap:12px;padding:5px 14px;font-size:13px;color:#888}
+.sh-ir span:last-child{color:#444;text-align:right;overflow-wrap:anywhere}
+.sh-ir.tt{border-top:1px solid #f4f4f4;margin-top:6px;padding-top:11px;padding-bottom:12px;color:#444}
+.sh-ir.tt b{color:var(--sa);font-size:17px;font-weight:600}
+.sh-inf{background:#fff;margin-top:10px;padding:8px 0 10px}
+.sh-inf h5{margin:0;font-size:13.5px;font-weight:600;padding:5px 14px 4px;color:#333}
+.sh-tip{margin:14px 0 0;text-align:center;color:#c2c2c2;font-size:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.sh-tip::before,.sh-tip::after{content:"";width:34px;height:1px;background:#e4e4e4}
 .hl{--hbg:#f2f2f7;--hc:#fff;--ht:#000;--hs:#8e8e93;--hl:#e5e5ea;position:fixed;inset:0;max-width:640px;margin:0 auto;z-index:5;background:var(--hbg);color:var(--ht);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 [data-theme=dark] .hl{--hbg:#000;--hc:#1c1c1e;--ht:#fff;--hs:#8e8e93;--hl:#2c2c2e}
 .hl svg{width:20px;height:20px;display:block}
@@ -2734,7 +2841,6 @@ const RPS_IC={
 };
 const RPS_GEAR='<svg viewBox="0 0 24 24" fill="none" stroke="#3f4148" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/><circle cx="12" cy="12" r="3"/></svg>';
 const RPS_USER='<svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4.2" fill="#6f7686"/><path d="M3.8 21c0-4.6 3.7-7.4 8.2-7.4s8.2 2.8 8.2 7.4z" fill="#6f7686"/></svg>';
-const RPS_SHOP='<svg class="full" viewBox="0 0 100 100"><defs><linearGradient id="rpssh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f8fe3"/><stop offset="1" stop-color="#9ccff6"/></linearGradient></defs><rect x="22" y="14" width="40" height="40" fill="#d9d9dc"/><text x="42" y="25" text-anchor="middle" font-size="9" font-weight="700" font-family="serif" fill="#222">News</text><path d="M26 30h32M26 35h32M26 40h32" stroke="#bdbdc2" stroke-width="1.4"/><rect x="8" y="36" width="30" height="46" fill="#f6c232"/><text x="12" y="46" font-size="7.5" font-weight="700" font-family="sans-serif" fill="#3a3a3a">ART</text><circle cx="23" cy="57" r="6" fill="#3aa0ee"/><rect x="12" y="66" width="11" height="11" fill="#ee4438"/><path d="M26 78l6-9 6 9z" fill="#fff" opacity=".85"/><rect x="32" y="27" width="31" height="55" fill="url(#rpssh)"/><text x="47.5" y="36" text-anchor="middle" font-size="7" font-weight="700" font-family="serif" fill="#1c2f86">TRAVEL</text><path d="M47.5 48c1.3 0 2.2 1 2.2 3v7l9 5v3l-9-3v6l3 2.5v2.5l-5.2-1.5-5.2 1.5v-2.5l3-2.5v-6l-9 3v-3l9-5v-7c0-2 .9-3 2.2-3z" fill="#fff"/><rect x="58" y="36" width="34" height="46" fill="#5cc043"/><text x="75" y="45" text-anchor="middle" font-size="6.6" font-weight="700" font-family="serif" fill="#fff">SPORTS</text><circle cx="75" cy="58" r="7.5" fill="#e6ee45"/><path d="M69.5 52.8c3 3 3 9.4 0 12.4M80.5 52.8c-3 3-3 9.4 0 12.4" fill="none" stroke="#fff" stroke-width="1.2"/><path d="M60 82l5-12h20l5 12M62.5 76h25M75 70v12" fill="none" stroke="#fff" stroke-width="1.2"/></svg>';
 const RPS_SAFARI='<svg class="full" viewBox="0 0 100 100"><defs><radialGradient id="rpssf" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#7fd4ff"/><stop offset="1" stop-color="#1a68e0"/></radialGradient></defs><circle cx="50" cy="50" r="41" fill="url(#rpssf)"/><circle cx="50" cy="50" r="38.5" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="0.9 3.08"/><polygon points="68,32 54.2,54.2 45.8,45.8" fill="#ff3b30"/><polygon points="32,68 54.2,54.2 45.8,45.8" fill="#fff"/><circle cx="50" cy="50" r="2.2" fill="#d1d5db"/></svg>';
 function rpsPickUser(){iosSheet({title:'切换用户',items:S.userProfiles.map(u=>({label:u.name||'未命名',av:av(u),on:u.id===S.activeUserProfile,run:()=>{if(u.id===S.activeUserProfile)return;switchUser(u.id);S.me={name:u.name||'',handle:u.handle||'',bio:u.bio||'',avatar:u.avatar||''};rolePhonePersonaId='';rolePhoneActiveApp='';rpsSel='';saveNow();rolePhoneRender();toast('已切换到 '+(u.name||'未命名'))}}))})}
 let rpsSel='';
@@ -2777,7 +2883,7 @@ function rpsHome(p,store){
 ${rpsApp('notes',store)}${rpsApp('monologue',store)}
 <button class="rps-app" data-rps-settings><span class="rps-ic" style="--g:linear-gradient(#c9cbd1,#8e9098)">${RPS_GEAR}</span><b>Settings</b></button>
 <button class="rps-app" data-rps-contacts><span class="rps-ic" style="--g:linear-gradient(#f0f1f5,#cfd2da)">${RPS_USER}</span><b>Contacts</b></button>
-<div class="rps-app"><span class="rps-ic" style="--g:#fff">${RPS_SHOP}</span><b>Shopping</b></div>
+${rpsApp('shop',store)}
 <div class="rps-app"><span class="rps-ic" style="--g:#fff">${RPS_SAFARI}</span><b>Safari</b></div>
 </div>${wg}<div class="rps-dots"><i class="on"></i><i></i></div></div>
 <div class="rps-dockbar"><div class="rps-dock">${rpsApp('phone',store)}${rpsApp('message',store)}${rpsApp('twitter',store)}${rpsApp('music',store)}</div></div></div>`}
@@ -2789,7 +2895,7 @@ function rpsHomeBind(p){
  const s=$('[data-rps-settings]');if(s)s.onclick=()=>iosSheet({title:'设置',items:[{label:'更换主屏幕壁纸',run:()=>rpsWpSheet('home',p.id)},{label:'更换锁屏壁纸',run:()=>rpsWpSheet('lock')},{label:'锁屏消息文字颜色',run:()=>rpsTxSheet()},{label:'一键生成全部内容',run:()=>rolePhoneGenerateAll(p.id)}]})}
 if(!window.__rpsTick)window.__rpsTick=setInterval(()=>{const n=rpsNow();['rps-t','rpl-t'].forEach(i=>{const e=document.getElementById(i);if(e)e.textContent=n.t});const h=document.getElementById('rps-h'),m=document.getElementById('rps-m');if(h)h.setAttribute('transform','rotate('+n.h+' 50 50)');if(m)m.setAttribute('transform','rotate('+n.m+' 50 50)')},10000);
 function rolePhoneRender(){
- const root=$('#rp-body');if(!root)return;{const v=$('#v-rolephones');if(v)v.classList.toggle('rpk',!rolePhoneActiveApp||!['message','monologue','notes','phone','music','twitter'].includes(rolePhoneActiveApp))}
+ const root=$('#rp-body');if(!root)return;{const v=$('#v-rolephones');if(v)v.classList.toggle('rpk',!rolePhoneActiveApp||!['message','monologue','notes','phone','music','twitter','shop'].includes(rolePhoneActiveApp))}
  if(!rolePhonePersonaId){$('#rp-title').textContent='iPhone';$('#rp-actions').innerHTML='';const ps=S.personas.filter(p=>!p.blocked&&p.boundUser===S.activeUserProfile);root.innerHTML=rpsLock(ps);rpsLockBind(ps);
    return;
  }
@@ -2801,8 +2907,8 @@ function rolePhoneRender(){
  }
  const app=apps.find(a=>a.id===rolePhoneActiveApp);if(!app){rolePhoneActiveApp='';rolePhoneRender();return}
  $('#rp-title').textContent=app.name;const content=store.apps[app.id];
- const fsApp={message:rpWx,monologue:rpHealth,notes:rpNotes,phone:rpPhone,music:rpMusic,twitter:rpTw};
- if(fsApp[app.id]){root.innerHTML=fsApp[app.id](app.id==='music'||app.id==='twitter'||app.id==='monologue'?content:(Array.isArray(content)?content:(content&&Array.isArray(content.items)?content.items:[])));rolePhoneBind();return}
+ const fsApp={message:rpWx,monologue:rpHealth,notes:rpNotes,phone:rpPhone,music:rpMusic,twitter:rpTw,shop:rpShop};
+ if(fsApp[app.id]){root.innerHTML=fsApp[app.id](app.id==='music'||app.id==='twitter'||app.id==='monologue'||app.id==='shop'?content:(Array.isArray(content)?content:(content&&Array.isArray(content.items)?content.items:[])));rolePhoneBind();return}
  root.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><button class="pill" id="rp-app-home">‹ ${esc(p.name)} 的手机</button><span style="flex:1"></span><button class="pill" id="rp-regenerate">${content?'重新生成':'生成内容'}</button></div><p class="note">${esc(app.desc)} · 由副 API 按角色人设生成</p>${content?rolePhoneContentHTML(app.id,content):'<div class="empty">这个软件还没有内容，点击右上角生成。</div>'}`;
  $('#rp-app-home').onclick=()=>{rolePhoneActiveApp='';rolePhoneChat='';rolePhoneRender()};$('#rp-regenerate').onclick=()=>rolePhoneGenerateOne(p.id,app.id);rolePhoneBind();
 }
@@ -3048,7 +3154,115 @@ async function rpHlGen(id,quiet){
  }catch(e){toast('生成失败：'+e.message)}
  finally{const e2=$('#rp-body .hl');if(e2)e2.classList.remove('busy')}
 }
+/* ===== Shopping app ===== */
+const RPS_SHOP='<svg class="full" viewBox="0 0 100 100"><defs><linearGradient id="rpssh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f8fe3"/><stop offset="1" stop-color="#9ccff6"/></linearGradient></defs><rect x="22" y="14" width="40" height="40" fill="#d9d9dc"/><text x="42" y="25" text-anchor="middle" font-size="9" font-weight="700" font-family="serif" fill="#222">News</text><path d="M26 30h32M26 35h32M26 40h32" stroke="#bdbdc2" stroke-width="1.4"/><rect x="8" y="36" width="30" height="46" fill="#f6c232"/><text x="12" y="46" font-size="7.5" font-weight="700" font-family="sans-serif" fill="#3a3a3a">ART</text><circle cx="23" cy="57" r="6" fill="#3aa0ee"/><rect x="12" y="66" width="11" height="11" fill="#ee4438"/><path d="M26 78l6-9 6 9z" fill="#fff" opacity=".85"/><rect x="32" y="27" width="31" height="55" fill="url(#rpssh)"/><text x="47.5" y="36" text-anchor="middle" font-size="7" font-weight="700" font-family="serif" fill="#1c2f86">TRAVEL</text><path d="M47.5 48c1.3 0 2.2 1 2.2 3v7l9 5v3l-9-3v6l3 2.5v2.5l-5.2-1.5-5.2 1.5v-2.5l3-2.5v-6l-9 3v-3l9-5v-7c0-2 .9-3 2.2-3z" fill="#fff"/><rect x="58" y="36" width="34" height="46" fill="#5cc043"/><text x="75" y="45" text-anchor="middle" font-size="6.6" font-weight="700" font-family="serif" fill="#fff">SPORTS</text><circle cx="75" cy="58" r="7.5" fill="#e6ee45"/><path d="M69.5 52.8c3 3 3 9.4 0 12.4M80.5 52.8c-3 3-3 9.4 0 12.4" fill="none" stroke="#fff" stroke-width="1.2"/><path d="M60 82l5-12h20l5 12M62.5 76h25M75 70v12" fill="none" stroke="#fff" stroke-width="1.2"/></svg>';
+RPS_IC.shop={l:'Shopping',g:'#fff',h:RPS_SHOP};
+ROLE_PHONE_APPS.push({id:'shop',name:'Shopping',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l1 12H4z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>',desc:'最近购买与购物车'});
+let rolePhoneShTab=0,rolePhoneShItem='',shScroll=0;
+const SH_CATS=['clothes','shoes','bag','snack','drink','wine','book','beauty','digital','home','flower','jewelry','toy','pet','sport','watch','gift','fruit'];
+const SH_BG={clothes:['#fff1f3','#ffd9df'],shoes:['#eaf4ff','#d0e4ff'],bag:['#fff2e8','#ffdcc7'],snack:['#fff7e6','#ffe8bf'],drink:['#f6efe9','#e8d8c9'],wine:['#f8ecf2','#ead0de'],book:['#edf2ff','#d7e1ff'],beauty:['#ffecf3','#ffd5e4'],digital:['#eff0ff','#dcdfff'],home:['#fff9e5','#ffedb8'],flower:['#fff0f7','#ffd9ea'],jewelry:['#eefaff','#d8f2ff'],toy:['#fff4e4','#ffe2bb'],pet:['#fff2e8','#ffdfc8'],sport:['#ebf9f0','#d0efdd'],watch:['#f0f2f7','#dfe4ee'],gift:['#fff1f1','#ffd8d8'],fruit:['#f0faea','#dbf3ce']};
+const SH_G=(id,a,b,d)=>`<linearGradient id="${id}" x1="0" y1="0" x2="${d==='h'||d==='d'?1:0}" y2="${d==='h'?0:1}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
+const SH_SD=(cx,cy,rx)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="3" fill="#2b2f45" opacity=".1"/>`;
+const SH_FL=(cx,cy,r,c,m)=>`<g transform="translate(${cx} ${cy})">${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="${(-r*.62).toFixed(1)}" rx="${(r*.46).toFixed(1)}" ry="${(r*.62).toFixed(1)}" fill="${c}" transform="rotate(${a})"/>`).join('')}<circle r="${(r*.38).toFixed(1)}" fill="${m}"/></g>`;
+const SH_ART={
+clothes:`<defs>${SH_G('shc1','#ffb3a7','#ff7b8f','d')}</defs>${SH_SD(40,71,22)}<path d="M27 15 35 12Q40 19 45 12L53 15 67 26 59 34 53 30V64Q53 66 51 66H29Q27 66 27 64V30L21 34 13 26Z" fill="url(#shc1)"/><path d="M27 30V64Q27 66 29 66H33V28L27 30Z" fill="#fff" opacity=".18"/><path d="M35 12Q40 19 45 12Q40 25 35 12Z" fill="#c9506a" opacity=".35"/><path d="M35 12Q40 19 45 12" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".85"/><path d="M13 26 21 34M67 26 59 34" stroke="#fff" stroke-width="1" opacity=".5"/><path d="M40 41.5c-3-2.8-6.5-.6-4.6 2.4L40 48l4.6-4.1c1.9-3-1.6-5.2-4.6-2.4Z" fill="#fff" opacity=".9"/><path d="M33 55h14M33 59.5h14" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>`,
+shoes:`<defs>${SH_G('shs1','#78b9ff','#3d68ee','d')}</defs>${SH_SD(40,69,30)}<path d="M9 56H71Q73 56 73 59V61Q73 66 66 66H16Q9 66 9 60Z" fill="#fff" stroke="#dfe4f0"/><path d="M11 56V45Q11 40 16 40L28 42Q33 33 42 32L47 37Q52 48 66 50Q72 51 72 56Z" fill="url(#shs1)"/><path d="M54 51Q64 51 72 56H58Z" fill="#fff" opacity=".35"/><path d="M28 42Q33 33 42 32L40 40Z" fill="#fff" opacity=".3"/><path d="M36 38l6 5M40 35l6 6M44 33.5l5 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M20 53Q34 56 48 47" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".9"/><path d="M11 59H71" stroke="#ffb199" stroke-width="1.4"/>`,
+bag:`<defs>${SH_G('shb1','#ffc2a3','#ff8a78','d')}${SH_G('shb2','#ffeaa8','#d9a63a','d')}</defs>${SH_SD(40,71,26)}<path d="M28 34V27Q28 15 40 15T52 27V34" fill="none" stroke="#d9705f" stroke-width="3.4" stroke-linecap="round"/><path d="M17 33H63L67 62Q67.5 68 61 68H19Q12.5 68 13 62Z" fill="url(#shb1)"/><path d="M17 33H63L64 41Q40 54 16 41Z" fill="#fff" opacity=".24"/><path d="M16 41Q40 54 64 41" stroke="#fff" stroke-width="1.2" fill="none" opacity=".75" stroke-dasharray="2 2"/><rect x="36" y="44" width="8" height="9" rx="2.2" fill="url(#shb2)"/><circle cx="40" cy="48.5" r="1.3" fill="#b98a22"/><path d="M17 36 14 62" stroke="#fff" stroke-width="1.6" opacity=".3" stroke-linecap="round"/>`,
+snack:`<defs>${SH_G('shk1','#ffe2a8','#f4b865','v')}${SH_G('shk2','#ffffff','#ffeef3','v')}</defs>${SH_SD(40,70,30)}<ellipse cx="40" cy="64" rx="29" ry="5.5" fill="#fff" stroke="#e6e9f2"/><path d="M16 56V40H64V56Q64 60 60 60H20Q16 60 16 56Z" fill="url(#shk1)"/><rect x="16" y="46" width="48" height="4.5" fill="url(#shk2)"/><path d="M14 40Q14 33 22 33H58Q66 33 66 40Q62 45 58 40Q54 45 50 40Q46 45 42 40Q38 45 34 40Q30 45 26 40Q22 45 18 40Q16 42 14 40Z" fill="#fff" stroke="#ffd0dd"/><circle cx="40" cy="27.5" r="6.3" fill="#ff4d6a"/><path d="M40 21.5q3-4.5 7-3.5-1 4.5-7 3.5Z" fill="#4fbf7a"/><circle cx="37.6" cy="25.6" r="1.6" fill="#fff" opacity=".65"/><circle cx="24" cy="37" r="1" fill="#ff9ab0"/><circle cx="56" cy="37" r="1" fill="#ff9ab0"/><circle cx="30" cy="36.6" r="1" fill="#9ad9ff"/><circle cx="50" cy="36.6" r="1" fill="#ffd36e"/>`,
+drink:`<defs>${SH_G('shd1','#ffffff','#eadfd2','h')}${SH_G('shd2','#b07a52','#6b3f26','v')}</defs>${SH_SD(40,70,30)}<path d="M32 27Q29 23 32 19Q35 15 32 11M40 27Q37 23 40 19Q43 15 40 11M48 27Q45 23 48 19Q51 15 48 11" fill="none" stroke="#b9a898" stroke-width="2" stroke-linecap="round" opacity=".6"/><ellipse cx="40" cy="64" rx="27" ry="5" fill="#fff" stroke="#e6dccf"/><path d="M57 42Q70 41 69 51Q68 60 55 58" fill="none" stroke="#efe4d8" stroke-width="5" stroke-linecap="round"/><path d="M21 36H59V52Q59 63 48 63H32Q21 63 21 52Z" fill="url(#shd1)"/><path d="M21 48H59" stroke="#ffb199" stroke-width="3" opacity=".75"/><ellipse cx="40" cy="36" rx="19" ry="5" fill="#fff" stroke="#e6dccf"/><ellipse cx="40" cy="36.5" rx="16" ry="3.8" fill="url(#shd2)"/><path d="M40 38.4c-2.6-2.3-5.4-.4-3.8 1.4L40 41.6l3.8-1.8c1.6-1.8-1.2-3.7-3.8-1.4Z" fill="#fff" opacity=".85"/>`,
+wine:`<defs>${SH_G('shw1','#3f8260','#1e4a38','h')}${SH_G('shw2','#d94a64','#8b1a3a','v')}</defs>${SH_SD(40,70,30)}<rect x="22" y="11" width="6" height="17" rx="1.5" fill="url(#shw1)"/><rect x="21" y="9" width="8" height="8" rx="1.6" fill="#c43b52"/><path d="M21 26H29Q32 30 32 36V64Q32 67 29 67H21Q18 67 18 64V36Q18 30 21 26Z" fill="url(#shw1)"/><rect x="19.4" y="42" width="11.2" height="15" rx="1.5" fill="#f7ecd5"/><path d="M21.6 47H28.4M21.6 50.5H28.4" stroke="#c9b48a" stroke-width="1.2" stroke-linecap="round"/><path d="M20.5 36V62" stroke="#fff" stroke-width="1.4" opacity=".28" stroke-linecap="round"/><path d="M41 16H63Q64 34 52 40Q40 34 41 16Z" fill="#fff" fill-opacity=".6" stroke="#c9d3e6" stroke-width="1.4"/><path d="M42 26H62Q61 35 52 38.6Q43 35 42 26Z" fill="url(#shw2)"/><rect x="51" y="40" width="2" height="22" fill="#cfd7e8"/><ellipse cx="52" cy="64" rx="9" ry="2.6" fill="#e3e8f3" stroke="#c9d3e6"/>`,
+book:`<defs>${SH_G('shn1','#6a88ff','#2f45b8','h')}</defs>${SH_SD(40,72,24)}<rect x="24" y="15.5" width="38" height="52" rx="3" fill="#f4f1ea" stroke="#d9d4c7"/><path d="M20 14H56Q58 14 58 16V63Q58 65 56 65H20Q17 65 17 62V17Q17 14 20 14Z" fill="url(#shn1)"/><rect x="17" y="14" width="6" height="51" rx="2" fill="#26379a" opacity=".7"/><rect x="29" y="23" width="22" height="3" rx="1.5" fill="#fff" opacity=".92"/><rect x="29" y="29" width="15" height="3" rx="1.5" fill="#fff" opacity=".6"/><circle cx="40" cy="48" r="8.5" fill="none" stroke="#ffd96a" stroke-width="1.6"/><path d="M40 43l1.7 3.6 3.9.4-2.9 2.6.8 3.8-3.5-1.9-3.5 1.9.8-3.8-2.9-2.6 3.9-.4Z" fill="#ffd96a"/><path d="M49 65V74L52 71.6 55 74V65Z" fill="#ff5a6e"/>`,
+beauty:`<defs>${SH_G('shy1','#ffeaa8','#d9a63a','h')}${SH_G('shy2','#ff6f8a','#c9163f','h')}${SH_G('shy3','#ffe6f0','#ffb3cf','d')}</defs>${SH_SD(40,70,30)}<path d="M24 41V27L31 20Q32.5 19 33 21V41Z" fill="url(#shy2)"/><rect x="22.5" y="40" width="11" height="5" fill="#2e3042"/><rect x="21.5" y="45" width="13" height="22" rx="2" fill="url(#shy1)"/><path d="M21.5 52H34.5" stroke="#fff" stroke-width="1" opacity=".5"/><rect x="49" y="21" width="12" height="10" rx="3" fill="url(#shy1)"/><rect x="52" y="30" width="6" height="7" fill="#e6b84a"/><rect x="43.5" y="36" width="23" height="31" rx="6.5" fill="url(#shy3)" stroke="#ff9fc0"/><path d="M55 59c-5-3.6-7-6.6-7-9 0-2 1.5-3.3 3.3-3.3 1.5 0 2.8.9 3.7 2.2.9-1.3 2.2-2.2 3.7-2.2 1.8 0 3.3 1.3 3.3 3.3 0 2.4-2 5.4-7 9Z" fill="#ff5c8a"/><path d="M47 41V60" stroke="#fff" stroke-width="1.6" opacity=".6" stroke-linecap="round"/>`,
+digital:`<defs>${SH_G('shg1','#8f80ff','#5646d6','d')}</defs>${SH_SD(40,70,28)}<path d="M17 48V42Q17 15 40 15T63 42V48" fill="none" stroke="#2f3250" stroke-width="5" stroke-linecap="round"/><path d="M21 40Q23 21 40 19.5" fill="none" stroke="#fff" stroke-width="1.4" opacity=".35" stroke-linecap="round"/><rect x="10" y="42" width="16" height="26" rx="8" fill="url(#shg1)"/><rect x="54" y="42" width="16" height="26" rx="8" fill="url(#shg1)"/><rect x="22.5" y="46" width="6" height="18" rx="3" fill="#2f3250"/><rect x="51.5" y="46" width="6" height="18" rx="3" fill="#2f3250"/><circle cx="17" cy="55" r="3.4" fill="#fff" opacity=".35"/><circle cx="63" cy="55" r="3.4" fill="#fff" opacity=".35"/>`,
+home:`<defs>${SH_G('shh1','#ffeaa8','#ffb94f','v')}<radialGradient id="shh0"><stop offset="0" stop-color="#fff2b0" stop-opacity=".85"/><stop offset="1" stop-color="#fff2b0" stop-opacity="0"/></radialGradient></defs><circle cx="40" cy="42" r="32" fill="url(#shh0)"/>${SH_SD(40,70,18)}<ellipse cx="40" cy="66" rx="14" ry="3.8" fill="#8e96ad"/><path d="M27 66Q27 61.5 32 61.5H48Q53 61.5 53 66Z" fill="#aab2c8"/><rect x="38.4" y="40" width="3.2" height="23" rx="1.6" fill="#b9c0d3"/><path d="M27 14H53L62 40H18Z" fill="url(#shh1)"/><path d="M30 16 25 38" stroke="#fff" opacity=".55" stroke-width="2" stroke-linecap="round"/><ellipse cx="40" cy="40" rx="22" ry="3" fill="#ffd77a"/><ellipse cx="40" cy="41" rx="9" ry="2" fill="#fff6c2"/>`,
+flower:`<defs>${SH_G('shf1','#ffe7bf','#f2bd78','d')}</defs>${SH_SD(40,72,18)}<path d="M40 52 28 30M40 52 52 28M40 52V20" stroke="#4fae6e" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="31" cy="42" rx="7" ry="3" fill="#5cc47e" transform="rotate(-35 31 42)"/><ellipse cx="50" cy="40" rx="7" ry="3" fill="#5cc47e" transform="rotate(35 50 40)"/>${SH_FL(28,28,9.5,'#ff9ec0','#ffe27a')}${SH_FL(52,26,9.5,'#ffd36e','#ff8f5a')}${SH_FL(40,18,8.5,'#ffffff','#ffc94d')}<path d="M19 43Q40 36 61 43L44 72H36Z" fill="url(#shf1)"/><path d="M33 47 38 71M47 47 42 71" stroke="#fff" stroke-width="1" opacity=".45"/><path d="M40 53C33 46 29 52 35 56ZM40 53C47 46 51 52 45 56Z" fill="#ff7a93"/><circle cx="40" cy="54" r="2.6" fill="#ff5a77"/>`,
+jewelry:`<defs>${SH_G('shj1','#fff0b8','#d9a22e','d')}${SH_G('shj2','#eafcff','#7fd0f5','d')}</defs>${SH_SD(40,71,20)}<circle cx="40" cy="52" r="15" fill="none" stroke="url(#shj1)" stroke-width="5.5"/><path d="M33 40H47L45 34H35Z" fill="url(#shj1)"/><path d="M31 25 35 18H45L49 25 40 36Z" fill="url(#shj2)" stroke="#9adff7" stroke-width=".8"/><path d="M31 25H49M35 18 38 25 40 36M45 18 42 25 40 36M38 25H42" stroke="#fff" stroke-width=".9" opacity=".9" fill="none"/><path d="M62 18l1.6 3.6 3.6 1.6-3.6 1.6L62 28.4l-1.6-3.6-3.6-1.6 3.6-1.6Z" fill="#ffd96a"/><path d="M17 28l1.1 2.5 2.5 1.1-2.5 1.1L17 35.2l-1.1-2.5-2.5-1.1 2.5-1.1Z" fill="#ffd96a"/>`,
+toy:`<defs>${SH_G('sht1','#e0aa74','#b9743f','d')}</defs>${SH_SD(40,71,20)}<circle cx="25" cy="22" r="7.5" fill="url(#sht1)"/><circle cx="55" cy="22" r="7.5" fill="url(#sht1)"/><circle cx="25" cy="22" r="3.8" fill="#f2cba3"/><circle cx="55" cy="22" r="3.8" fill="#f2cba3"/><ellipse cx="40" cy="58" rx="16" ry="13" fill="url(#sht1)"/><ellipse cx="40" cy="60" rx="9" ry="8" fill="#ffe9cf"/><ellipse cx="24" cy="54" rx="5.5" ry="8" transform="rotate(25 24 54)" fill="url(#sht1)"/><ellipse cx="56" cy="54" rx="5.5" ry="8" transform="rotate(-25 56 54)" fill="url(#sht1)"/><ellipse cx="31" cy="69" rx="6" ry="4" fill="url(#sht1)"/><ellipse cx="49" cy="69" rx="6" ry="4" fill="url(#sht1)"/><circle cx="40" cy="33" r="17" fill="url(#sht1)"/><ellipse cx="40" cy="39" rx="8.5" ry="6.5" fill="#ffe9cf"/><ellipse cx="40" cy="36.5" rx="3" ry="2.2" fill="#5a3a28"/><path d="M40 38.5V41M37 42.2Q40 44.5 43 42.2" stroke="#5a3a28" stroke-width="1.2" fill="none" stroke-linecap="round"/><circle cx="33" cy="30" r="2.3" fill="#3a2418"/><circle cx="47" cy="30" r="2.3" fill="#3a2418"/><circle cx="33.7" cy="29.2" r=".8" fill="#fff"/><circle cx="47.7" cy="29.2" r=".8" fill="#fff"/><circle cx="29.5" cy="38" r="2.6" fill="#ff9aa8" opacity=".5"/><circle cx="50.5" cy="38" r="2.6" fill="#ff9aa8" opacity=".5"/><path d="M40 49 33 45V53ZM40 49 47 45V53Z" fill="#ee4562"/><circle cx="40" cy="49" r="2.4" fill="#d3304c"/>`,
+pet:`<defs>${SH_G('shp1','#ffcb92','#f29850','d')}</defs>${SH_SD(40,70,24)}<path d="M18 32 20 12 33 22Z" fill="url(#shp1)"/><path d="M62 32 60 12 47 22Z" fill="url(#shp1)"/><path d="M22.5 26 23 17.5 29 22Z" fill="#ffb1b8"/><path d="M57.5 26 57 17.5 51 22Z" fill="#ffb1b8"/><ellipse cx="40" cy="44" rx="24" ry="21" fill="url(#shp1)"/><path d="M40 24V30M34 25.5 35 30.5M46 25.5 45 30.5" stroke="#d9772e" stroke-width="2" stroke-linecap="round"/><ellipse cx="40" cy="53" rx="9.5" ry="6.5" fill="#fff3e4"/><ellipse cx="30" cy="44" rx="3" ry="3.8" fill="#2d2a3a"/><ellipse cx="50" cy="44" rx="3" ry="3.8" fill="#2d2a3a"/><circle cx="31" cy="42.6" r="1.1" fill="#fff"/><circle cx="51" cy="42.6" r="1.1" fill="#fff"/><path d="M37.2 49.5H42.8L40 52.4Z" fill="#ff7a90"/><path d="M40 52.4V55Q37.5 57.5 35 55.5M40 55Q42.5 57.5 45 55.5" stroke="#8a4b2a" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M14 48 26 50M13 54 25 53M66 48 54 50M67 54 55 53" stroke="#b87a4a" stroke-width="1.2" opacity=".55" stroke-linecap="round"/><circle cx="24" cy="52" r="3" fill="#ff9aa8" opacity=".4"/><circle cx="56" cy="52" r="3" fill="#ff9aa8" opacity=".4"/>`,
+sport:`<defs>${SH_G('shr1','#62d9ad','#2e9d78','d')}${SH_G('shr2','#d4dbea','#9aa4bd','v')}</defs>${SH_SD(40,71,26)}<g transform="rotate(-28 40 42)"><rect x="18" y="39.5" width="44" height="5" rx="2.5" fill="url(#shr2)"/><path d="M34 39.5V44.5M37 39.5V44.5M40 39.5V44.5M43 39.5V44.5M46 39.5V44.5" stroke="#8791ab" stroke-width=".9"/><rect x="22" y="29" width="8" height="26" rx="3" fill="url(#shr1)"/><rect x="50" y="29" width="8" height="26" rx="3" fill="url(#shr1)"/><rect x="14.5" y="33" width="7.5" height="18" rx="2.6" fill="#2e9d78"/><rect x="58" y="33" width="7.5" height="18" rx="2.6" fill="#2e9d78"/><path d="M24 31V53M52 31V53" stroke="#fff" stroke-width="1.4" opacity=".4" stroke-linecap="round"/></g>`,
+watch:`<defs>${SH_G('shm1','#8191ff','#4856c8','v')}${SH_G('shm2','#fff6d6','#d9aa4a','d')}</defs>${SH_SD(40,73,16)}<path d="M32 5H48L50 25H30Z" fill="url(#shm1)"/><path d="M30 55H50L48 75H32Z" fill="url(#shm1)"/><circle cx="40" cy="65" r="1.3" fill="#fff" opacity=".6"/><circle cx="40" cy="70" r="1.3" fill="#fff" opacity=".6"/><rect x="58" y="37" width="4.6" height="6.4" rx="1.6" fill="url(#shm2)"/><circle cx="40" cy="40" r="20" fill="url(#shm2)"/><circle cx="40" cy="40" r="16" fill="#fff"/><path d="M40 27.5V30M40 50V52.5M27.5 40H30M50 40H52.5" stroke="#8b92a8" stroke-width="1.5" stroke-linecap="round"/><path d="M40 40V32.5M40 40 45.5 43.2" stroke="#2f3250" stroke-width="2.1" stroke-linecap="round"/><path d="M40 40 34.5 46.5" stroke="#ff5a6e" stroke-width="1.1" stroke-linecap="round"/><circle cx="40" cy="40" r="1.9" fill="#ff5a6e"/>`,
+gift:`<defs>${SH_G('shq1','#ff93a6','#ff5a77','d')}${SH_G('shq2','#ffaabb','#ff7b94','d')}${SH_G('shq3','#fff6d6','#ffd36b','h')}</defs>${SH_SD(40,70,28)}<rect x="16" y="37" width="48" height="29" rx="3" fill="url(#shq1)"/><rect x="13" y="28" width="54" height="12" rx="3" fill="url(#shq2)"/><rect x="36" y="28" width="8" height="38" fill="url(#shq3)"/><path d="M40 28C30 13 19 20 26 27Q32 32 40 28Z" fill="url(#shq3)"/><path d="M40 28C50 13 61 20 54 27Q48 32 40 28Z" fill="url(#shq3)"/><rect x="36" y="25" width="8" height="7" rx="2.5" fill="#ffc94d"/><path d="M20 40V62" stroke="#fff" stroke-width="1.6" opacity=".3" stroke-linecap="round"/>`,
+fruit:`<defs>${SH_G('shu1','#ff8d7c','#e2344c','d')}</defs>${SH_SD(40,71,20)}<path d="M40 26C32 20 18 24 18 40C18 54 28 68 36 68Q40 66 44 68C52 68 62 54 62 40C62 24 48 20 40 26Z" fill="url(#shu1)"/><path d="M40 26Q39 18 43 12" stroke="#7a4a2a" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M43 18Q52 10 60 16Q52 24 43 18Z" fill="#5cc47e"/><path d="M45 18Q52 15 57 16" stroke="#3a9a5c" stroke-width="1" fill="none"/><path d="M26 37Q27 30 32 29" stroke="#fff" stroke-width="2.4" opacity=".55" fill="none" stroke-linecap="round"/>`
+};
+const shArt=(c,cls)=>{c=SH_ART[c]?c:'gift';const b=SH_BG[c];return`<div class="sh-th" style="background:linear-gradient(145deg,${b[0]},${b[1]})"><svg viewBox="0 0 80 80">${SH_ART[c]}</svg></div>`};
+const SHI={
+ shop:'<svg viewBox="0 0 20 20"><defs><linearGradient id="shis" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb04a"/><stop offset="1" stop-color="#ff5a2a"/></linearGradient></defs><path d="M3 8.2 4.4 3.5H15.6L17 8.2Z" fill="url(#shis)"/><path d="M3.8 8.2V16.5H16.2V8.2" fill="#fff" stroke="#ff7a3d" stroke-width="1.2" stroke-linejoin="round"/><path d="M3 8.2Q4.7 11 6.4 8.2Q8.2 11 10 8.2Q11.8 11 13.6 8.2Q15.3 11 17 8.2" fill="none" stroke="#fff" stroke-width="1.1"/><rect x="8" y="12" width="4" height="4.5" rx=".8" fill="#ffd9c3"/></svg>',
+ ch:'<svg class="ch" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 2.5 8 6 4.5 9.5"/></svg>',
+ ck:'<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.4 5 8.8 9.5 3.6"/></svg>',
+ pay:'<svg viewBox="0 0 32 32" fill="none" stroke="#555" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="24" height="17" rx="3"/><path d="M7 9 21 5.5V9"/><path d="M28 15.5h-6a3 3 0 0 0 0 6h6" fill="#fff4ec" stroke="#ff7a3d"/><circle cx="22.4" cy="18.5" r="1.1" fill="#ff5000" stroke="none"/></svg>',
+ box:'<svg viewBox="0 0 32 32" fill="none" stroke="#555" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4 28 10v12L16 28 4 22V10Z"/><path d="M4 10l12 6 12-6M16 16v12"/><path d="M10 7l12 6" stroke="#ff7a3d" stroke-width="2.2"/></svg>',
+ truck:'<svg viewBox="0 0 32 32" fill="none" stroke="#555" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5h15V22H3z"/><path d="M18 13h5.5l4.5 4.6V22H18"/><circle cx="9" cy="23" r="3" fill="#fff4ec" stroke="#ff7a3d"/><circle cx="23" cy="23" r="3" fill="#fff4ec" stroke="#ff7a3d"/><path d="M6.5 13.5h8" stroke="#ff7a3d"/></svg>',
+ cmt:'<svg viewBox="0 0 32 32" fill="none" stroke="#555" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5Q5 5 7.5 5h17Q27 5 27 7.5v11Q27 21 24.5 21H14l-5.5 5v-5H7.5Q5 21 5 18.5Z"/><path d="m16 8.6 1.7 3.5 3.8.5-2.8 2.6.7 3.8-3.4-1.9-3.4 1.9.7-3.8-2.8-2.6 3.8-.5Z" fill="#ff7a3d" stroke="#ff7a3d" stroke-width="1"/></svg>',
+ ret:'<svg viewBox="0 0 32 32" fill="none" stroke="#555" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6 6 11.5l6 5.5"/><path d="M6 11.5h13a7 7 0 0 1 0 14h-8"/><circle cx="21" cy="18.5" r="3.4" fill="#fff4ec" stroke="#ff7a3d"/><path d="M21 17v3M19.8 18.4h2.4" stroke="#ff7a3d" stroke-width="1.2"/></svg>',
+ note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5Q4 4 5.5 4h13Q20 4 20 5.5v9Q20 16 18.5 16H11l-4.5 4v-4H5.5Q4 16 4 14.5Z"/><path d="M8 8.5h8M8 11.8h5"/></svg>',
+ done:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb04a"/><stop offset="1" stop-color="#ff5a2a"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-a)"/><circle cx="24" cy="24" r="21" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.5"/><path d="M14.5 24.8 21 31l12.5-13.5" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+ trk:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb04a"/><stop offset="1" stop-color="#ff5a2a"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-b)"/><path d="M11 17h16v15H11zM27 21h6.5l4.5 5v6H27z" fill="#fff"/><circle cx="18" cy="33" r="3.6" fill="#ff6a2f" stroke="#fff" stroke-width="2"/><circle cx="32.5" cy="33" r="3.6" fill="#ff6a2f" stroke="#fff" stroke-width="2"/></svg>',
+ pk:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-c" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb04a"/><stop offset="1" stop-color="#ff5a2a"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-c)"/><path d="M24 11.5 36 18v13L24 37.5 12 31V18Z" fill="#fff"/><path d="M12 18l12 6.5L36 18M24 24.5v13" fill="none" stroke="#ff9a5c" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+ cart:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-d" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb04a"/><stop offset="1" stop-color="#ff5a2a"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-d)"/><path d="M10.5 14.5h4.4l3.1 12.2h13.6l3-9.2H17" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="33.5" r="2.6" fill="#fff"/><circle cx="30.5" cy="33.5" r="2.6" fill="#fff"/></svg>',
+ em:'<svg viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="34" fill="#fff4ec"/><path d="M22 30h36l-3 30H25z" fill="#fff" stroke="#ffb38a" stroke-width="2.4" stroke-linejoin="round"/><path d="M32 30v-4a8 8 0 0 1 16 0v4" stroke="#ff8a4a" stroke-width="3" stroke-linecap="round"/><path d="M33 44q7 6 14 0" stroke="#ff8a4a" stroke-width="2.6" stroke-linecap="round"/><circle cx="34" cy="40" r="1.8" fill="#ff8a4a"/><circle cx="46" cy="40" r="1.8" fill="#ff8a4a"/></svg>'
+};
+function shNorm(d,base){
+ const A=x=>Array.isArray(x)?x:[];
+ const mk=(a,cart)=>A(a).map((x,i)=>{const o=x&&typeof x==='object'?x:{title:String(x||'')};
+  let price=parseFloat(String(o.price==null?'':o.price).replace(/[^\d.]/g,''));if(!isFinite(price)||price<0)price=0;
+  const qty=Math.max(1,parseInt(o.qty)||1),ago=Math.max(1,Math.round(+o.ago)||(i+1)*1440);
+  let stt=String(o.status||'');stt=/待发|未发|待出/.test(stt)?'待发货':/待收|已发|运输|派送|配送/.test(stt)?'待收货':'交易成功';
+  return{title:String(o.title||o.name||'').trim(),spec:String(o.spec||'').trim(),price,qty,shop:String(o.shop||'').trim()||'小店',cat:SH_CATS.includes(o.cat)?o.cat:'gift',t:typeof o.t==='number'&&o.t>1e11?o.t:base-ago*6e4,status:cart?'':stt,reason:String(o.reason||'').trim()}}).filter(x=>x.title).sort((a,b)=>b.t-a.t).map((x,i)=>(x.id=i,x));
+ return{orders:mk(d&&d.orders,0),cart:mk(d&&d.cart,1)};
+}
+const shDt=t=>{const d=new Date(t),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+' '+z(d.getHours())+':'+z(d.getMinutes())};
+const shAgo=t=>{const m=Math.max(1,Math.round((Date.now()-t)/6e4));return m<60?m+'分钟前':m<1440?Math.floor(m/60)+'小时前':Math.floor(m/1440)+'天前'};
+const shM=n=>(+n).toFixed(2);
+function shDetail(k,it,p,bar){
+ const isO=k==='o',stt=isO?it.status:'购物车中',ic=isO?(stt==='交易成功'?SHI.done:stt==='待收货'?SHI.trk:SHI.pk):SHI.cart;
+ const sub=isO?(stt==='交易成功'?'交易已完成，感谢你的购买':stt==='待收货'?'卖家已发货，包裹正在路上':'已付款，等待卖家发货'):shAgo(it.t)+'加入购物车，还没有下单';
+ const no=String(Math.floor(it.t/1000))+String(100+it.id*37).slice(-3)+'0'+String(it.id+1);
+ const why=`<div class="sh-why"><h4>${SHI.note}${isO?'购买理由':'加购理由'}</h4><p>${it.reason?esc(it.reason):'（没有留下理由）'}</p><em>—— ${esc(p.name)}</em></div>`;
+ const prod=`<div class="sh-dp"><div class="sh-oh"><div class="sh-sn">${SHI.shop}<span>${esc(it.shop)}</span>${SHI.ch}</div></div><div class="sh-pr">${shArt(it.cat)}<div class="sh-pm"><div class="sh-ti">${esc(it.title)}</div>${it.spec?`<div class="sh-sp">${esc(it.spec)}</div>`:''}</div><div class="sh-pp"><i>¥</i>${shM(it.price)}<small>×${it.qty}</small></div></div><div class="sh-ir"><span>商品总价</span><span><i>¥</i>${shM(it.price*it.qty)}</span></div><div class="sh-ir"><span>运费</span><span><i>¥</i>0.00</span></div><div class="sh-ir tt"><span>${isO?'实付款':'合计'}</span><b><i style="font-style:normal;font-size:12px">¥</i>${shM(it.price*it.qty)}</b></div></div>`;
+ const info=isO?`<div class="sh-inf"><h5>订单信息</h5><div class="sh-ir"><span>订单编号</span><span>${no}</span></div><div class="sh-ir"><span>创建时间</span><span>${shDt(it.t)}</span></div><div class="sh-ir"><span>付款方式</span><span>在线支付</span></div></div>`:`<div class="sh-inf"><h5>商品信息</h5><div class="sh-ir"><span>加入时间</span><span>${shDt(it.t)}</span></div><div class="sh-ir"><span>数量</span><span>${it.qty} 件</span></div></div>`;
+ return `<div class="sh">${bar('data-sh-back',isO?'订单详情':'商品详情',0)}<div class="sh-sc"><div class="sh-sb"><div class="ic">${ic}</div><div><b>${stt}</b><small>${sub}</small></div><div class="wm">${isO?SHI.pk:SHI.cart}</div></div>${why}${prod}${info}<div class="sh-tip">没有更多了</div></div></div>`;
+}
+function rpShop(data){
+ const pid=rolePhonePersonaId,p=P(pid)||{name:'角色'},st=rolePhoneStore(pid);
+ const bar=(l,t,g)=>`<div class="sh-top"><button class="sh-c" ${l}>${twSvg('bk')}</button><b>${t}</b>${g?`<button class="sh-c sh-gen" data-sh-gen>${twSvg('dt')}</button>`:'<span class="sh-c"></span>'}</div>`;
+ const ok=data&&typeof data==='object'&&!Array.isArray(data)&&(Array.isArray(data.orders)||Array.isArray(data.cart));
+ if(!ok)return `<div class="sh">${bar('data-rp-home','我的购物',1)}<div class="sh-sc"><div class="sh-e">${SHI.em}这个角色还没有购物记录<br>点右上角「···」生成最近购买和购物车</div></div></div>`;
+ const n=shNorm(data,st.generatedAt||Date.now()),key=rolePhoneShItem;
+ if(key){const it=(key[0]==='o'?n.orders:n.cart)[+key.slice(1)];if(it)return shDetail(key[0],it,p,bar)}
+ const tab=rolePhoneShTab,spend=n.orders.reduce((s,x)=>s+x.price*x.qty,0),cartSum=n.cart.reduce((s,x)=>s+x.price*x.qty,0),wk=Date.now()-7*864e5;
+ const c1=n.orders.filter(x=>x.status==='待发货').length,c2=n.orders.filter(x=>x.status==='待收货').length,c3=n.orders.filter(x=>x.status==='交易成功'&&x.t>wk).length;
+ const badge=v=>v?`<em>${v}</em>`:'';
+ const oi=`<div class="sh-od"><div class="sh-odh">我的订单<small>全部订单${SHI.ch}</small></div><div class="sh-oi"><div>${SHI.pay}待付款</div><div>${badge(c1)}${SHI.box}待发货</div><div>${badge(c2)}${SHI.truck}待收货</div><div>${badge(c3)}${SHI.cmt}待评价</div><div>${SHI.ret}退款/售后</div></div></div>`;
+ const head=`<div class="sh-me"><div class="sh-av">${av(p)}</div><div class="sh-mi"><b>${esc(p.name)}</b><span>${SHI.ck.replace('<svg','<svg style="color:#ff7a3d"')}会员 · 常客</span></div></div><div class="sh-sts"><div><b>${n.orders.length}<small> 件</small></b><small>最近购买</small></div><div><b><i>¥</i>${Math.round(spend)}</b><small>近期花费</small></div><div><b>${n.cart.length}<small> 件</small></b><small>购物车</small></div></div>`;
+ const tabs=`<div class="sh-tabs"><button data-sh-tab="0" class="${tab?'':'on'}">最近购买<small>${n.orders.length}</small></button><button data-sh-tab="1" class="${tab?'on':''}">购物车<small>${n.cart.length}</small></button></div>`;
+ let body='';
+ if(!tab){
+  body=n.orders.map(x=>`<div class="sh-o" data-sh-open="o${x.id}"><div class="sh-oh"><div class="sh-sn">${SHI.shop}<span>${esc(x.shop)}</span>${SHI.ch}</div><span class="sh-ss${x.status==='交易成功'?' ok':''}">${x.status}</span></div><div class="sh-pr">${shArt(x.cat)}<div class="sh-pm"><div class="sh-ti">${esc(x.title)}</div>${x.spec?`<div class="sh-sp">${esc(x.spec)}</div>`:''}</div><div class="sh-pp"><i>¥</i>${shM(x.price)}<small>×${x.qty}</small></div></div><div class="sh-of">共${x.qty}件商品 实付款 <b><i>¥</i>${shM(x.price*x.qty)}</b></div><div class="sh-ob"><span class="sh-bt">${shAgo(x.t)}</span><span class="sh-bt o">${SHI.note.replace('<svg','<svg style="width:13px;height:13px"')}为什么买</span></div></div>`).join('')||'<div class="sh-e">还没有购买记录</div>';
+ }else{
+  const gs=[];n.cart.forEach(x=>{let g=gs.find(y=>y.s===x.shop);if(!g)gs.push(g={s:x.shop,r:[]});g.r.push(x)});
+  body=gs.map(g=>`<div class="sh-cg"><div class="sh-cgh"><span class="sh-ck on">${SHI.ck}</span><span class="n">${SHI.shop.replace('<svg','<svg class="st"')}<em>${esc(g.s)}</em>${SHI.ch}</span></div>${g.r.map(x=>`<div class="sh-ci" data-sh-open="c${x.id}"><span class="sh-ck on">${SHI.ck}</span>${shArt(x.cat)}<div class="sh-pm" style="flex:1"><div class="sh-ti">${esc(x.title)}</div>${x.spec?`<div class="sh-sp">${esc(x.spec)}</div>`:''}<div class="sh-ad">${SHI.note}${shAgo(x.t)}加入 · 看看为什么</div><div class="sh-cp"><b><i>¥</i>${shM(x.price)}</b><div class="sh-q"><span>−</span><span>${x.qty}</span><span>+</span></div></div></div></div>`).join('')}</div>`).join('')||'<div class="sh-e">购物车是空的</div>';
+ }
+ const settle=tab?`<div class="sh-bar"><span class="all"><span class="sh-ck on">${SHI.ck}</span>全选</span><span class="sum">合计：<b><i style="font-style:normal;font-size:12px">¥</i>${shM(cartSum)}</b></span><span class="go">结算(${n.cart.reduce((s,x)=>s+x.qty,0)})</span></div>`:'';
+ return `<div class="sh">${bar('data-rp-home','我的购物',1)}<div class="sh-sc">${head}${oi}${tabs}${body}<div class="sh-tip">已经到底啦</div></div>${settle}</div>`;
+}
+async function rpShGen(id,quiet){
+ const p=P(id);if(!p)return;const st=rolePhoneStore(id),old=st.apps.shop;
+ if(!quiet&&old&&typeof old==='object'&&!Array.isArray(old)&&(Array.isArray(old.orders)||Array.isArray(old.cart))&&!confirm('重新生成会覆盖现有的购物记录，继续吗？'))return;
+ const el=$('#rp-body .sh');if(el)el.classList.add('busy');if(!quiet)toast('正在生成购物记录…');
+ try{
+  const sys=rolePhonePrompt(p)+'\n你要生成该角色手机里“购物”App 的内容：最近买了什么（订单）和购物车里有什么。商品要符合人设（年龄、性别、职业、收入、审美、生活习惯）和近期生活，具体、真实、前后一致；价格按人民币，符合角色消费水平；商品标题写成淘宝式标题（15-30字，可带品类词和卖点词）。每件商品都要有 reason：由角色用第一人称写 1-3 句话，说清楚“为什么买它”（订单）或“为什么把它加进购物车”（购物车，可以是犹豫、等降价、舍不得买、想送人、先放着等），口吻像随手在心里嘀咕的话，贴合角色性格和与用户的近期聊天上下文；涉及用户时按双方真实关系写，用角色对用户的称呼，绝对不能写“用户”二字。其中 2-3 件可以与用户有关（给对方买的、因为对方说过的话而买的、想和对方一起用的），其余是自己的日常、工作、爱好或一时冲动。只输出严格 JSON 对象，不要 Markdown：{"orders":[],"cart":[]}。orders：6-9 条，每项 {"title","spec"（规格，如 颜色分类:奶白 尺码:M，可空）,"price"（单价，数字）,"qty"（整数，通常 1）,"shop"（店铺名，像真实淘宝店名）,"cat"（商品插画类别，必须从这些里选一个：clothes,shoes,bag,snack,drink,wine,book,beauty,digital,home,flower,jewelry,toy,pet,sport,watch,gift,fruit）,"ago"（距今多少分钟，由近到远，跨度几小时到两个月）,"status"（交易成功 / 待收货 / 待发货，最近一两天的可以是待收货或待发货，其余交易成功）,"reason"}；cart：5-8 条，每项 {"title","spec","price","qty","shop","cat","ago"（几小时到三周前加入）,"reason"}。';
+  const d=rolePhoneParse(await ask([{role:'system',content:sys},{role:'user',content:'为 '+p.name+' 生成购物 App 数据。'}],null,{max_tokens:4500},rolePhoneConfig()));
+  if(!d||typeof d!=='object'||(!Array.isArray(d.orders)&&!Array.isArray(d.cart)))throw new Error('返回内容不是有效 JSON');
+  const n=shNorm(d,Date.now());if(!n.orders.length&&!n.cart.length)throw new Error('购物数据为空');
+  st.apps.shop=n;st.generatedAt=Date.now();save();rolePhoneShItem='';rolePhoneShTab=0;rolePhoneRender();if(!quiet)toast('购物记录已生成');
+ }catch(e){toast('生成失败：'+e.message)}
+ finally{const e2=$('#rp-body .sh');if(e2)e2.classList.remove('busy')}
+}
 function rolePhoneBind(){
+ $$('#rp-body [data-sh-tab]').forEach(e=>e.onclick=()=>{rolePhoneShTab=+e.dataset.shTab;rolePhoneShItem='';rolePhoneRender()});
+ $$('#rp-body [data-sh-open]').forEach(e=>e.onclick=()=>{const sc=$('#rp-body .sh-sc');shScroll=sc?sc.scrollTop:0;rolePhoneShItem=e.dataset.shOpen;rolePhoneRender();const s2=$('#rp-body .sh-sc');if(s2)s2.scrollTop=0});
+ $$('#rp-body [data-sh-back]').forEach(e=>e.onclick=()=>{rolePhoneShItem='';rolePhoneRender();const sc=$('#rp-body .sh-sc');if(sc)sc.scrollTop=shScroll});
+ $$('#rp-body [data-sh-gen]').forEach(e=>e.onclick=()=>rpShGen(rolePhonePersonaId));
  $$('#rp-body [data-hl-sec]').forEach(e=>e.onclick=()=>{rolePhoneHlSec=e.dataset.hlSec;rolePhoneRender()});
   $$('#rp-body [data-hl-back]').forEach(e=>e.onclick=()=>{rolePhoneHlSec='';rolePhoneRender()});
   $$('#rp-body [data-hl-gen]').forEach(e=>e.onclick=()=>rpHlGen(rolePhonePersonaId));
@@ -3061,7 +3275,7 @@ function rolePhoneBind(){
  $$('#rp-body [data-ph-f]').forEach(e=>e.onclick=()=>{rolePhonePhFilter=+e.dataset.phF;rolePhoneRender()});
  $$('#rp-body [data-mu-tab]').forEach(e=>e.onclick=()=>{rolePhoneMuTab=+e.dataset.muTab;rolePhoneRender()});
  const pq=$('#ph-q');if(pq)pq.oninput=e=>{const v=e.target.value.trim().toLowerCase();$$('#rp-body .ph-r').forEach(r=>r.style.display=!v||r.dataset.q.includes(v)?'':'none')};
- $$('#rp-body [data-rp-home]').forEach(e=>e.onclick=()=>{rolePhoneActiveApp='';rolePhoneChat='';rolePhoneNote=-1;rolePhoneRender()});
+ $$('#rp-body [data-rp-home]').forEach(e=>e.onclick=()=>{rolePhoneActiveApp='';rolePhoneChat='';rolePhoneNote=-1;rolePhoneShItem='';rolePhoneRender()});
  $$('#rp-body [data-rp-gen]').forEach(e=>e.onclick=()=>rolePhoneGenerateOne(rolePhonePersonaId,e.dataset.rpGen));
  $$('#rp-body [data-nt]').forEach(e=>e.onclick=()=>{rolePhoneNote=+e.dataset.nt;rolePhoneRender()});
  $$('#rp-body [data-nt-back]').forEach(e=>e.onclick=()=>{rolePhoneNote=-1;rolePhoneRender()});
@@ -3085,8 +3299,8 @@ function rolePhoneContentHTML(id,data){
  return `<div class="rolephone-content">${esc(String(data||''))}</div>`;
 }
 function rolePhoneParse(raw){let t=String(raw||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');try{return JSON.parse(t)}catch(e){return t}}
-async function rolePhoneGenerateAll(id){const p=P(id);if(!p)return;const btn=$('#rp-generate-all');if(btn){btn.disabled=true;btn.classList.add('busy')}toast('正在生成整部手机…');try{const apps=ROLE_PHONE_APPS.filter(a=>a.id!=='twitter'&&a.id!=='monologue').map(a=>({id:a.id,name:a.name,description:a.desc}));const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n你要一次性生成角色手机里全部软件的数据。必须输出严格 JSON 对象，键名使用指定 app id：message, notes, phone, music。message 为 14-20 条微信聊天记录数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）；notes（每项含 title、content、date 如 2026/10/18，由近到远）；phone 为 8-12 条通话记录数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；music 为对象，含 playlists（2-4 个，每项 name、mood、tracks 歌曲名数组）和 recentlyPlayed（8-12 首，每项 title、artist）。各软件内容要彼此一致、细节丰富但不过度夸张。只输出 JSON。'}, {role:'user',content:'请生成全部软件内容。软件列表：'+JSON.stringify(apps)}],null,{max_tokens:6500},rolePhoneConfig());const data=rolePhoneParse(raw);if(!data||typeof data!=='object')throw new Error('返回内容不是 JSON 对象');const store=rolePhoneStore(id);for(const a of ROLE_PHONE_APPS){if(a.id!=='twitter'&&a.id!=='monologue'&&data[a.id]!==undefined)store.apps[a.id]=data[a.id]}store.generatedAt=Date.now();save();toast('正在生成 Twitter…');await rpTwGen(id,'all',true);toast('正在生成健康数据…');await rpHlGen(id,true);toast('手机内容生成完成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-generate-all');if(b){b.disabled=false;b.classList.remove('busy')}}}
-async function rolePhoneGenerateOne(id,appId){const p=P(id),app=ROLE_PHONE_APPS.find(a=>a.id===appId);if(!p||!app)return;if(appId==='twitter')return rpTwGen(id,'all');if(appId==='monologue')return rpHlGen(id);const btn=$('#rp-regenerate');if(btn){btn.disabled=true;btn.textContent='生成中…'}try{const prompts={message:'生成 14-20 条微信聊天记录，JSON 数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）。要有来有回，不要伪装成真实历史。',notes:'生成 6-10 条 iPhone 备忘录，JSON 数组，每项含 title、content、date（如 2026/10/18，由近到远，跨度几周到几个月）。包括个人待办、生活琐事、和用户日常相关的细节、想和用户一起做的事。',twitter:'生成 5-8 条个人 Twitter 帖子/草稿，JSON 数组，每项含 content 和可选 time。语气符合角色，像个人账号而不是营销号。',phone:'生成 8-12 条通话记录，JSON 数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；其中 2-3 条未接。',music:'生成 2-4 个 Apple Music 歌单以及 8-12 首最近播放歌曲，JSON 对象，包含 playlists（数组，每项 name、mood、tracks）和 recentlyPlayed（数组，每项 title、artist、reason）。歌曲可以是真实存在的歌曲，但不要捏造具体播放数据来源。'};const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n只生成软件「'+app.name+'」的数据。'+prompts[appId]+' 严格按要求输出 JSON，不要 Markdown。'}, {role:'user',content:'为 '+p.name+' 的「'+app.name+'」生成内容。'}],null,{max_tokens:3500},rolePhoneConfig());const data=rolePhoneParse(raw);if(data===undefined||data===null||data==='')throw new Error('返回内容为空');rolePhoneStore(id).apps[appId]=data;rolePhoneStore(id).generatedAt=Date.now();save();toast(app.name+'已生成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-regenerate');if(b){b.disabled=false;b.textContent='重新生成'}}}
+async function rolePhoneGenerateAll(id){const p=P(id);if(!p)return;const btn=$('#rp-generate-all');if(btn){btn.disabled=true;btn.classList.add('busy')}toast('正在生成整部手机…');try{const apps=ROLE_PHONE_APPS.filter(a=>a.id!=='twitter'&&a.id!=='monologue'&&a.id!=='shop').map(a=>({id:a.id,name:a.name,description:a.desc}));const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n你要一次性生成角色手机里全部软件的数据。必须输出严格 JSON 对象，键名使用指定 app id：message, notes, phone, music。message 为 14-20 条微信聊天记录数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）；notes（每项含 title、content、date 如 2026/10/18，由近到远）；phone 为 8-12 条通话记录数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；music 为对象，含 playlists（2-4 个，每项 name、mood、tracks 歌曲名数组）和 recentlyPlayed（8-12 首，每项 title、artist）。各软件内容要彼此一致、细节丰富但不过度夸张。只输出 JSON。'}, {role:'user',content:'请生成全部软件内容。软件列表：'+JSON.stringify(apps)}],null,{max_tokens:6500},rolePhoneConfig());const data=rolePhoneParse(raw);if(!data||typeof data!=='object')throw new Error('返回内容不是 JSON 对象');const store=rolePhoneStore(id);for(const a of ROLE_PHONE_APPS){if(a.id!=='twitter'&&a.id!=='monologue'&&a.id!=='shop'&&data[a.id]!==undefined)store.apps[a.id]=data[a.id]}store.generatedAt=Date.now();save();toast('正在生成 Twitter…');await rpTwGen(id,'all',true);toast('正在生成健康数据…');await rpHlGen(id,true);toast('正在生成购物记录…');await rpShGen(id,true);toast('手机内容生成完成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-generate-all');if(b){b.disabled=false;b.classList.remove('busy')}}}
+async function rolePhoneGenerateOne(id,appId){const p=P(id),app=ROLE_PHONE_APPS.find(a=>a.id===appId);if(!p||!app)return;if(appId==='twitter')return rpTwGen(id,'all');if(appId==='monologue')return rpHlGen(id);if(appId==='shop')return rpShGen(id);const btn=$('#rp-regenerate');if(btn){btn.disabled=true;btn.textContent='生成中…'}try{const prompts={message:'生成 14-20 条微信聊天记录，JSON 数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）。要有来有回，不要伪装成真实历史。',notes:'生成 6-10 条 iPhone 备忘录，JSON 数组，每项含 title、content、date（如 2026/10/18，由近到远，跨度几周到几个月）。包括个人待办、生活琐事、和用户日常相关的细节、想和用户一起做的事。',twitter:'生成 5-8 条个人 Twitter 帖子/草稿，JSON 数组，每项含 content 和可选 time。语气符合角色，像个人账号而不是营销号。',phone:'生成 8-12 条通话记录，JSON 数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；其中 2-3 条未接。',music:'生成 2-4 个 Apple Music 歌单以及 8-12 首最近播放歌曲，JSON 对象，包含 playlists（数组，每项 name、mood、tracks）和 recentlyPlayed（数组，每项 title、artist、reason）。歌曲可以是真实存在的歌曲，但不要捏造具体播放数据来源。'};const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n只生成软件「'+app.name+'」的数据。'+prompts[appId]+' 严格按要求输出 JSON，不要 Markdown。'}, {role:'user',content:'为 '+p.name+' 的「'+app.name+'」生成内容。'}],null,{max_tokens:3500},rolePhoneConfig());const data=rolePhoneParse(raw);if(data===undefined||data===null||data==='')throw new Error('返回内容为空');rolePhoneStore(id).apps[appId]=data;rolePhoneStore(id).generatedAt=Date.now();save();toast(app.name+'已生成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-regenerate');if(b){b.disabled=false;b.textContent='重新生成'}}}
 
 /* Desktop customization: wallpapers, app icons, home widgets and touch-friendly reordering */
 function desktopApply(){
