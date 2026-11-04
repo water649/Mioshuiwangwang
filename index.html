@@ -486,7 +486,9 @@ div.rps-app:active .rps-ic{filter:none}
 .sh-top b{font-size:17px;font-weight:600;letter-spacing:.5px}
 .sh-c{width:40px;height:40px;display:grid;place-items:center;color:#444}
 .sh-c svg{width:22px;height:22px}
-.sh.busy .sh-gen{opacity:.35;pointer-events:none}
+.sh.busy .sh-gen{opacity:.35;pointer-events:none;animation:rpbp 1s ease-in-out infinite}
+.gen-busy{pointer-events:none;animation:rpbp 1s ease-in-out infinite}
+@keyframes rpbp{50%{opacity:.2}}
 .sh-sc{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#f5f5f5;padding-bottom:calc(26px + env(safe-area-inset-bottom,0px))}
 .sh-e{color:#999;text-align:center;padding:90px 24px;font-size:14px;line-height:1.8}
 .sh-e svg{width:84px;height:84px;margin:0 auto 14px}
@@ -2661,7 +2663,7 @@ const ago=t=>new Date(t).toDateString()===new Date().toDateString()?hm(t):(new D
 function applyTheme(){const d=S.theme==='dark'||(S.theme==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches);
   document.documentElement.dataset.theme=d?'dark':'light'}
 matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>S.theme==='auto'&&applyTheme());
-function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>e.classList.remove('on'),2600)}
+function toast(t,ms){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>e.classList.remove('on'),ms||2600)}
 
 function pick(cb){const i=document.createElement('input');i.type='file';i.accept='image/*';
   i.onchange=()=>{const f=i.files[0];if(!f)return;const im=new Image();
@@ -3190,13 +3192,13 @@ const HL_RULE='角色必须是成年人。数据要符合人设（年龄、性�
 async function rpHlGen(id,quiet){
  const p=P(id);if(!p)return;const st=rolePhoneStore(id),old=st.apps.monologue;
  if(!quiet&&old&&!Array.isArray(old)&&Array.isArray(old.measures)&&!confirm('重新生成会覆盖现有的健康数据，继续吗？'))return;
- const el=$('#rp-body .hl');if(el)el.classList.add('busy');if(!quiet)toast('正在生成健康数据…');
+ const el=$('#rp-body .hl');if(el)el.classList.add('busy');if(!quiet)toast('正在生成「健康」，请稍等…',90000);
  try{
   const sys=rolePhonePrompt(p)+'\n你要生成该角色手机里“健康”App 的数据。'+HL_RULE+HL_LANG_RULE+'只输出严格 JSON 对象，不要 Markdown：{"measures":[],"hr":[],"bp":[]}。measures：6-9 项身体量测，每项 {"name","value"（纯数字字符串；身高用 cm、体重用 kg、围度用 cm、体脂率用 %）,"unit","ago"（距今分钟，通常几天到两个月）,"note"（可选，一句话备注，可空）}，必须包含身高、体重、腰围、胸围、臀围，并可按人设增加体脂率、肩宽、腿长、静息心率、体温等；hr：4-6 条“高心率通知”，每项 {"bpm"（120-175 的整数）,"ago","reason"}；bp：5-8 条血压记录，每项 {"sys","dia","pulse","ago","reason"}，大部分接近正常，有 2-3 条偏高，偏高的要有合理原因。';
   const d=rolePhoneParse(await ask([{role:'system',content:sys},{role:'user',content:'为 '+p.name+' 生成健康 App 数据。'}],null,{max_tokens:4000},rolePhoneConfig()));
   if(!d||typeof d!=='object'||!Array.isArray(d.measures))throw new Error('返回内容不是有效 JSON');
   const n=hlNorm(d,Date.now());if(!n.measures.length)throw new Error('身体数据为空');
-  st.apps.monologue=n;st.generatedAt=Date.now();save();rolePhoneHlSec='';rolePhoneRender();if(!quiet)toast('健康数据已生成');
+  st.apps.monologue=n;st.generatedAt=Date.now();save();rolePhoneHlSec='';rolePhoneRender();if(!quiet)toast('✓ 「健康」已生成');
  }catch(e){toast('生成失败：'+e.message)}
  finally{const e2=$('#rp-body .hl');if(e2)e2.classList.remove('busy')}
 }
@@ -3299,14 +3301,14 @@ function rpShop(data){
 async function rpShGen(id,quiet){
  const p=P(id);if(!p)return;const st=rolePhoneStore(id),old=st.apps.shop;
  if(!quiet&&old&&typeof old==='object'&&!Array.isArray(old)&&(Array.isArray(old.orders)||Array.isArray(old.cart))&&!confirm('重新生成会覆盖现有的购物记录，继续吗？'))return;
- const el=$('#rp-body .sh');if(el)el.classList.add('busy');if(!quiet)toast('正在生成购物记录…');
+ const el=$('#rp-body .sh');if(el)el.classList.add('busy');if(!quiet)toast('正在生成「Shopping」，请稍等…',90000);
  try{
   const sys=rolePhonePrompt(p)+'\n你要生成该角色手机里“购物”App 的内容：最近买了什么（订单）和购物车里有什么。商品要符合人设（年龄、性别、职业、收入、审美、生活习惯）和近期生活，具体、真实、前后一致；价格按人民币，符合角色消费水平；商品标题写成淘宝式标题（15-30字，可带品类词和卖点词）。每件商品都要有 reason：由角色用第一人称写 1-3 句话，说清楚“为什么买它”（订单）或“为什么把它加进购物车”（购物车，可以是犹豫、等降价、舍不得买、想送人、先放着等），口吻像随手在心里嘀咕的话，贴合角色性格和与用户的近期聊天上下文；涉及用户时按双方真实关系写，用角色对用户的称呼，绝对不能写“用户”二字。其中 2-3 件可以与用户有关（给对方买的、因为对方说过的话而买的、想和对方一起用的），其余是自己的日常、工作、爱好或一时冲动。'+SH_LANG_RULE+'只输出严格 JSON 对象，不要 Markdown：{"orders":[],"cart":[]}。orders：6-9 条，每项 {"title","spec"（规格，如 颜色分类:奶白 尺码:M，可空）,"price"（单价，数字）,"qty"（整数，通常 1）,"shop"（店铺名，像真实淘宝店名）,"cat"（商品插画类别，必须从这些里选一个：clothes,shoes,bag,snack,drink,wine,book,beauty,digital,home,flower,jewelry,toy,pet,sport,watch,gift,fruit）,"ago"（距今多少分钟，由近到远，跨度几小时到两个月）,"status"（交易成功 / 待收货 / 待发货，最近一两天的可以是待收货或待发货，其余交易成功）,"reason"}；cart：5-8 条，每项 {"title","spec","price","qty","shop","cat","ago"（几小时到三周前加入）,"reason"}。';
   const d=rolePhoneParse(await ask([{role:'system',content:sys},{role:'user',content:'为 '+p.name+' 生成购物 App 数据。'}],null,{max_tokens:4500},rolePhoneConfig()));
   if(!d||typeof d!=='object'||(!Array.isArray(d.orders)&&!Array.isArray(d.cart)))throw new Error('返回内容不是有效 JSON');
   const n=shNorm(d,Date.now());if(!n.orders.length&&!n.cart.length)throw new Error('购物数据为空');
-  st.apps.shop=n;st.generatedAt=Date.now();save();rolePhoneShItem='';rolePhoneShTab=0;rolePhoneRender();if(!quiet)toast('购物记录已生成');
- }catch(e){toast('生成失败：'+e.message)}
+  st.apps.shop=n;st.generatedAt=Date.now();save();rolePhoneShItem='';rolePhoneShTab=0;rolePhoneRender();if(!quiet)toast('✓ 「Shopping」已生成');
+ }catch(e){toast('生成失败：'+e.message,4500)}
  finally{const e2=$('#rp-body .sh');if(e2)e2.classList.remove('busy')}
 }
 /* ===== Safari app ===== */
@@ -3364,14 +3366,14 @@ function rpSafari(data){
 async function rpSfGen(id,quiet){
  const p=P(id);if(!p)return;const st=rolePhoneStore(id),old=st.apps.safari;
  if(!quiet&&old&&typeof old==='object'&&!Array.isArray(old)&&(Array.isArray(old.history)||Array.isArray(old.bookmarks))&&!confirm('重新生成会覆盖现有的 Safari 内容，继续吗？'))return;
- const el=$('#rp-body .sf');if(el)el.classList.add('busy');if(!quiet)toast('正在生成 Safari 内容…');
+ const el=$('#rp-body .sf');if(el)el.classList.add('busy');if(!quiet)toast('正在生成「Safari」，请稍等…',90000);
  try{
   const sys=rolePhonePrompt(p)+'\n你要生成该角色手机里 Safari 浏览器的内容：收藏夹、私密浏览记录、普通浏览记录。内容要符合人设（年龄、职业、爱好、生活习惯、所在地区）和近期聊天，具体、真实、前后一致。'+SF_LANG_RULE+'网址写成像真实网址的样子（域名/路径，不带 https://），成年向内容请用虚构或泛化的域名，不要出现真实的成人网站。只输出严格 JSON 对象，不要 Markdown：{"bookmarks":[],"private":[],"history":[]}。bookmarks：收藏夹 8-12 条，每项 {"title","titleTr","url"}，是角色长期收藏的网页（工作资料、爱好、常用工具、喜欢的店、攻略等）。private：私密浏览 8-12 条，每项 {"kind":"search"或"page","title"（搜索词或页面标题）,"titleTr","url"（搜索写成 google.com/search?q=关键词 的样子）,"ago"（距今多少分钟，跨度几小时到几个月）}，内容是成年向的：成年人之间的暧昧与亲密、情趣好奇、亲密关系里的困惑、深夜情绪、不想让人看到的欲望相关搜索等，点到为止，保持含蓄擦边，不写露骨的性行为描写，不涉及未成年人、胁迫或非自愿内容，其中 2-3 条可以和用户有关。history：普通浏览记录 14-20 条，每项 {"title","titleTr","url","ago"（分钟，整数，由近到远，跨度从几十分钟到两周）}，像真实的浏览痕迹（搜索、新闻、购物、查资料、地图、视频、社交），其中 2-3 条与用户有关（查对方提过的东西、挑礼物、找约会的地方等）。';
   const d=rolePhoneParse(await ask([{role:'system',content:sys},{role:'user',content:'为 '+p.name+' 生成 Safari 数据。'}],null,{max_tokens:6000},rolePhoneConfig()));
   if(!d||typeof d!=='object'||(!Array.isArray(d.history)&&!Array.isArray(d.bookmarks)&&!Array.isArray(d.private)))throw new Error('返回内容不是有效 JSON');
   const n=sfNorm(d,Date.now());if(!n.history.length&&!n.bookmarks.length&&!n.private.length)throw new Error('内容为空');
-  st.apps.safari=n;st.generatedAt=Date.now();save();rolePhoneSfCol.clear();rolePhoneRender();if(!quiet)toast('Safari 内容已生成');
- }catch(e){toast('生成失败：'+e.message)}
+  st.apps.safari=n;st.generatedAt=Date.now();save();rolePhoneSfCol.clear();rolePhoneRender();if(!quiet)toast('✓ 「Safari」已生成');
+ }catch(e){toast('生成失败：'+e.message,4500)}
  finally{const e2=$('#rp-body .sf');if(e2)e2.classList.remove('busy')}
 }
 function rolePhoneBind(){
@@ -3419,7 +3421,7 @@ function rolePhoneContentHTML(id,data){
 }
 function rolePhoneParse(raw){let t=String(raw||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');try{return JSON.parse(t)}catch(e){return t}}
 async function rolePhoneGenerateAll(id){const p=P(id);if(!p)return;const btn=$('#rp-generate-all');if(btn){btn.disabled=true;btn.classList.add('busy')}toast('正在生成整部手机…');try{const apps=ROLE_PHONE_APPS.filter(a=>a.id!=='twitter'&&a.id!=='monologue'&&a.id!=='shop'&&a.id!=='safari').map(a=>({id:a.id,name:a.name,description:a.desc}));const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n你要一次性生成角色手机里全部软件的数据。必须输出严格 JSON 对象，键名使用指定 app id：message, notes, phone, music。message 为 14-20 条微信聊天记录数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）；'+WX_LANG_RULE+'notes（每项含 title、content、date 如 2026/10/18，由近到远；'+NT_LANG_RULE+'）；phone 为 8-12 条通话记录数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；'+PH_LANG_RULE+'music 为对象，含 playlists（2-4 个，每项 name、mood、tracks 歌曲名数组）和 recentlyPlayed（8-12 首，每项 title、artist）。各软件内容要彼此一致、细节丰富但不过度夸张。只输出 JSON。'}, {role:'user',content:'请生成全部软件内容。软件列表：'+JSON.stringify(apps)}],null,{max_tokens:9000},rolePhoneConfig());const data=rolePhoneParse(raw);if(!data||typeof data!=='object')throw new Error('返回内容不是 JSON 对象');const store=rolePhoneStore(id);for(const a of ROLE_PHONE_APPS){if(a.id!=='twitter'&&a.id!=='monologue'&&a.id!=='shop'&&a.id!=='safari'&&data[a.id]!==undefined)store.apps[a.id]=data[a.id]}store.generatedAt=Date.now();save();toast('正在生成 Twitter…');await rpTwGen(id,'all',true);toast('正在生成健康数据…');await rpHlGen(id,true);toast('正在生成购物记录…');await rpShGen(id,true);toast('正在生成浏览记录…');await rpSfGen(id,true);toast('手机内容生成完成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-generate-all');if(b){b.disabled=false;b.classList.remove('busy')}}}
-async function rolePhoneGenerateOne(id,appId){const p=P(id),app=ROLE_PHONE_APPS.find(a=>a.id===appId);if(!p||!app)return;if(appId==='twitter')return rpTwGen(id,'all');if(appId==='monologue')return rpHlGen(id);if(appId==='shop')return rpShGen(id);if(appId==='safari')return rpSfGen(id);const btn=$('#rp-regenerate');if(btn){btn.disabled=true;btn.textContent='生成中…'}try{const prompts={message:'生成 14-20 条微信聊天记录，JSON 数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）。要有来有回，不要伪装成真实历史。'+WX_LANG_RULE,notes:'生成 6-10 条 iPhone 备忘录，JSON 数组，每项含 title、content、date（如 2026/10/18，由近到远，跨度几周到几个月）。包括个人待办、生活琐事、和用户日常相关的细节、想和用户一起做的事。'+NT_LANG_RULE,twitter:'生成 5-8 条个人 Twitter 帖子/草稿，JSON 数组，每项含 content 和可选 time。语气符合角色，像个人账号而不是营销号。',phone:'生成 8-12 条通话记录，JSON 数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；其中 2-3 条未接。'+PH_LANG_RULE,music:'生成 2-4 个 Apple Music 歌单以及 8-12 首最近播放歌曲，JSON 对象，包含 playlists（数组，每项 name、mood、tracks）和 recentlyPlayed（数组，每项 title、artist、reason）。歌曲可以是真实存在的歌曲，但不要捏造具体播放数据来源。'};const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n只生成软件「'+app.name+'」的数据。'+prompts[appId]+' 严格按要求输出 JSON，不要 Markdown。'}, {role:'user',content:'为 '+p.name+' 的「'+app.name+'」生成内容。'}],null,{max_tokens:6000},rolePhoneConfig());const data=rolePhoneParse(raw);if(data===undefined||data===null||data==='')throw new Error('返回内容为空');rolePhoneStore(id).apps[appId]=data;rolePhoneStore(id).generatedAt=Date.now();save();toast(app.name+'已生成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-regenerate');if(b){b.disabled=false;b.textContent='重新生成'}}}
+async function rolePhoneGenerateOne(id,appId){const p=P(id),app=ROLE_PHONE_APPS.find(a=>a.id===appId);if(!p||!app)return;if(appId==='twitter')return rpTwGen(id,'all');if(appId==='monologue')return rpHlGen(id);if(appId==='shop')return rpShGen(id);if(appId==='safari')return rpSfGen(id);const btn=$('#rp-regenerate');if(btn){btn.disabled=true;btn.textContent='生成中…'}$$('#rp-body [data-rp-gen]').forEach(b=>b.classList.add('gen-busy'));toast('正在生成「'+app.name+'」，请稍等…',90000);try{const prompts={message:'生成 14-20 条微信聊天记录，JSON 数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）。要有来有回，不要伪装成真实历史。'+WX_LANG_RULE,notes:'生成 6-10 条 iPhone 备忘录，JSON 数组，每项含 title、content、date（如 2026/10/18，由近到远，跨度几周到几个月）。包括个人待办、生活琐事、和用户日常相关的细节、想和用户一起做的事。'+NT_LANG_RULE,twitter:'生成 5-8 条个人 Twitter 帖子/草稿，JSON 数组，每项含 content 和可选 time。语气符合角色，像个人账号而不是营销号。',phone:'生成 8-12 条通话记录，JSON 数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；其中 2-3 条未接。'+PH_LANG_RULE,music:'生成 2-4 个 Apple Music 歌单以及 8-12 首最近播放歌曲，JSON 对象，包含 playlists（数组，每项 name、mood、tracks）和 recentlyPlayed（数组，每项 title、artist、reason）。歌曲可以是真实存在的歌曲，但不要捏造具体播放数据来源。'};const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n只生成软件「'+app.name+'」的数据。'+prompts[appId]+' 严格按要求输出 JSON，不要 Markdown。'}, {role:'user',content:'为 '+p.name+' 的「'+app.name+'」生成内容。'}],null,{max_tokens:6000},rolePhoneConfig());const data=rolePhoneParse(raw);if(data===undefined||data===null||data==='')throw new Error('返回内容为空');rolePhoneStore(id).apps[appId]=data;rolePhoneStore(id).generatedAt=Date.now();save();toast('✓ 「'+app.name+'」已生成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message,4500)}finally{const b=$('#rp-regenerate');if(b){b.disabled=false;b.textContent='重新生成'}$$('#rp-body [data-rp-gen]').forEach(b=>b.classList.remove('gen-busy'))}}
 
 /* Desktop customization: wallpapers, app icons, home widgets and touch-friendly reordering */
 function desktopApply(){
