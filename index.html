@@ -374,6 +374,8 @@ div.rps-app:active .rps-ic{filter:none}
 .nt-d{text-align:center;color:var(--ns);font-size:13px;margin:12px 0 18px}
 .nt-sc h1{font-size:26px;font-weight:700;line-height:1.3;margin-bottom:10px;overflow-wrap:anywhere}
 .nt-b{font-size:17px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.nt-ht{color:var(--ns);font-size:15px;line-height:1.5;margin:-4px 0 12px;overflow-wrap:anywhere}
+.nt-tr{margin-top:18px;padding-top:14px;border-top:1px solid var(--nl);color:var(--ns);font-size:15px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
 .nt-e{color:var(--ns,#8e8e93);text-align:center;padding:80px 20px;font-size:14px}
 .ph{--pbg:#fff;--pg:#f2f2f7;--pt:#000;--ps:#8e8e93;--pl:#e5e5ea;--pb:#007aff;--pr:#ff3b30;position:fixed;inset:0;max-width:640px;margin:0 auto;z-index:5;background:var(--pbg);color:var(--pt);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 [data-theme=dark] .ph{--pbg:#000;--pg:#1c1c1e;--pt:#fff;--pl:#38383a;--pb:#0a84ff}
@@ -561,18 +563,21 @@ div.rps-app:active .rps-ic{filter:none}
 .sh-bar .sum{flex:1;text-align:right;font-size:12.5px;color:#666}
 .sh-bar .sum b{color:var(--sa);font-size:17px;font-weight:600}
 .sh-bar .go{height:38px;padding:0 22px;border-radius:3px;background:linear-gradient(90deg,#ff8a3a,#ff5000);color:#fff;font-weight:600;font-size:14.5px;display:flex;align-items:center}
-.sh-sb{padding:18px 18px 20px;background:linear-gradient(135deg,#fff1e6,#fff8f2 65%,#fff);position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;border-bottom:1px solid #fbe8db}
-.sh-sb .ic{width:48px;height:48px;flex:none}
-.sh-sb b{font-size:19px;color:var(--sa);display:block;font-weight:700}
-.sh-sb small{color:#b88f78;font-size:12.5px;margin-top:3px;display:block;line-height:1.5}
-.sh-sb .wm{position:absolute;right:-10px;bottom:-16px;width:104px;height:104px;opacity:.09;color:var(--sa)}
-.sh-why{margin:10px 12px 0;background:#fffdf8;border:1px dashed #f1c6a8;border-radius:6px;padding:14px 16px 12px;position:relative}
-.sh-why h4{margin:0 0 9px;display:flex;align-items:center;gap:7px;color:var(--sa);font-size:14px;font-weight:700;}
-.sh-why h4 svg{width:19px;height:19px}
-.sh-why p{margin:0;font-size:15px;line-height:1.9;color:#444;white-space:pre-wrap;overflow-wrap:anywhere}
-.sh-why em{display:block;text-align:right;font-style:normal;color:#bba998;font-size:12px;margin-top:9px}
+.sh-sb{padding:18px 18px 18px;background:linear-gradient(135deg,#e9e9ec,#f6f6f7 55%,#fff);display:flex;align-items:center;gap:14px;border-bottom:1px solid #eee}
+.sh-sb .ic{width:46px;height:46px;flex:none}
+.sh-sb .ic svg{width:100%;height:100%}
+.sh-sb b{font-size:19px;color:#222;display:block;font-weight:700}
+.sh-sb small{color:#999;font-size:12.5px;margin-top:3px;display:block;line-height:1.5}
+.sh-why{margin:10px 12px 0;background:#fff;border:1px dashed #cfcfd4;border-radius:6px;padding:14px 16px 12px}
+.sh-why h4{margin:0 0 9px;display:flex;align-items:center;gap:7px;color:#333;font-size:14px;font-weight:700}
+.sh-why h4 svg{width:19px;height:19px;color:#888}
+.sh-why p{margin:0;font-size:15px;line-height:1.9;color:#333;white-space:pre-wrap;overflow-wrap:anywhere}
+.sh-why p.tr{margin-top:10px;padding-top:10px;border-top:1px solid #f0f0f0;font-size:13.5px;line-height:1.8;color:#999}
+.sh-why em{display:block;text-align:right;font-style:normal;color:#aaa;font-size:12px;margin-top:9px}
+.sh-tt{margin-top:4px;font-size:12px;line-height:1.4;color:#999;overflow-wrap:anywhere}
 .sh-dp{background:#fff;margin-top:10px}
 .sh-dp .sh-th{width:96px;height:96px}
+.sh-dp .sh-ti{display:block;max-height:none;overflow:visible}
 .sh-ir{display:flex;justify-content:space-between;gap:12px;padding:5px 14px;font-size:13px;color:#888}
 .sh-ir span:last-child{color:#444;text-align:right;overflow-wrap:anywhere}
 .sh-ir.tt{border-top:1px solid #f4f4f4;margin-top:6px;padding-top:11px;padding-bottom:12px;color:#444}
@@ -581,6 +586,42 @@ div.rps-app:active .rps-ic{filter:none}
 .sh-inf h5{margin:0;font-size:13.5px;font-weight:600;padding:5px 14px 4px;color:#333}
 .sh-tip{margin:14px 0 0;text-align:center;color:#c2c2c2;font-size:12px;display:flex;align-items:center;justify-content:center;gap:8px}
 .sh-tip::before,.sh-tip::after{content:"";width:34px;height:1px;background:#e4e4e4}
+.sf{--sbg:#f2f2f7;--sc:#fff;--st:#000;--ss:#8e8e93;--sl:#d1d1d6;--sb:#007aff;position:fixed;inset:0;max-width:640px;margin:0 auto;z-index:5;background:var(--sbg);color:var(--st);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif}
+.sf.dk{--sbg:#1c1c1e;--sc:#2c2c2e;--st:#fff;--ss:#98989f;--sl:#3d3d40;--sb:#0a84ff}
+.sf svg{display:block}
+.sf button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer}
+.sf-top{flex:none;display:flex;align-items:center;justify-content:space-between;height:54px;padding:0 16px}
+.sf-top b{font-size:17px;font-weight:600}
+.sf .sf-gen,.sf .sf-done{min-width:44px;height:40px;display:flex;align-items:center;color:var(--sb);font-size:17px}
+.sf-gen svg{width:24px;height:24px}
+.sf-done{justify-content:flex-end;font-weight:600}
+.sf.busy .sf-gen{opacity:.35;pointer-events:none}
+.sf-seg{flex:none;display:flex;margin:0 16px 8px;padding:3px;border-radius:11px;background:rgba(118,118,128,.14);height:42px;box-sizing:border-box}
+.sf.dk .sf-seg{background:rgba(118,118,128,.28)}
+.sf-seg button{flex:1;display:grid;place-items:center;border-radius:8px;color:var(--st);position:relative}
+.sf-seg button svg{width:26px;height:26px}
+.sf-seg button.on{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.14),0 0 0 .5px rgba(0,0,0,.06);color:#000}
+.sf.dk .sf-seg button.on{background:#636366;color:#fff;box-shadow:none}
+.sf-seg button+button:not(.on)::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:1px;background:rgba(60,60,67,.22)}
+.sf-seg button.on+button::before,.sf-seg button.on::before{display:none}
+.sf-sc{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px calc(84px + env(safe-area-inset-bottom,0px))}
+.sf-e{color:var(--ss);text-align:center;padding:90px 24px;font-size:14.5px;line-height:1.8}
+.sf-e svg{width:64px;height:64px;margin:0 auto 14px;color:var(--ss);opacity:.7}
+.sf-h{display:flex;align-items:center;justify-content:space-between;margin:22px 8px 10px;cursor:pointer}
+.sf-h b{font-size:22px;font-weight:700}
+.sf-h svg{width:20px;height:20px;color:var(--sb);transition:transform .2s}
+.sf-h.c svg{transform:rotate(-90deg)}
+.sf-gp{background:var(--sc);border-radius:18px;overflow:hidden}
+.sf-r{display:flex;align-items:center;gap:14px;padding:0 0 0 14px;min-height:64px}
+.sf-fv{width:34px;height:34px;border-radius:8px;flex:none;display:grid;place-items:center;overflow:hidden;color:#fff;font-weight:700;font-size:17px}
+.sf-fv svg{width:100%;height:100%}
+.sf-t{flex:1;min-width:0;padding:9px 14px 9px 0;border-top:1px solid var(--sl)}
+.sf-r:first-child .sf-t{border-top:0}
+.sf-t b{display:block;font-size:17px;font-weight:400;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sf-t em{display:block;font-style:normal;font-size:14.5px;line-height:1.35;color:var(--st);opacity:.62;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+.sf-t small{display:block;font-size:15px;line-height:1.35;color:var(--ss);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+.sf-bot{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));font-size:19px;color:var(--sb);background:linear-gradient(to top,var(--sbg) 70%,transparent);pointer-events:none}
+.sf-bot span:last-child{opacity:.4}
 .hl{--hbg:#f2f2f7;--hc:#fff;--ht:#000;--hs:#8e8e93;--hl:#e5e5ea;position:fixed;inset:0;max-width:640px;margin:0 auto;z-index:5;background:var(--hbg);color:var(--ht);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 [data-theme=dark] .hl{--hbg:#000;--hc:#1c1c1e;--ht:#fff;--hs:#8e8e93;--hl:#2c2c2e}
 .hl svg{width:20px;height:20px;display:block}
@@ -2884,7 +2925,7 @@ ${rpsApp('notes',store)}${rpsApp('monologue',store)}
 <button class="rps-app" data-rps-settings><span class="rps-ic" style="--g:linear-gradient(#c9cbd1,#8e9098)">${RPS_GEAR}</span><b>Settings</b></button>
 <button class="rps-app" data-rps-contacts><span class="rps-ic" style="--g:linear-gradient(#f0f1f5,#cfd2da)">${RPS_USER}</span><b>Contacts</b></button>
 ${rpsApp('shop',store)}
-<div class="rps-app"><span class="rps-ic" style="--g:#fff">${RPS_SAFARI}</span><b>Safari</b></div>
+${rpsApp('safari',store)}
 </div>${wg}<div class="rps-dots"><i class="on"></i><i></i></div></div>
 <div class="rps-dockbar"><div class="rps-dock">${rpsApp('phone',store)}${rpsApp('message',store)}${rpsApp('twitter',store)}${rpsApp('music',store)}</div></div></div>`}
 function rpsWgPick(pid,i){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=()=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);const st=rolePhoneStore(pid);st.wgImgs=st.wgImgs||['','',''];st.wgImgs[i]=c.toDataURL('image/jpeg',.82);save();rolePhoneRender()};im.onerror=()=>toast('图片读取失败');im.src=r.result};r.readAsDataURL(f)};inp.click()}
@@ -2895,7 +2936,7 @@ function rpsHomeBind(p){
  const s=$('[data-rps-settings]');if(s)s.onclick=()=>iosSheet({title:'设置',items:[{label:'更换主屏幕壁纸',run:()=>rpsWpSheet('home',p.id)},{label:'更换锁屏壁纸',run:()=>rpsWpSheet('lock')},{label:'锁屏消息文字颜色',run:()=>rpsTxSheet()},{label:'一键生成全部内容',run:()=>rolePhoneGenerateAll(p.id)}]})}
 if(!window.__rpsTick)window.__rpsTick=setInterval(()=>{const n=rpsNow();['rps-t','rpl-t'].forEach(i=>{const e=document.getElementById(i);if(e)e.textContent=n.t});const h=document.getElementById('rps-h'),m=document.getElementById('rps-m');if(h)h.setAttribute('transform','rotate('+n.h+' 50 50)');if(m)m.setAttribute('transform','rotate('+n.m+' 50 50)')},10000);
 function rolePhoneRender(){
- const root=$('#rp-body');if(!root)return;{const v=$('#v-rolephones');if(v)v.classList.toggle('rpk',!rolePhoneActiveApp||!['message','monologue','notes','phone','music','twitter','shop'].includes(rolePhoneActiveApp))}
+ const root=$('#rp-body');if(!root)return;{const v=$('#v-rolephones');if(v)v.classList.toggle('rpk',!rolePhoneActiveApp||!['message','monologue','notes','phone','music','twitter','shop','safari'].includes(rolePhoneActiveApp))}
  if(!rolePhonePersonaId){$('#rp-title').textContent='iPhone';$('#rp-actions').innerHTML='';const ps=S.personas.filter(p=>!p.blocked&&p.boundUser===S.activeUserProfile);root.innerHTML=rpsLock(ps);rpsLockBind(ps);
    return;
  }
@@ -2907,8 +2948,8 @@ function rolePhoneRender(){
  }
  const app=apps.find(a=>a.id===rolePhoneActiveApp);if(!app){rolePhoneActiveApp='';rolePhoneRender();return}
  $('#rp-title').textContent=app.name;const content=store.apps[app.id];
- const fsApp={message:rpWx,monologue:rpHealth,notes:rpNotes,phone:rpPhone,music:rpMusic,twitter:rpTw,shop:rpShop};
- if(fsApp[app.id]){root.innerHTML=fsApp[app.id](app.id==='music'||app.id==='twitter'||app.id==='monologue'||app.id==='shop'?content:(Array.isArray(content)?content:(content&&Array.isArray(content.items)?content.items:[])));rolePhoneBind();return}
+ const fsApp={message:rpWx,monologue:rpHealth,notes:rpNotes,phone:rpPhone,music:rpMusic,twitter:rpTw,shop:rpShop,safari:rpSafari};
+ if(fsApp[app.id]){root.innerHTML=fsApp[app.id](app.id==='music'||app.id==='twitter'||app.id==='monologue'||app.id==='shop'||app.id==='safari'?content:(Array.isArray(content)?content:(content&&Array.isArray(content.items)?content.items:[])));rolePhoneBind();return}
  root.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><button class="pill" id="rp-app-home">‹ ${esc(p.name)} 的手机</button><span style="flex:1"></span><button class="pill" id="rp-regenerate">${content?'重新生成':'生成内容'}</button></div><p class="note">${esc(app.desc)} · 由副 API 按角色人设生成</p>${content?rolePhoneContentHTML(app.id,content):'<div class="empty">这个软件还没有内容，点击右上角生成。</div>'}`;
  $('#rp-app-home').onclick=()=>{rolePhoneActiveApp='';rolePhoneChat='';rolePhoneRender()};$('#rp-regenerate').onclick=()=>rolePhoneGenerateOne(p.id,app.id);rolePhoneBind();
 }
@@ -2956,9 +2997,10 @@ function rpNotes(arr){
  const st=rolePhoneStore(rolePhonePersonaId),base=st.generatedAt||Date.now();
  const it=arr.map((x,i)=>{const o=typeof x==='string'?{content:x}:x,t=String(o.title||o.name||'').trim(),c=String(o.content||o.text||o.description||'').trim(),ln=c.split('\n');
   let d=o.date?new Date(String(o.date).replace(/-/g,'/')):null;if(!d||isNaN(d))d=new Date(base-i*172800000);
-  return{i,d,title:t||ln[0]||'新备忘录',body:t?c:ln.slice(1).join('\n').trim(),prev:(t?c:ln.slice(1).join(' ')).replace(/\s+/g,' ')}}).sort((a,b)=>b.d-a.d);
+  const tc=String(o.tr||o.contentTr||'').trim(),tl=tc.split('\n');
+  return{i,d,title:t||ln[0]||'新备忘录',body:t?c:ln.slice(1).join('\n').trim(),tt:String(o.titleTr||'').trim(),tr:t?tc:tl.slice(1).join('\n').trim(),prev:(t?c:ln.slice(1).join(' ')).replace(/\s+/g,' ')}}).sort((a,b)=>b.d-a.d);
  const f=d=>d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate(),z=n=>String(n).padStart(2,'0'),cur=it.find(x=>x.i===rolePhoneNote);
- if(cur)return `<div class="nt nt-det"><div class="nt-bar"><button class="nt-c" data-nt-back>${rpSvg('bk')}</button></div><div class="nt-sc"><div class="nt-d">${cur.d.getFullYear()}年${cur.d.getMonth()+1}月${cur.d.getDate()}日 ${z(cur.d.getHours())}:${z(cur.d.getMinutes())}</div><h1>${esc(cur.title)}</h1><div class="nt-b">${esc(cur.body)}</div></div></div>`;
+ if(cur)return `<div class="nt nt-det"><div class="nt-bar"><button class="nt-c" data-nt-back>${rpSvg('bk')}</button></div><div class="nt-sc"><div class="nt-d">${cur.d.getFullYear()}年${cur.d.getMonth()+1}月${cur.d.getDate()}日 ${z(cur.d.getHours())}:${z(cur.d.getMinutes())}</div><h1>${esc(cur.title)}</h1>${cur.tt?`<div class="nt-ht">${esc(cur.tt)}</div>`:''}<div class="nt-b">${esc(cur.body)}</div>${cur.tr?`<div class="nt-tr">${esc(cur.tr)}</div>`:''}</div></div>`;
  const groups=[],yr=new Date().getFullYear();
  it.forEach(x=>{const k=(x.d.getFullYear()===yr?'':x.d.getFullYear()+'年')+(x.d.getMonth()+1)+'月';let g=groups.find(y=>y.k===k);if(!g)groups.push(g={k,r:[]});g.r.push(x)});
  return `<div class="nt"><div class="nt-bar"><button class="nt-c" data-rp-home>${rpSvg('bk')}</button><div class="nt-t"><b>备忘录</b><small>${it.length}则备忘录</small></div><button class="nt-c" data-rp-gen="notes">···</button></div>
@@ -3158,6 +3200,8 @@ async function rpHlGen(id,quiet){
 const RPS_SHOP='<svg class="full" viewBox="0 0 100 100"><defs><linearGradient id="rpssh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f8fe3"/><stop offset="1" stop-color="#9ccff6"/></linearGradient></defs><rect x="22" y="14" width="40" height="40" fill="#d9d9dc"/><text x="42" y="25" text-anchor="middle" font-size="9" font-weight="700" font-family="serif" fill="#222">News</text><path d="M26 30h32M26 35h32M26 40h32" stroke="#bdbdc2" stroke-width="1.4"/><rect x="8" y="36" width="30" height="46" fill="#f6c232"/><text x="12" y="46" font-size="7.5" font-weight="700" font-family="sans-serif" fill="#3a3a3a">ART</text><circle cx="23" cy="57" r="6" fill="#3aa0ee"/><rect x="12" y="66" width="11" height="11" fill="#ee4438"/><path d="M26 78l6-9 6 9z" fill="#fff" opacity=".85"/><rect x="32" y="27" width="31" height="55" fill="url(#rpssh)"/><text x="47.5" y="36" text-anchor="middle" font-size="7" font-weight="700" font-family="serif" fill="#1c2f86">TRAVEL</text><path d="M47.5 48c1.3 0 2.2 1 2.2 3v7l9 5v3l-9-3v6l3 2.5v2.5l-5.2-1.5-5.2 1.5v-2.5l3-2.5v-6l-9 3v-3l9-5v-7c0-2 .9-3 2.2-3z" fill="#fff"/><rect x="58" y="36" width="34" height="46" fill="#5cc043"/><text x="75" y="45" text-anchor="middle" font-size="6.6" font-weight="700" font-family="serif" fill="#fff">SPORTS</text><circle cx="75" cy="58" r="7.5" fill="#e6ee45"/><path d="M69.5 52.8c3 3 3 9.4 0 12.4M80.5 52.8c-3 3-3 9.4 0 12.4" fill="none" stroke="#fff" stroke-width="1.2"/><path d="M60 82l5-12h20l5 12M62.5 76h25M75 70v12" fill="none" stroke="#fff" stroke-width="1.2"/></svg>';
 RPS_IC.shop={l:'Shopping',g:'#fff',h:RPS_SHOP};
 ROLE_PHONE_APPS.push({id:'shop',name:'Shopping',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l1 12H4z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>',desc:'最近购买与购物车'});
+const SH_LANG_RULE='语言规则：先判断角色的母语或日常语言。如果不是简体中文（英语、日语、韩语、法语等），商品标题 title、规格 spec、reason 都用该外语写，并加 titleTr（标题的简体中文翻译）、specTr（规格的简体中文翻译）和 tr（reason 的简体中文翻译）；如果是中文角色，不要写 titleTr、specTr 和 tr。店铺名 shop 写成像真实店铺的名字即可。';
+const NT_LANG_RULE='语言规则：先判断角色的母语或日常语言。如果不是简体中文（英语、日语、韩语、法语等），title 和 content 都用该外语写（保持原有换行），并加 titleTr（标题的简体中文翻译）和 tr（content 的完整简体中文翻译，保持相同的换行）；如果是中文角色，不要写 titleTr 和 tr。';
 let rolePhoneShTab=0,rolePhoneShItem='',shScroll=0;
 const SH_CATS=['clothes','shoes','bag','snack','drink','wine','book','beauty','digital','home','flower','jewelry','toy','pet','sport','watch','gift','fruit'];
 const SH_BG={clothes:['#fff1f3','#ffd9df'],shoes:['#eaf4ff','#d0e4ff'],bag:['#fff2e8','#ffdcc7'],snack:['#fff7e6','#ffe8bf'],drink:['#f6efe9','#e8d8c9'],wine:['#f8ecf2','#ead0de'],book:['#edf2ff','#d7e1ff'],beauty:['#ffecf3','#ffd5e4'],digital:['#eff0ff','#dcdfff'],home:['#fff9e5','#ffedb8'],flower:['#fff0f7','#ffd9ea'],jewelry:['#eefaff','#d8f2ff'],toy:['#fff4e4','#ffe2bb'],pet:['#fff2e8','#ffdfc8'],sport:['#ebf9f0','#d0efdd'],watch:['#f0f2f7','#dfe4ee'],gift:['#fff1f1','#ffd8d8'],fruit:['#f0faea','#dbf3ce']};
@@ -3195,10 +3239,10 @@ const SHI={
  cmt:'<svg viewBox="0 0 32 32" fill="none" stroke="#555" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5Q5 5 7.5 5h17Q27 5 27 7.5v11Q27 21 24.5 21H14l-5.5 5v-5H7.5Q5 21 5 18.5Z"/><path d="m16 8.6 1.7 3.5 3.8.5-2.8 2.6.7 3.8-3.4-1.9-3.4 1.9.7-3.8-2.8-2.6 3.8-.5Z" fill="#ff7a3d" stroke="#ff7a3d" stroke-width="1"/></svg>',
  ret:'<svg viewBox="0 0 32 32" fill="none" stroke="#555" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6 6 11.5l6 5.5"/><path d="M6 11.5h13a7 7 0 0 1 0 14h-8"/><circle cx="21" cy="18.5" r="3.4" fill="#fff4ec" stroke="#ff7a3d"/><path d="M21 17v3M19.8 18.4h2.4" stroke="#ff7a3d" stroke-width="1.2"/></svg>',
  note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5Q4 4 5.5 4h13Q20 4 20 5.5v9Q20 16 18.5 16H11l-4.5 4v-4H5.5Q4 16 4 14.5Z"/><path d="M8 8.5h8M8 11.8h5"/></svg>',
- done:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb04a"/><stop offset="1" stop-color="#ff5a2a"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-a)"/><circle cx="24" cy="24" r="21" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.5"/><path d="M14.5 24.8 21 31l12.5-13.5" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
- trk:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb04a"/><stop offset="1" stop-color="#ff5a2a"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-b)"/><path d="M11 17h16v15H11zM27 21h6.5l4.5 5v6H27z" fill="#fff"/><circle cx="18" cy="33" r="3.6" fill="#ff6a2f" stroke="#fff" stroke-width="2"/><circle cx="32.5" cy="33" r="3.6" fill="#ff6a2f" stroke="#fff" stroke-width="2"/></svg>',
- pk:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-c" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb04a"/><stop offset="1" stop-color="#ff5a2a"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-c)"/><path d="M24 11.5 36 18v13L24 37.5 12 31V18Z" fill="#fff"/><path d="M12 18l12 6.5L36 18M24 24.5v13" fill="none" stroke="#ff9a5c" stroke-width="1.6" stroke-linejoin="round"/></svg>',
- cart:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-d" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb04a"/><stop offset="1" stop-color="#ff5a2a"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-d)"/><path d="M10.5 14.5h4.4l3.1 12.2h13.6l3-9.2H17" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="33.5" r="2.6" fill="#fff"/><circle cx="30.5" cy="33.5" r="2.6" fill="#fff"/></svg>',
+ done:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b4bac6"/><stop offset="1" stop-color="#7a8291"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-a)"/><circle cx="24" cy="24" r="21" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.5"/><path d="M14.5 24.8 21 31l12.5-13.5" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+ trk:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b4bac6"/><stop offset="1" stop-color="#7a8291"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-b)"/><path d="M11 17h16v15H11zM27 21h6.5l4.5 5v6H27z" fill="#fff"/><circle cx="18" cy="33" r="3.6" fill="#7a8291" stroke="#fff" stroke-width="2"/><circle cx="32.5" cy="33" r="3.6" fill="#7a8291" stroke="#fff" stroke-width="2"/></svg>',
+ pk:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-c" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b4bac6"/><stop offset="1" stop-color="#7a8291"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-c)"/><path d="M24 11.5 36 18v13L24 37.5 12 31V18Z" fill="#fff"/><path d="M12 18l12 6.5L36 18M24 24.5v13" fill="none" stroke="#a4abb8" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+ cart:'<svg viewBox="0 0 48 48"><defs><linearGradient id="shd-d" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b4bac6"/><stop offset="1" stop-color="#7a8291"/></linearGradient></defs><circle cx="24" cy="24" r="21" fill="url(#shd-d)"/><path d="M10.5 14.5h4.4l3.1 12.2h13.6l3-9.2H17" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="33.5" r="2.6" fill="#fff"/><circle cx="30.5" cy="33.5" r="2.6" fill="#fff"/></svg>',
  em:'<svg viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="34" fill="#fff4ec"/><path d="M22 30h36l-3 30H25z" fill="#fff" stroke="#ffb38a" stroke-width="2.4" stroke-linejoin="round"/><path d="M32 30v-4a8 8 0 0 1 16 0v4" stroke="#ff8a4a" stroke-width="3" stroke-linecap="round"/><path d="M33 44q7 6 14 0" stroke="#ff8a4a" stroke-width="2.6" stroke-linecap="round"/><circle cx="34" cy="40" r="1.8" fill="#ff8a4a"/><circle cx="46" cy="40" r="1.8" fill="#ff8a4a"/></svg>'
 };
 function shNorm(d,base){
@@ -3207,7 +3251,7 @@ function shNorm(d,base){
   let price=parseFloat(String(o.price==null?'':o.price).replace(/[^\d.]/g,''));if(!isFinite(price)||price<0)price=0;
   const qty=Math.max(1,parseInt(o.qty)||1),ago=Math.max(1,Math.round(+o.ago)||(i+1)*1440);
   let stt=String(o.status||'');stt=/待发|未发|待出/.test(stt)?'待发货':/待收|已发|运输|派送|配送/.test(stt)?'待收货':'交易成功';
-  return{title:String(o.title||o.name||'').trim(),spec:String(o.spec||'').trim(),price,qty,shop:String(o.shop||'').trim()||'小店',cat:SH_CATS.includes(o.cat)?o.cat:'gift',t:typeof o.t==='number'&&o.t>1e11?o.t:base-ago*6e4,status:cart?'':stt,reason:String(o.reason||'').trim()}}).filter(x=>x.title).sort((a,b)=>b.t-a.t).map((x,i)=>(x.id=i,x));
+  return{title:String(o.title||o.name||'').trim(),spec:String(o.spec||'').trim(),price,qty,shop:String(o.shop||'').trim()||'小店',cat:SH_CATS.includes(o.cat)?o.cat:'gift',t:typeof o.t==='number'&&o.t>1e11?o.t:base-ago*6e4,status:cart?'':stt,reason:String(o.reason||'').trim(),tr:String(o.tr||o.reasonTr||'').trim(),titleTr:String(o.titleTr||'').trim(),specTr:String(o.specTr||'').trim()}}).filter(x=>x.title).sort((a,b)=>b.t-a.t).map((x,i)=>(x.id=i,x));
  return{orders:mk(d&&d.orders,0),cart:mk(d&&d.cart,1)};
 }
 const shDt=t=>{const d=new Date(t),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+' '+z(d.getHours())+':'+z(d.getMinutes())};
@@ -3217,10 +3261,10 @@ function shDetail(k,it,p,bar){
  const isO=k==='o',stt=isO?it.status:'购物车中',ic=isO?(stt==='交易成功'?SHI.done:stt==='待收货'?SHI.trk:SHI.pk):SHI.cart;
  const sub=isO?(stt==='交易成功'?'交易已完成，感谢你的购买':stt==='待收货'?'卖家已发货，包裹正在路上':'已付款，等待卖家发货'):shAgo(it.t)+'加入购物车，还没有下单';
  const no=String(Math.floor(it.t/1000))+String(100+it.id*37).slice(-3)+'0'+String(it.id+1);
- const why=`<div class="sh-why"><h4>${SHI.note}${isO?'购买理由':'加购理由'}</h4><p>${it.reason?esc(it.reason):'（没有留下理由）'}</p><em>—— ${esc(p.name)}</em></div>`;
- const prod=`<div class="sh-dp"><div class="sh-oh"><div class="sh-sn">${SHI.shop}<span>${esc(it.shop)}</span>${SHI.ch}</div></div><div class="sh-pr">${shArt(it.cat)}<div class="sh-pm"><div class="sh-ti">${esc(it.title)}</div>${it.spec?`<div class="sh-sp">${esc(it.spec)}</div>`:''}</div><div class="sh-pp"><i>¥</i>${shM(it.price)}<small>×${it.qty}</small></div></div><div class="sh-ir"><span>商品总价</span><span><i>¥</i>${shM(it.price*it.qty)}</span></div><div class="sh-ir"><span>运费</span><span><i>¥</i>0.00</span></div><div class="sh-ir tt"><span>${isO?'实付款':'合计'}</span><b><i style="font-style:normal;font-size:12px">¥</i>${shM(it.price*it.qty)}</b></div></div>`;
+ const why=`<div class="sh-why"><h4>${SHI.note}${isO?'购买理由':'加购理由'}</h4><p>${it.reason?esc(it.reason):'（没有留下理由）'}</p>${it.tr?`<p class="tr">${esc(it.tr)}</p>`:''}<em>—— ${esc(p.name)}</em></div>`;
+ const prod=`<div class="sh-dp"><div class="sh-oh"><div class="sh-sn">${SHI.shop}<span>${esc(it.shop)}</span>${SHI.ch}</div></div><div class="sh-pr">${shArt(it.cat)}<div class="sh-pm"><div class="sh-ti">${esc(it.title)}</div>${it.titleTr?`<div class="sh-tt">${esc(it.titleTr)}</div>`:''}${it.spec?`<div class="sh-sp">${esc(it.spec)}</div>`:''}${it.specTr?`<div class="sh-tt">${esc(it.specTr)}</div>`:''}</div><div class="sh-pp"><i>¥</i>${shM(it.price)}<small>×${it.qty}</small></div></div><div class="sh-ir"><span>商品总价</span><span><i>¥</i>${shM(it.price*it.qty)}</span></div><div class="sh-ir"><span>运费</span><span><i>¥</i>0.00</span></div><div class="sh-ir tt"><span>${isO?'实付款':'合计'}</span><b><i style="font-style:normal;font-size:12px">¥</i>${shM(it.price*it.qty)}</b></div></div>`;
  const info=isO?`<div class="sh-inf"><h5>订单信息</h5><div class="sh-ir"><span>订单编号</span><span>${no}</span></div><div class="sh-ir"><span>创建时间</span><span>${shDt(it.t)}</span></div><div class="sh-ir"><span>付款方式</span><span>在线支付</span></div></div>`:`<div class="sh-inf"><h5>商品信息</h5><div class="sh-ir"><span>加入时间</span><span>${shDt(it.t)}</span></div><div class="sh-ir"><span>数量</span><span>${it.qty} 件</span></div></div>`;
- return `<div class="sh">${bar('data-sh-back',isO?'订单详情':'商品详情',0)}<div class="sh-sc"><div class="sh-sb"><div class="ic">${ic}</div><div><b>${stt}</b><small>${sub}</small></div><div class="wm">${isO?SHI.pk:SHI.cart}</div></div>${why}${prod}${info}<div class="sh-tip">没有更多了</div></div></div>`;
+ return `<div class="sh">${bar('data-sh-back',isO?'订单详情':'商品详情',0)}<div class="sh-sc"><div class="sh-sb"><div class="ic">${ic}</div><div><b>${stt}</b><small>${sub}</small></div></div>${why}${prod}${info}<div class="sh-tip">没有更多了</div></div></div>`;
 }
 function rpShop(data){
  const pid=rolePhonePersonaId,p=P(pid)||{name:'角色'},st=rolePhoneStore(pid);
@@ -3237,10 +3281,10 @@ function rpShop(data){
  const tabs=`<div class="sh-tabs"><button data-sh-tab="0" class="${tab?'':'on'}">最近购买<small>${n.orders.length}</small></button><button data-sh-tab="1" class="${tab?'on':''}">购物车<small>${n.cart.length}</small></button></div>`;
  let body='';
  if(!tab){
-  body=n.orders.map(x=>`<div class="sh-o" data-sh-open="o${x.id}"><div class="sh-oh"><div class="sh-sn">${SHI.shop}<span>${esc(x.shop)}</span>${SHI.ch}</div><span class="sh-ss${x.status==='交易成功'?' ok':''}">${x.status}</span></div><div class="sh-pr">${shArt(x.cat)}<div class="sh-pm"><div class="sh-ti">${esc(x.title)}</div>${x.spec?`<div class="sh-sp">${esc(x.spec)}</div>`:''}</div><div class="sh-pp"><i>¥</i>${shM(x.price)}<small>×${x.qty}</small></div></div><div class="sh-of">共${x.qty}件商品 实付款 <b><i>¥</i>${shM(x.price*x.qty)}</b></div><div class="sh-ob"><span class="sh-bt">${shAgo(x.t)}</span><span class="sh-bt o">${SHI.note.replace('<svg','<svg style="width:13px;height:13px"')}为什么买</span></div></div>`).join('')||'<div class="sh-e">还没有购买记录</div>';
+  body=n.orders.map(x=>`<div class="sh-o" data-sh-open="o${x.id}"><div class="sh-oh"><div class="sh-sn">${SHI.shop}<span>${esc(x.shop)}</span>${SHI.ch}</div><span class="sh-ss${x.status==='交易成功'?' ok':''}">${x.status}</span></div><div class="sh-pr">${shArt(x.cat)}<div class="sh-pm"><div class="sh-ti">${esc(x.title)}</div>${x.titleTr?`<div class="sh-tt">${esc(x.titleTr)}</div>`:''}${x.spec?`<div class="sh-sp">${esc(x.spec)}</div>`:''}${x.specTr?`<div class="sh-tt">${esc(x.specTr)}</div>`:''}</div><div class="sh-pp"><i>¥</i>${shM(x.price)}<small>×${x.qty}</small></div></div><div class="sh-of">共${x.qty}件商品 实付款 <b><i>¥</i>${shM(x.price*x.qty)}</b></div><div class="sh-ob"><span class="sh-bt">${shAgo(x.t)}</span><span class="sh-bt o">${SHI.note.replace('<svg','<svg style="width:13px;height:13px"')}为什么买</span></div></div>`).join('')||'<div class="sh-e">还没有购买记录</div>';
  }else{
   const gs=[];n.cart.forEach(x=>{let g=gs.find(y=>y.s===x.shop);if(!g)gs.push(g={s:x.shop,r:[]});g.r.push(x)});
-  body=gs.map(g=>`<div class="sh-cg"><div class="sh-cgh"><span class="sh-ck on">${SHI.ck}</span><span class="n">${SHI.shop.replace('<svg','<svg class="st"')}<em>${esc(g.s)}</em>${SHI.ch}</span></div>${g.r.map(x=>`<div class="sh-ci" data-sh-open="c${x.id}"><span class="sh-ck on">${SHI.ck}</span>${shArt(x.cat)}<div class="sh-pm" style="flex:1"><div class="sh-ti">${esc(x.title)}</div>${x.spec?`<div class="sh-sp">${esc(x.spec)}</div>`:''}<div class="sh-ad">${SHI.note}${shAgo(x.t)}加入 · 看看为什么</div><div class="sh-cp"><b><i>¥</i>${shM(x.price)}</b><div class="sh-q"><span>−</span><span>${x.qty}</span><span>+</span></div></div></div></div>`).join('')}</div>`).join('')||'<div class="sh-e">购物车是空的</div>';
+  body=gs.map(g=>`<div class="sh-cg"><div class="sh-cgh"><span class="sh-ck on">${SHI.ck}</span><span class="n">${SHI.shop.replace('<svg','<svg class="st"')}<em>${esc(g.s)}</em>${SHI.ch}</span></div>${g.r.map(x=>`<div class="sh-ci" data-sh-open="c${x.id}"><span class="sh-ck on">${SHI.ck}</span>${shArt(x.cat)}<div class="sh-pm" style="flex:1"><div class="sh-ti">${esc(x.title)}</div>${x.titleTr?`<div class="sh-tt">${esc(x.titleTr)}</div>`:''}${x.spec?`<div class="sh-sp">${esc(x.spec)}</div>`:''}${x.specTr?`<div class="sh-tt">${esc(x.specTr)}</div>`:''}<div class="sh-ad">${SHI.note}${shAgo(x.t)}加入 · 看看为什么</div><div class="sh-cp"><b><i>¥</i>${shM(x.price)}</b><div class="sh-q"><span>−</span><span>${x.qty}</span><span>+</span></div></div></div></div>`).join('')}</div>`).join('')||'<div class="sh-e">购物车是空的</div>';
  }
  const settle=tab?`<div class="sh-bar"><span class="all"><span class="sh-ck on">${SHI.ck}</span>全选</span><span class="sum">合计：<b><i style="font-style:normal;font-size:12px">¥</i>${shM(cartSum)}</b></span><span class="go">结算(${n.cart.reduce((s,x)=>s+x.qty,0)})</span></div>`:'';
  return `<div class="sh">${bar('data-rp-home','我的购物',1)}<div class="sh-sc">${head}${oi}${tabs}${body}<div class="sh-tip">已经到底啦</div></div>${settle}</div>`;
@@ -3250,7 +3294,7 @@ async function rpShGen(id,quiet){
  if(!quiet&&old&&typeof old==='object'&&!Array.isArray(old)&&(Array.isArray(old.orders)||Array.isArray(old.cart))&&!confirm('重新生成会覆盖现有的购物记录，继续吗？'))return;
  const el=$('#rp-body .sh');if(el)el.classList.add('busy');if(!quiet)toast('正在生成购物记录…');
  try{
-  const sys=rolePhonePrompt(p)+'\n你要生成该角色手机里“购物”App 的内容：最近买了什么（订单）和购物车里有什么。商品要符合人设（年龄、性别、职业、收入、审美、生活习惯）和近期生活，具体、真实、前后一致；价格按人民币，符合角色消费水平；商品标题写成淘宝式标题（15-30字，可带品类词和卖点词）。每件商品都要有 reason：由角色用第一人称写 1-3 句话，说清楚“为什么买它”（订单）或“为什么把它加进购物车”（购物车，可以是犹豫、等降价、舍不得买、想送人、先放着等），口吻像随手在心里嘀咕的话，贴合角色性格和与用户的近期聊天上下文；涉及用户时按双方真实关系写，用角色对用户的称呼，绝对不能写“用户”二字。其中 2-3 件可以与用户有关（给对方买的、因为对方说过的话而买的、想和对方一起用的），其余是自己的日常、工作、爱好或一时冲动。只输出严格 JSON 对象，不要 Markdown：{"orders":[],"cart":[]}。orders：6-9 条，每项 {"title","spec"（规格，如 颜色分类:奶白 尺码:M，可空）,"price"（单价，数字）,"qty"（整数，通常 1）,"shop"（店铺名，像真实淘宝店名）,"cat"（商品插画类别，必须从这些里选一个：clothes,shoes,bag,snack,drink,wine,book,beauty,digital,home,flower,jewelry,toy,pet,sport,watch,gift,fruit）,"ago"（距今多少分钟，由近到远，跨度几小时到两个月）,"status"（交易成功 / 待收货 / 待发货，最近一两天的可以是待收货或待发货，其余交易成功）,"reason"}；cart：5-8 条，每项 {"title","spec","price","qty","shop","cat","ago"（几小时到三周前加入）,"reason"}。';
+  const sys=rolePhonePrompt(p)+'\n你要生成该角色手机里“购物”App 的内容：最近买了什么（订单）和购物车里有什么。商品要符合人设（年龄、性别、职业、收入、审美、生活习惯）和近期生活，具体、真实、前后一致；价格按人民币，符合角色消费水平；商品标题写成淘宝式标题（15-30字，可带品类词和卖点词）。每件商品都要有 reason：由角色用第一人称写 1-3 句话，说清楚“为什么买它”（订单）或“为什么把它加进购物车”（购物车，可以是犹豫、等降价、舍不得买、想送人、先放着等），口吻像随手在心里嘀咕的话，贴合角色性格和与用户的近期聊天上下文；涉及用户时按双方真实关系写，用角色对用户的称呼，绝对不能写“用户”二字。其中 2-3 件可以与用户有关（给对方买的、因为对方说过的话而买的、想和对方一起用的），其余是自己的日常、工作、爱好或一时冲动。'+SH_LANG_RULE+'只输出严格 JSON 对象，不要 Markdown：{"orders":[],"cart":[]}。orders：6-9 条，每项 {"title","spec"（规格，如 颜色分类:奶白 尺码:M，可空）,"price"（单价，数字）,"qty"（整数，通常 1）,"shop"（店铺名，像真实淘宝店名）,"cat"（商品插画类别，必须从这些里选一个：clothes,shoes,bag,snack,drink,wine,book,beauty,digital,home,flower,jewelry,toy,pet,sport,watch,gift,fruit）,"ago"（距今多少分钟，由近到远，跨度几小时到两个月）,"status"（交易成功 / 待收货 / 待发货，最近一两天的可以是待收货或待发货，其余交易成功）,"reason"}；cart：5-8 条，每项 {"title","spec","price","qty","shop","cat","ago"（几小时到三周前加入）,"reason"}。';
   const d=rolePhoneParse(await ask([{role:'system',content:sys},{role:'user',content:'为 '+p.name+' 生成购物 App 数据。'}],null,{max_tokens:4500},rolePhoneConfig()));
   if(!d||typeof d!=='object'||(!Array.isArray(d.orders)&&!Array.isArray(d.cart)))throw new Error('返回内容不是有效 JSON');
   const n=shNorm(d,Date.now());if(!n.orders.length&&!n.cart.length)throw new Error('购物数据为空');
@@ -3258,7 +3302,75 @@ async function rpShGen(id,quiet){
  }catch(e){toast('生成失败：'+e.message)}
  finally{const e2=$('#rp-body .sh');if(e2)e2.classList.remove('busy')}
 }
+/* ===== Safari app ===== */
+RPS_IC.safari={l:'Safari',g:'#fff',h:RPS_SAFARI};
+ROLE_PHONE_APPS.push({id:'safari',name:'Safari',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>',desc:'收藏、私密浏览与浏览记录'});
+let rolePhoneSfTab=2;const rolePhoneSfCol=new Set();
+const SF_LANG_RULE='语言规则：先判断角色的母语或日常语言。如果不是简体中文（英语、日语、韩语、法语等），每条的 title（页面标题或搜索词）和网址里的关键词都用该外语写，并加 titleTr（title 的简体中文翻译）；如果是中文角色，不要写 titleTr。';
+const SFI={
+ bk:'<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M14 8.5C12 6.8 8.6 6.2 4.5 6.5v14c4.1-.3 7.5.3 9.5 2 2-1.7 5.4-2.3 9.5-2v-14c-4.1-.3-7.5.3-9.5 2Z"/><path d="M14 8.5v14"/></svg>',
+ pv:'<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><circle cx="8.6" cy="16.2" r="4.3"/><circle cx="19.4" cy="16.2" r="4.3"/><path d="M12.9 15.4q1.1-1 2.2 0M4.3 15.6 6.2 9.4M23.7 15.6 21.8 9.4"/></svg>',
+ hs:'<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><circle cx="14" cy="14" r="9.5"/><path d="M14 8.3V14l3.9 2.5"/></svg>',
+ ch:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+ dt:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5.5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="18.5" cy="12" r="1.7"/></svg>',
+ gl:'<svg viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="13" stroke="#3a7bd5" stroke-width="1.9"/><ellipse cx="17" cy="17" rx="5.6" ry="13" stroke="#3a7bd5" stroke-width="1.7"/><path d="M4.3 12.5h25.4M4.3 21.5h25.4M17 4v26" stroke="#3a7bd5" stroke-width="1.6"/></svg>',
+ sr:'<svg viewBox="0 0 34 34" fill="none"><rect width="34" height="34" fill="#8e8e93" fill-opacity=".22"/><circle cx="15.5" cy="15.5" r="6.3" stroke="#6c6c70" stroke-width="2.3"/><path d="m20.4 20.4 5 5" stroke="#6c6c70" stroke-width="2.5" stroke-linecap="round"/></svg>',
+ em:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="32" r="24"/><path d="m39.5 24.5-5 10-10 5 5-10z"/></svg>'
+};
+const SF_COL=['#ff6b6b,#e03131','#ffa94d,#f76707','#ffd43b,#f59f00','#69db7c,#2f9e44','#4dabf7,#1c7ed6','#9775fa,#6741d9','#f783ac,#d6336c','#63e6be,#0ca678'];
+function sfFav(it){
+ if(it.kind==='search')return `<span class="sf-fv">${SFI.sr}</span>`;
+ const host=it.url.split(/[/?#]/)[0]||it.title;let h=0;for(const c of host)h=(h*31+c.charCodeAt(0))>>>0;
+ if(h%3===0)return `<span class="sf-fv">${SFI.gl}</span>`;
+ const m=host.match(/[A-Za-z0-9]/),L=(m?m[0]:host[0]||'?').toUpperCase(),c=SF_COL[h%SF_COL.length].split(',');
+ return `<span class="sf-fv" style="background:linear-gradient(145deg,${c[0]},${c[1]})">${esc(L)}</span>`;
+}
+function sfNorm(d,base){
+ const A=x=>Array.isArray(x)?x:[];
+ const mk=(a,def)=>A(a).map((x,i)=>{const o=x&&typeof x==='object'?x:{title:String(x||'')};
+  const url=String(o.url||'').trim().replace(/^https?:\/\//,'').replace(/^www\./,''),ago=Math.max(1,Math.round(+o.ago)||(i+1)*def);
+  const sch=o.kind==='search'||(/^(google|bing|baidu|duckduckgo|yahoo)\./.test(url)&&/[?&](q|wd|query|p)=/.test(url));
+  return{title:String(o.title||o.query||'').trim(),titleTr:String(o.titleTr||'').trim(),url,kind:sch?'search':'page',t:typeof o.t==='number'&&o.t>1e11?o.t:base-ago*6e4}}).filter(x=>x.title).sort((a,b)=>b.t-a.t);
+ return{bookmarks:mk(d&&d.bookmarks,1440),private:mk(d&&d.private,2880),history:mk(d&&d.history,180)};
+}
+function sfGroup(t){
+ const d=new Date(t),n=new Date(),dd=x=>new Date(x.getFullYear(),x.getMonth(),x.getDate()).getTime(),df=Math.round((dd(n)-dd(d))/864e5),h=d.getHours();
+ if(df<=0)return h<6?'今天凌晨':h<12?'今天上午':h<18?'今天下午':'今天晚上';
+ if(df===1)return '昨天';
+ return (d.getMonth()+1)+'月'+d.getDate()+'日 星期'+'日一二三四五六'[d.getDay()];
+}
+function rpSafari(data){
+ const tab=rolePhoneSfTab,ok=data&&typeof data==='object'&&!Array.isArray(data)&&(Array.isArray(data.history)||Array.isArray(data.bookmarks)||Array.isArray(data.private));
+ const st=rolePhoneStore(rolePhonePersonaId),dk=tab===1;
+ const ttl=['收藏夹','私密浏览','历史记录'][tab];
+ const top=`<div class="sf-top"><button class="sf-gen" data-sf-gen>${SFI.dt}</button><b>${ttl}</b><button class="sf-done" data-rp-home>完成</button></div><div class="sf-seg">${[['bk',0],['pv',1],['hs',2]].map(([k,i])=>`<button data-sf-tab="${i}" class="${i===tab?'on':''}">${SFI[k]}</button>`).join('')}</div>`;
+ if(!ok)return `<div class="sf${dk?' dk':''}">${top}<div class="sf-sc"><div class="sf-e">${SFI.em}这个角色还没有 Safari 内容<br>点左上角「···」生成收藏、私密浏览和浏览记录</div></div></div>`;
+ const n=sfNorm(data,st.generatedAt||Date.now()),list=[n.bookmarks,n.private,n.history][tab];
+ const row=x=>`<div class="sf-r">${sfFav(x)}<div class="sf-t"><b>${esc(x.title)}</b>${x.titleTr?`<em>${esc(x.titleTr)}</em>`:''}${x.url?`<small>${esc(x.url)}</small>`:''}</div></div>`;
+ const grp=(label,items)=>{const key=tab+'|'+label,c=rolePhoneSfCol.has(key);return `<div class="sf-h${c?' c':''}" data-sf-col="${esc(key)}"><b>${esc(label)}</b>${SFI.ch}</div>${c?'':`<div class="sf-gp">${items.map(row).join('')}</div>`}`};
+ let body='';
+ if(!list.length)body=`<div class="sf-e">${SFI.em}这里还没有内容</div>`;
+ else if(tab===0)body=grp('个人收藏',list);
+ else{const gs=[];list.forEach(x=>{const l=sfGroup(x.t);let g=gs.find(y=>y.l===l);if(!g)gs.push(g={l,r:[]});g.r.push(x)});body=gs.map(g=>grp(g.l,g.r)).join('')}
+ return `<div class="sf${dk?' dk':''}">${top}<div class="sf-sc">${body}</div><div class="sf-bot"><span>编辑</span><span>清除</span></div></div>`;
+}
+async function rpSfGen(id,quiet){
+ const p=P(id);if(!p)return;const st=rolePhoneStore(id),old=st.apps.safari;
+ if(!quiet&&old&&typeof old==='object'&&!Array.isArray(old)&&(Array.isArray(old.history)||Array.isArray(old.bookmarks))&&!confirm('重新生成会覆盖现有的 Safari 内容，继续吗？'))return;
+ const el=$('#rp-body .sf');if(el)el.classList.add('busy');if(!quiet)toast('正在生成 Safari 内容…');
+ try{
+  const sys=rolePhonePrompt(p)+'\n你要生成该角色手机里 Safari 浏览器的内容：收藏夹、私密浏览记录、普通浏览记录。内容要符合人设（年龄、职业、爱好、生活习惯、所在地区）和近期聊天，具体、真实、前后一致。'+SF_LANG_RULE+'网址写成像真实网址的样子（域名/路径，不带 https://），成年向内容请用虚构或泛化的域名，不要出现真实的成人网站。只输出严格 JSON 对象，不要 Markdown：{"bookmarks":[],"private":[],"history":[]}。bookmarks：收藏夹 8-12 条，每项 {"title","titleTr","url"}，是角色长期收藏的网页（工作资料、爱好、常用工具、喜欢的店、攻略等）。private：私密浏览 8-12 条，每项 {"kind":"search"或"page","title"（搜索词或页面标题）,"titleTr","url"（搜索写成 google.com/search?q=关键词 的样子）,"ago"（距今多少分钟，跨度几小时到几个月）}，内容是成年向的：成年人之间的暧昧与亲密、情趣好奇、亲密关系里的困惑、深夜情绪、不想让人看到的欲望相关搜索等，点到为止，保持含蓄擦边，不写露骨的性行为描写，不涉及未成年人、胁迫或非自愿内容，其中 2-3 条可以和用户有关。history：普通浏览记录 14-20 条，每项 {"title","titleTr","url","ago"（分钟，整数，由近到远，跨度从几十分钟到两周）}，像真实的浏览痕迹（搜索、新闻、购物、查资料、地图、视频、社交），其中 2-3 条与用户有关（查对方提过的东西、挑礼物、找约会的地方等）。';
+  const d=rolePhoneParse(await ask([{role:'system',content:sys},{role:'user',content:'为 '+p.name+' 生成 Safari 数据。'}],null,{max_tokens:6000},rolePhoneConfig()));
+  if(!d||typeof d!=='object'||(!Array.isArray(d.history)&&!Array.isArray(d.bookmarks)&&!Array.isArray(d.private)))throw new Error('返回内容不是有效 JSON');
+  const n=sfNorm(d,Date.now());if(!n.history.length&&!n.bookmarks.length&&!n.private.length)throw new Error('内容为空');
+  st.apps.safari=n;st.generatedAt=Date.now();save();rolePhoneSfCol.clear();rolePhoneRender();if(!quiet)toast('Safari 内容已生成');
+ }catch(e){toast('生成失败：'+e.message)}
+ finally{const e2=$('#rp-body .sf');if(e2)e2.classList.remove('busy')}
+}
 function rolePhoneBind(){
+ $$('#rp-body [data-sf-tab]').forEach(e=>e.onclick=()=>{rolePhoneSfTab=+e.dataset.sfTab;rolePhoneRender()});
+ $$('#rp-body [data-sf-col]').forEach(e=>e.onclick=()=>{const k=e.dataset.sfCol,sc=$('#rp-body .sf-sc'),y=sc?sc.scrollTop:0;rolePhoneSfCol.has(k)?rolePhoneSfCol.delete(k):rolePhoneSfCol.add(k);rolePhoneRender();const s2=$('#rp-body .sf-sc');if(s2)s2.scrollTop=y});
+ $$('#rp-body [data-sf-gen]').forEach(e=>e.onclick=()=>rpSfGen(rolePhonePersonaId));
  $$('#rp-body [data-sh-tab]').forEach(e=>e.onclick=()=>{rolePhoneShTab=+e.dataset.shTab;rolePhoneShItem='';rolePhoneRender()});
  $$('#rp-body [data-sh-open]').forEach(e=>e.onclick=()=>{const sc=$('#rp-body .sh-sc');shScroll=sc?sc.scrollTop:0;rolePhoneShItem=e.dataset.shOpen;rolePhoneRender();const s2=$('#rp-body .sh-sc');if(s2)s2.scrollTop=0});
  $$('#rp-body [data-sh-back]').forEach(e=>e.onclick=()=>{rolePhoneShItem='';rolePhoneRender();const sc=$('#rp-body .sh-sc');if(sc)sc.scrollTop=shScroll});
@@ -3299,8 +3411,8 @@ function rolePhoneContentHTML(id,data){
  return `<div class="rolephone-content">${esc(String(data||''))}</div>`;
 }
 function rolePhoneParse(raw){let t=String(raw||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');try{return JSON.parse(t)}catch(e){return t}}
-async function rolePhoneGenerateAll(id){const p=P(id);if(!p)return;const btn=$('#rp-generate-all');if(btn){btn.disabled=true;btn.classList.add('busy')}toast('正在生成整部手机…');try{const apps=ROLE_PHONE_APPS.filter(a=>a.id!=='twitter'&&a.id!=='monologue'&&a.id!=='shop').map(a=>({id:a.id,name:a.name,description:a.desc}));const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n你要一次性生成角色手机里全部软件的数据。必须输出严格 JSON 对象，键名使用指定 app id：message, notes, phone, music。message 为 14-20 条微信聊天记录数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）；notes（每项含 title、content、date 如 2026/10/18，由近到远）；phone 为 8-12 条通话记录数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；music 为对象，含 playlists（2-4 个，每项 name、mood、tracks 歌曲名数组）和 recentlyPlayed（8-12 首，每项 title、artist）。各软件内容要彼此一致、细节丰富但不过度夸张。只输出 JSON。'}, {role:'user',content:'请生成全部软件内容。软件列表：'+JSON.stringify(apps)}],null,{max_tokens:6500},rolePhoneConfig());const data=rolePhoneParse(raw);if(!data||typeof data!=='object')throw new Error('返回内容不是 JSON 对象');const store=rolePhoneStore(id);for(const a of ROLE_PHONE_APPS){if(a.id!=='twitter'&&a.id!=='monologue'&&a.id!=='shop'&&data[a.id]!==undefined)store.apps[a.id]=data[a.id]}store.generatedAt=Date.now();save();toast('正在生成 Twitter…');await rpTwGen(id,'all',true);toast('正在生成健康数据…');await rpHlGen(id,true);toast('正在生成购物记录…');await rpShGen(id,true);toast('手机内容生成完成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-generate-all');if(b){b.disabled=false;b.classList.remove('busy')}}}
-async function rolePhoneGenerateOne(id,appId){const p=P(id),app=ROLE_PHONE_APPS.find(a=>a.id===appId);if(!p||!app)return;if(appId==='twitter')return rpTwGen(id,'all');if(appId==='monologue')return rpHlGen(id);if(appId==='shop')return rpShGen(id);const btn=$('#rp-regenerate');if(btn){btn.disabled=true;btn.textContent='生成中…'}try{const prompts={message:'生成 14-20 条微信聊天记录，JSON 数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）。要有来有回，不要伪装成真实历史。',notes:'生成 6-10 条 iPhone 备忘录，JSON 数组，每项含 title、content、date（如 2026/10/18，由近到远，跨度几周到几个月）。包括个人待办、生活琐事、和用户日常相关的细节、想和用户一起做的事。',twitter:'生成 5-8 条个人 Twitter 帖子/草稿，JSON 数组，每项含 content 和可选 time。语气符合角色，像个人账号而不是营销号。',phone:'生成 8-12 条通话记录，JSON 数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；其中 2-3 条未接。',music:'生成 2-4 个 Apple Music 歌单以及 8-12 首最近播放歌曲，JSON 对象，包含 playlists（数组，每项 name、mood、tracks）和 recentlyPlayed（数组，每项 title、artist、reason）。歌曲可以是真实存在的歌曲，但不要捏造具体播放数据来源。'};const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n只生成软件「'+app.name+'」的数据。'+prompts[appId]+' 严格按要求输出 JSON，不要 Markdown。'}, {role:'user',content:'为 '+p.name+' 的「'+app.name+'」生成内容。'}],null,{max_tokens:3500},rolePhoneConfig());const data=rolePhoneParse(raw);if(data===undefined||data===null||data==='')throw new Error('返回内容为空');rolePhoneStore(id).apps[appId]=data;rolePhoneStore(id).generatedAt=Date.now();save();toast(app.name+'已生成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-regenerate');if(b){b.disabled=false;b.textContent='重新生成'}}}
+async function rolePhoneGenerateAll(id){const p=P(id);if(!p)return;const btn=$('#rp-generate-all');if(btn){btn.disabled=true;btn.classList.add('busy')}toast('正在生成整部手机…');try{const apps=ROLE_PHONE_APPS.filter(a=>a.id!=='twitter'&&a.id!=='monologue'&&a.id!=='shop'&&a.id!=='safari').map(a=>({id:a.id,name:a.name,description:a.desc}));const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n你要一次性生成角色手机里全部软件的数据。必须输出严格 JSON 对象，键名使用指定 app id：message, notes, phone, music。message 为 14-20 条微信聊天记录数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）；notes（每项含 title、content、date 如 2026/10/18，由近到远；'+NT_LANG_RULE+'）；phone 为 8-12 条通话记录数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；music 为对象，含 playlists（2-4 个，每项 name、mood、tracks 歌曲名数组）和 recentlyPlayed（8-12 首，每项 title、artist）。各软件内容要彼此一致、细节丰富但不过度夸张。只输出 JSON。'}, {role:'user',content:'请生成全部软件内容。软件列表：'+JSON.stringify(apps)}],null,{max_tokens:6500},rolePhoneConfig());const data=rolePhoneParse(raw);if(!data||typeof data!=='object')throw new Error('返回内容不是 JSON 对象');const store=rolePhoneStore(id);for(const a of ROLE_PHONE_APPS){if(a.id!=='twitter'&&a.id!=='monologue'&&a.id!=='shop'&&a.id!=='safari'&&data[a.id]!==undefined)store.apps[a.id]=data[a.id]}store.generatedAt=Date.now();save();toast('正在生成 Twitter…');await rpTwGen(id,'all',true);toast('正在生成健康数据…');await rpHlGen(id,true);toast('正在生成购物记录…');await rpShGen(id,true);toast('正在生成浏览记录…');await rpSfGen(id,true);toast('手机内容生成完成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-generate-all');if(b){b.disabled=false;b.classList.remove('busy')}}}
+async function rolePhoneGenerateOne(id,appId){const p=P(id),app=ROLE_PHONE_APPS.find(a=>a.id===appId);if(!p||!app)return;if(appId==='twitter')return rpTwGen(id,'all');if(appId==='monologue')return rpHlGen(id);if(appId==='shop')return rpShGen(id);if(appId==='safari')return rpSfGen(id);const btn=$('#rp-regenerate');if(btn){btn.disabled=true;btn.textContent='生成中…'}try{const prompts={message:'生成 14-20 条微信聊天记录，JSON 数组，每项含 chat（聊天对象的备注名；与用户的那一组，chat 必须是角色私下对用户的亲密称呼或备注（贴合双方关系和角色性格，绝对不能写「用户」二字），并在该组每条里加 isUser:true；另可有 2-3 个虚构的朋友或家人）、from（手机主人写「角色」，对方写对方名字）、text、time（如 08:12 或 昨天 21:30）。要有来有回，不要伪装成真实历史。',notes:'生成 6-10 条 iPhone 备忘录，JSON 数组，每项含 title、content、date（如 2026/10/18，由近到远，跨度几周到几个月）。包括个人待办、生活琐事、和用户日常相关的细节、想和用户一起做的事。'+NT_LANG_RULE,twitter:'生成 5-8 条个人 Twitter 帖子/草稿，JSON 数组，每项含 content 和可选 time。语气符合角色，像个人账号而不是营销号。',phone:'生成 8-12 条通话记录，JSON 数组，每项含 name（联系人称呼，不要写真实号码）、type（来电/去电/未接）、relation（简短备注，如 同事、老地方）、time（如 星期五、昨天、2026/10/10，由近到远）；其中 2-3 条未接。',music:'生成 2-4 个 Apple Music 歌单以及 8-12 首最近播放歌曲，JSON 对象，包含 playlists（数组，每项 name、mood、tracks）和 recentlyPlayed（数组，每项 title、artist、reason）。歌曲可以是真实存在的歌曲，但不要捏造具体播放数据来源。'};const raw=await ask([{role:'system',content:rolePhonePrompt(p)+'\n只生成软件「'+app.name+'」的数据。'+prompts[appId]+' 严格按要求输出 JSON，不要 Markdown。'}, {role:'user',content:'为 '+p.name+' 的「'+app.name+'」生成内容。'}],null,{max_tokens:3500},rolePhoneConfig());const data=rolePhoneParse(raw);if(data===undefined||data===null||data==='')throw new Error('返回内容为空');rolePhoneStore(id).apps[appId]=data;rolePhoneStore(id).generatedAt=Date.now();save();toast(app.name+'已生成');rolePhoneRender()}catch(e){toast('生成失败：'+e.message)}finally{const b=$('#rp-regenerate');if(b){b.disabled=false;b.textContent='重新生成'}}}
 
 /* Desktop customization: wallpapers, app icons, home widgets and touch-friendly reordering */
 function desktopApply(){
