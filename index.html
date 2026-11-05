@@ -2290,9 +2290,13 @@ button.feed-follow-plus{padding:0;cursor:pointer}
       <button class="ios-row" data-setting-section="api"><span class="ios-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.8"/></svg></span><span>Models & API</span><span class="chev">›</span></button><button class="ios-row" data-setting-section="imageapi"><span class="ios-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.5"/><path d="m4 17 5-5 3.5 3 3-4 4.5 6"/></svg></span><span>Image Generation API</span><span class="chev">›</span></button><button class="ios-row" data-setting-section="voice"><span class="ios-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3m-4 0h8"/></svg></span><span>Voice (MiniMax)</span><span class="chev">›</span></button>
       <button class="ios-row" data-setting-section="prompt"><span class="ios-icon" aria-hidden="true"><svg viewBox="0 0 24 24" class="filled"><path d="M12 2.5 14.4 9.6 21.5 12l-7.1 2.4L12 21.5l-2.4-7.1L2.5 12l7.1-2.4L12 2.5Z"/></svg></span><span>AI Roleplay Prompt</span><span class="chev">›</span></button><button class="ios-row" data-setting-section="memory"><span class="ios-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h8"/></svg></span><span>Memory Mode</span><span class="ios-value" id="ios-memory-mode">Traditional Memory</span><span class="chev">›</span></button>
       <button class="ios-row" data-setting-section="system"><span class="ios-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span><span>System (Keep Alive & Notifications)</span><span class="chev">›</span></button>
+      <button class="ios-row" data-setting-section="fball"><span class="ios-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.2"/></svg></span><span>Floating Ball</span><span class="chev">›</span></button>
       <button class="ios-row" data-setting-section="data"><span class="ios-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v5c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 10v5c0 1.7 3.6 3 8 3s8-1.3 8-3v-5M4 15v4c0 1.7 3.6 3 8 3s8-1.3 8-3v-4"/></svg></span><span>Data & Backup</span><span class="chev">›</span></button>
     </div>
     <p class="note" style="padding:0 5px">Choose a category to configure its settings.</p>
+  </div>
+  <div class="body settings-sub" id="settings-fball" style="display:none">
+    <div class="cap">Floating Ball</div><div class="card"><label class="chk" style="margin-top:0"><input type="checkbox" id="c-fball">Show Floating Ball</label><p class="note" style="margin-top:8px">开启后屏幕上会出现可拖动的小圆球，轻点可快速切换 API 预设，或一键回到主画面。</p></div>
   </div>
   <div class="body settings-sub" id="settings-system" style="display:none">
     <div class="cap">Keep Alive</div><div class="card"><label class="chk"><input type="checkbox" id="c-keepalive">Keep alive (silent background playback; show a playback card on Dynamic Island / Lock Screen)</label><p class="note">When enabled, a silent audio track loops so the system is less likely to suspend this app. Incoming character messages appear on the playback card. Tap the screen to start. Music playback takes priority. iOS may still suspend the app.</p></div>
@@ -2519,7 +2523,7 @@ function ofMainView(){
   box.innerHTML=`<div class="of-list" id="of-list">${d.msgs.length?d.msgs.map(ofMsgHtml).join(''):'<p class="of-empty">线下场景还没开始。<br>写下你的动作或第一句话，或直接点发送，让 TA 先开场。</p>'}</div><div class="of-bar"><button id="of-re" type="button">重回</button><button id="of-cont" type="button">继续</button><button id="of-memb" type="button">记忆 ${d.mem.length}</button><button id="of-set" type="button">设置</button></div><div class="of-in"><textarea id="of-ta" rows="1" placeholder="写下你的动作或对白…"></textarea><button id="of-send" type="button">${OF.busy&&OF.kind==='main'?'终止':'发送'}</button></div>`;
   const l=$('#of-list');l.scrollTop=l.scrollHeight;
   const ta=$('#of-ta');ta.oninput=()=>{ta.style.height='auto';ta.style.height=Math.min(120,ta.scrollHeight)+'px'};
-  $('#of-send').onclick=ofSend;$('#of-re').onclick=()=>ofGen('redo');$('#of-cont').onclick=()=>ofGen('cont');$('#of-memb').onclick=ofMemMenu;$('#of-set').onclick=ofSettings;
+  $('#of-send').onclick=ofSend;$('#of-re').onclick=ofRedoDlg;$('#of-cont').onclick=()=>ofGen('cont');$('#of-memb').onclick=ofMemMenu;$('#of-set').onclick=ofSettings;
   l.onclick=e=>{const m=e.target.closest('.of-m[data-i]');if(!m||OF.busy)return;const i=+m.dataset.i;iosSheet({title:'这条消息',items:[{label:'复制',run:()=>ofCopy(ofZh(d.msgs[i].content))},{label:'删除',red:true,run:()=>{d.msgs.splice(i,1);save();ofRender()}}]})};
 }
 function ofStop(){if(OF.ctl){OF.stopped=1;OF.ctl.abort()}}
@@ -2532,7 +2536,7 @@ function ofSys(p){
   if(online)sys+='\n\n【最近的线上聊天（仅供参考，线下可自然承接）】\n'+online;
   return sys;
 }
-async function ofGen(mode){
+async function ofGen(mode,note){
   if(OF.busy)return toast('正在生成中，请稍等');
   const p=P(ofS().char),d=ofD();if(!p||!d)return;if(!S.cfg.key)return toast('请先在设置里填写 API Key');
   const removed=[],sep=ofForeign(p)?'\n':'\n\n';let base='';
@@ -2547,6 +2551,7 @@ async function ofGen(mode){
     if(!hist.length)hist.push({role:'user',content:'（线下场景开始，请你先开场。）'});
     else if(hist[0].role==='assistant')hist.unshift({role:'user',content:'（线下场景开始）'});
     if(hist[hist.length-1].role==='assistant')hist.push({role:'user',content:mode==='cont'?'（请紧接上文继续往下写，不要重复已有内容，不要总结，不要重新开头。）':'（请继续推进这一幕。）'});
+    if(note){const tip='（重回要求：上一版回复已丢弃，请重新写这一轮。上一版的问题与改进方向：'+note+'。请保持人设与剧情连贯，不要提及这条说明。）';hist[hist.length-1].content+='\n\n'+tip}
     const out=String(await ask([{role:'system',content:ofSys(p)},...hist],t=>draw(base?base+sep+t:t),undefined,undefined,OF.ctl.signal)||'').trim();
     if(!out)throw new Error('模型没有返回内容');
     if(base){const l=d.msgs[d.msgs.length-1];l.content=base+sep+out}else d.msgs.push({role:'assistant',content:out,t:Date.now()});
@@ -2554,6 +2559,18 @@ async function ofGen(mode){
   }catch(e){removed.reverse().forEach(m=>d.msgs.push(m));save();toast(OF.stopped||(e&&e.name==='AbortError')?'已终止':'线下回复失败：'+e.message)}
   finally{OF.busy=0;OF.ctl=null;OF.stopped=0;ofRender()}
   ofAutoSum();
+}
+function ofRedoDlg(){
+  if(OF.busy)return toast('正在生成中，请稍等');
+  if(!ofD())return;
+  const old=document.getElementById('of-redo-ov');if(old)old.remove();
+  const ov=document.createElement('div');ov.id='of-redo-ov';
+  ov.innerHTML='<div class="of-rd"><h3>重回这一轮</h3><textarea id="of-rd-p" rows="5" placeholder="这一轮哪里有问题、希望怎么改（可留空直接重回）"></textarea><div class="of-rd-b"><button type="button" data-x>取消</button><button type="button" data-ok class="pri">重回</button></div></div>';
+  document.body.appendChild(ov);
+  ov.onclick=e=>{if(e.target===ov)ov.remove()};
+  ov.querySelector('[data-x]').onclick=()=>ov.remove();
+  ov.querySelector('[data-ok]').onclick=()=>{const t=ov.querySelector('#of-rd-p').value.trim();ov.remove();ofGen('redo',t)};
+  setTimeout(()=>{const t=ov.querySelector('#of-rd-p');if(t)t.focus()},30);
 }
 async function ofSummarize(){
   const p=P(ofS().char),d=ofD();if(!p||!d)throw new Error('先选择角色');
@@ -3991,7 +4008,7 @@ document.addEventListener('click',e=>{
     if(mg){if(confirm('删除这个表情包？')){S.stickers=S.stickers.filter(s=>s.id!==id);save();rSP()}}else{sendStk(id);$('#sp').classList.remove('on')}}
   else if(q('#stup'))addStk();
   else if(q('#stmg')){mg=!mg;rSP()}
-  else if(q('#smile')){$('#sp').classList.toggle('on');rSP()}
+  else if(q('#smile')){if($('#sp').classList.toggle('on'))window.stickerQ='';rSP()}
 });
 
 /* Profile editing uses the controls bound by bindUserProfile/rProf only.
@@ -4829,9 +4846,23 @@ async function gen(){
 
 /* stickers */
 let mg=0;
+function rSG(){
+  const g=$('#sg');if(!g)return;
+  const chosen=window.stickerChatGroup||'全部',q=(window.stickerQ||'').trim().toLowerCase();
+  let all=stkList();
+  if(q)all=all.filter(s=>((s.description||'')+' '+(s.name||'')).toLowerCase().includes(q));
+  else all=all.filter(s=>chosen==='全部'||(s.group||'默认')===chosen);
+  g.innerHTML=all.map(s=>`<div class="stw"><button class="st${mg?' mg':''}" data-stk="${s.id}"><img src="${s.src}" alt=""></button><small>${esc(s.description||s.name||'')}</small></div>`).join('')||`<div class="empty" style="grid-column:1/-1;padding:20px">${q?'没有描述里含「'+esc(window.stickerQ.trim())+'」的表情包':'这个分组还没有表情包'}</div>`;
+}
 function rSP(){
-  const groups=['全部',...(S.stickerGroups||['默认'])];const chosen=window.stickerChatGroup||'全部';const all=stkList().filter(s=>chosen==='全部'||(s.group||'默认')===chosen);
-  $('#sp').innerHTML=`<div class="sph"><span>表情包</span><div><button id="stup">导入</button><button id="stmg">${mg?'完成':'管理'}</button></div></div><div style="display:flex;gap:6px;overflow:auto;padding:5px 0">${groups.map(g=>`<button data-sticker-chat-group="${esc(g)}" style="white-space:nowrap;padding:5px 9px;border-radius:14px;background:${chosen===g?'var(--me)':'var(--bg)'};color:var(--ink)">${esc(g)}</button>`).join('')}</div><div class="sg">${all.map(s=>`<div class="stw"><button class="st${mg?' mg':''}" data-stk="${s.id}"><img src="${s.src}" alt=""></button><small>${esc(s.description||s.name||'')}</small></div>`).join('')||'<div class="empty" style="grid-column:1/-1;padding:20px">这个分组还没有表情包</div>'}</div>`;$$('[data-sticker-chat-group]').forEach(b=>b.onclick=()=>{window.stickerChatGroup=b.dataset.stickerChatGroup;rSP()})}
+  const groups=['全部',...(S.stickerGroups||['默认'])];const chosen=window.stickerChatGroup||'全部';const q=(window.stickerQ||'').trim();
+  $('#sp').innerHTML=`<div class="sph"><span>表情包</span><div><button id="stup">导入</button><button id="stmg">${mg?'完成':'管理'}</button></div></div><input id="stq" class="stq" type="search" enterkeyhint="search" placeholder="搜索已启用表情包的描述，如：开心" autocomplete="off" value="${esc(window.stickerQ||'')}"><div class="stg${q?' off':''}" style="display:flex;gap:6px;overflow:auto;padding:5px 0">${groups.map(g=>`<button data-sticker-chat-group="${esc(g)}" style="white-space:nowrap;padding:5px 9px;border-radius:14px;background:${chosen===g?'var(--me)':'var(--bg)'};color:var(--ink)">${esc(g)}</button>`).join('')}</div><div class="sg" id="sg"></div>`;
+  rSG();
+  $$('[data-sticker-chat-group]').forEach(b=>b.onclick=()=>{window.stickerChatGroup=b.dataset.stickerChatGroup;window.stickerQ='';rSP()});
+  const inp=$('#stq'),run=()=>{window.stickerQ=inp.value;const gr=$('#sp .stg');if(gr)gr.classList.toggle('off',!!inp.value.trim());rSG()};
+  inp.addEventListener('input',e=>{if(!e.isComposing)run()});
+  inp.addEventListener('compositionend',run);
+}
 function addStk(){chooseStickerFiles(false,'chat')}
 
 function sIcon(){/* 图标使用固定贴图，输入状态不替换图标 */}
@@ -5210,7 +5241,7 @@ function rSettings(){
 请保持角色固定的说话习惯、音色氛围与情绪表达。语音内容应像自然聊天，不要朗读系统提示或动作描写；根据情绪使用自然停顿，避免夸张播音腔。`,on:true,scope:'global',trigger:'global',position:'after',contacts:[]};S.worlds.push(w);save();editWorld(w)};
   $('#manage-voice-worlds').onclick=()=>{$('[data-go=worlds]')?.click();};
   FS.forEach(([s,o,k])=>{const e=$(s);e.value=S[o][k]??'';e.oninput=()=>{S[o][k]=e.type==='number'?Number(e.value):e.value;if(o==='me'&&S.activeUserProfile){const up=S.userProfiles.find(x=>x.id===S.activeUserProfile);if(up)up[k]=S.me[k]}save();if(o==='me'&&k==='name')$('#ios-name').textContent=S.me.name||'我的资料'}});[['c-secondary-base','secondaryBase'],['c-secondary-key','secondaryKey'],['c-secondary-model','secondaryModel']].forEach(([id,k])=>{const e=$('#'+id);if(e){e.value=S.cfg[k]||'';e.oninput=()=>{S.cfg[k]=e.value.trim();save()}}});secApiInit();sysInit();fontUi();pzInitAll();
-  $('#c-stream').checked=!!S.cfg.stream;$('#c-stream').onchange=e=>{S.cfg.stream=e.target.checked;save()};const imageToggle=$('#c-image-enabled');if(imageToggle){imageToggle.checked=!!S.cfg.imageEnabled;imageToggle.onchange=()=>{S.cfg.imageEnabled=imageToggle.checked;save();toast(imageToggle.checked?'已开启对方生图':'已关闭对方生图')}};
+  {const fb=$('#c-fball');if(fb){fb.checked=!!S.cfg.fball;fb.onchange=()=>{S.cfg.fball=fb.checked;save();fballSync();toast(fb.checked?'悬浮球已开启':'悬浮球已关闭')}}}$('#c-stream').checked=!!S.cfg.stream;$('#c-stream').onchange=e=>{S.cfg.stream=e.target.checked;save()};const imageToggle=$('#c-image-enabled');if(imageToggle){imageToggle.checked=!!S.cfg.imageEnabled;imageToggle.onchange=()=>{S.cfg.imageEnabled=imageToggle.checked;save();toast(imageToggle.checked?'已开启对方生图':'已关闭对方生图')}};
   const ip=$('#c-image-provider');if(ip){ip.value=S.cfg.imageProvider||'gpt';const syncImageProvider=()=>{S.cfg.imageProvider=ip.value;$('#image-gpt-fields').style.display=ip.value==='gpt'?'block':'none';$('#image-nai-fields').style.display=ip.value==='novelai'?'block':'none'};syncImageProvider();ip.onchange=syncImageProvider;
     const fields={ 'c-image-base':['imageBase','https://api.openai.com/v1'],'c-image-key':['imageKey',''],'c-image-model':['imageModel','gpt-image-1'],'c-gpt-positive':['gptPositive',''],'c-gpt-negative':['gptNegative',''],'c-gpt-detail':['gptDetail',''],'c-gpt-size':['gptSize','1024x1024'],'c-gpt-quality':['gptQuality','auto'],'c-gpt-style':['gptStyle',''],'c-gpt-n':['gptN',1],'c-nai-base':['naiBase','https://image.novelai.net'],'c-nai-key':['naiKey',''],'c-nai-model':['naiModel','nai-diffusion-4-full'],'c-nai-positive':['naiPositive',''],'c-nai-negative':['naiNegative',''],'c-nai-detail':['naiDetail',''],'c-nai-width':['naiWidth',832],'c-nai-height':['naiHeight',1216],'c-nai-scale':['naiScale',5],'c-nai-steps':['naiSteps',28],'c-nai-sampler':['naiSampler','k_euler_ancestral'],'c-nai-cfgrescale':['naiCfgRescale',0],'c-nai-seed':['naiSeed','']};
     const pzImg={list:()=>S.imagePresets,
@@ -5933,7 +5964,15 @@ function msQQSetup(){
    const b=prompt('后端地址（https 开头）',c.base||'https://music.xiaoshui.top');if(b===null)return;
    const k=prompt('访问密钥',c.key||'');if(k===null)return;
    msM().qq={base:b.trim().replace(/\/+$/,''),key:k.trim()};msM().disc=null;MS.discErr='';save();msQQTest(true)}},
-  ...(qqOn()?[{label:'测试连接',run:()=>msQQTest()},{label:'扫码登录 QQ 音乐',run:msQQLogin},{label:'断开连接',danger:1,run:()=>{msM().qq=null;msM().disc=null;MS.discErr='';save();msRender();toast('已断开')}}]:[]),
+  ...(qqOn()?[]:[{label:'用邀请码加入（朋友用）',run:async()=>{
+    const b=prompt('后端地址（https 开头）',c.base||'https://music.xiaoshui.top');if(b===null)return;
+    const code=prompt('邀请码','');if(code===null)return;
+    try{const base=b.trim().replace(/\/+$/,'');
+     const r=await fetch(base+'/api/music/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:code.trim()})});
+     const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(typeof j.detail==='string'?j.detail:'加入失败 '+r.status);
+     msM().qq={base,key:j.key};msM().disc=null;MS.discErr='';save();toast('已创建你的专属账号，请扫码登录 QQ 音乐');msQQLogin()
+    }catch(e){toast(e instanceof TypeError?'无法连接后端，请检查网址':e.message)}}}]),
+   ...(qqOn()?[{label:'测试连接',run:()=>msQQTest()},{label:'扫码登录 QQ 音乐',run:msQQLogin},{label:'断开连接',danger:1,run:()=>{msM().qq=null;msM().disc=null;MS.discErr='';save();msRender();toast('已断开')}}]:[]),
   {label:'取消'}])
 }
 async function msQQTest(load){
@@ -7140,6 +7179,36 @@ setInterval(dyTick,30000);document.addEventListener('visibilitychange',()=>{if(!
  const w=$('#recent-search-widget');if(w){w.addEventListener('click',edit);w.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();edit()}})}
  render();
 })();
+/* ===== v115 悬浮球：切换 API 预设 / 回主画面 ===== */
+function fballGoHome(){if(stack[stack.length-1]==='home')return toast('已经在主画面了');stack=['home'];go('home',false)}
+function fballPresets(){
+  if(!S.apiPresets.length)return toast('还没有 API 预设，请先在「设置 → 模型与 API」里保存一个');
+  iosSheet({title:'切换 API 预设',items:S.apiPresets.map(p=>({label:(pzApi.active(p)?'✓ ':'')+p.name,run:()=>{pzApi.apply(p);toast('已切换：'+p.name+(p.model?' · '+p.model:''))}}))});
+}
+function fballMenu(){
+  const a=S.apiPresets.find(p=>pzApi.active(p));
+  iosSheet({title:'悬浮球',items:[{label:'回到主画面',run:fballGoHome},{label:'切换 API 预设'+(a?'（当前：'+a.name+'）':''),run:fballPresets}]});
+}
+function fballPlace(el){
+  const pos=S.cfg.fballPos||{side:'r',y:.72},w=el.offsetWidth||46,h=el.offsetHeight||46;
+  el.style.left=(pos.side==='l'?6:innerWidth-w-6)+'px';
+  el.style.top=Math.max(10,Math.min(innerHeight-h-10,pos.y*innerHeight))+'px';
+}
+function fballSync(){
+  let el=document.getElementById('fball');
+  if(!S.cfg.fball){if(el)el.remove();return}
+  if(el){fballPlace(el);return}
+  el=document.createElement('button');el.id='fball';el.type='button';el.setAttribute('aria-label','悬浮球');
+  el.innerHTML='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.2"/></svg>';
+  document.body.appendChild(el);fballPlace(el);
+  let sx=0,sy=0,ox=0,oy=0,mv=0,pid=null;
+  el.addEventListener('pointerdown',e=>{pid=e.pointerId;try{el.setPointerCapture(pid)}catch(_){}sx=e.clientX;sy=e.clientY;const r=el.getBoundingClientRect();ox=r.left;oy=r.top;mv=0});
+  el.addEventListener('pointermove',e=>{if(e.pointerId!==pid)return;const dx=e.clientX-sx,dy=e.clientY-sy;if(!mv&&Math.hypot(dx,dy)<6)return;if(!mv){mv=1;el.classList.add('drag')}el.style.left=Math.max(0,Math.min(innerWidth-el.offsetWidth,ox+dx))+'px';el.style.top=Math.max(0,Math.min(innerHeight-el.offsetHeight,oy+dy))+'px'});
+  const end=e=>{if(e.pointerId!==pid)return;pid=null;el.classList.remove('drag');if(mv){const r=el.getBoundingClientRect();S.cfg.fballPos={side:r.left+r.width/2<innerWidth/2?'l':'r',y:r.top/innerHeight};save();fballPlace(el)}else if(e.type==='pointerup')fballMenu()};
+  el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
+  if(!fballSync.b){fballSync.b=1;addEventListener('resize',()=>{const x=document.getElementById('fball');if(x)fballPlace(x)})}
+}
+fballSync();
 })();
 </script>
 
@@ -8241,5 +8310,24 @@ addEventListener('unhandledrejection',e=>{const r=e.reason,nm=(r&&r.name)||'',ms
 })();
 </script>
 
+<style id="v115">
+/* 1 共读返回键：图标不可见，点击区域保留 */
+.cr-back svg{visibility:hidden}
+/* 2 重回弹窗 */
+#of-redo-ov{position:fixed;inset:0;z-index:10105;background:rgba(0,0,0,.38);display:flex;align-items:center;justify-content:center;padding:22px;box-sizing:border-box}
+#of-redo-ov .of-rd{width:min(100%,400px);background:var(--bg);color:var(--ink);border-radius:20px;padding:18px;box-sizing:border-box;box-shadow:0 18px 50px rgba(0,0,0,.25)}
+#of-redo-ov h3{margin:0 0 12px;font-size:18px;font-weight:700}
+#of-redo-ov textarea{display:block;width:100%;box-sizing:border-box;min-height:110px;resize:none;border:0;border-radius:12px;padding:10px 12px;background:var(--p);color:var(--ink);font:inherit;font-size:16px;outline:none}
+#of-redo-ov .of-rd-b{display:flex;gap:10px;margin-top:16px}
+#of-redo-ov .of-rd-b button{flex:1;height:42px;border:0;border-radius:21px;background:var(--p);color:var(--ink);font-size:15px;font-weight:600}
+#of-redo-ov .of-rd-b .pri{background:var(--me);color:var(--me-ink)}
+/* 3 表情包搜索 */
+#sp .stq{display:block;width:100%;box-sizing:border-box;margin:0 0 4px;padding:8px 12px;border:0;border-radius:12px;background:var(--bg);color:var(--ink);font-size:16px;outline:none;-webkit-appearance:none;appearance:none}
+#sp .stg.off{opacity:.35}
+/* 4 悬浮球 */
+#fball{position:fixed;z-index:10100;width:46px;height:46px;border-radius:50%;padding:0;border:0;background:var(--ink);color:var(--bg);display:grid;place-items:center;opacity:.78;box-shadow:0 4px 16px rgba(0,0,0,.28);touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;transition:left .22s ease,top .22s ease,opacity .2s}
+#fball.drag{transition:none;opacity:1}
+#fball svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;pointer-events:none}
+</style>
 </body>
 </html>
