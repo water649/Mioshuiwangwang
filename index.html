@@ -2296,7 +2296,7 @@ button.feed-follow-plus{padding:0;cursor:pointer}
     <p class="note" style="padding:0 5px">Choose a category to configure its settings.</p>
   </div>
   <div class="body settings-sub" id="settings-fball" style="display:none">
-    <div class="cap">Floating Ball</div><div class="card"><label class="chk" style="margin-top:0"><input type="checkbox" id="c-fball">Show Floating Ball</label><p class="note" style="margin-top:8px">开启后屏幕上会出现可拖动的小圆球，轻点可快速切换 API 预设，或一键回到主画面。</p><div class="fb-img"><span id="c-fball-prev" class="fb-prev"></span><div class="fb-act"><button class="btn fill" id="c-fball-img" type="button">更换图片</button><button class="btn" id="c-fball-img-clear" type="button">恢复默认</button></div></div><p class="note" style="margin-top:8px">支持相册图片、图片链接和 GIF 动图（GIF 不超过 3MB）。</p></div>
+    <div class="cap">Floating Ball</div><div class="card"><label class="chk" style="margin-top:0"><input type="checkbox" id="c-fball">Show Floating Ball</label><p class="note" style="margin-top:8px">开启后屏幕上会出现可拖动的小圆球，轻点可快速切换 API 预设，或一键回到主画面。</p><div class="fb-img"><span id="c-fball-prev" class="fb-prev"></span><div class="fb-act"><button class="btn fill" id="c-fball-img" type="button">更换图片</button><button class="btn" id="c-fball-img-clear" type="button">恢复默认</button></div></div><p class="note" style="margin-top:8px">支持相册图片、图片链接和 GIF 动图（GIF 不超过 3MB）。透明背景的 PNG 或 GIF 会按图片本身的形状显示，不带底圈。</p><label class="chk"><input type="checkbox" id="c-fball-round">Crop Image to Circle</label></div>
   </div>
   <div class="body settings-sub" id="settings-system" style="display:none">
     <div class="cap">Keep Alive</div><div class="card"><label class="chk"><input type="checkbox" id="c-keepalive">Keep alive (silent background playback; show a playback card on Dynamic Island / Lock Screen)</label><p class="note">When enabled, a silent audio track loops so the system is less likely to suspend this app. Incoming character messages appear on the playback card. Tap the screen to start. Music playback takes priority. iOS may still suspend the app.</p></div>
@@ -4947,13 +4947,40 @@ function jump(i){srch(0);const el=$('#msgs [data-i="'+i+'"]');if(!el)return;el.s
 let csetPage='main';
 function rChatMemory(){
   const cc=CC(cur);cc.memoryEntries=cc.memoryEntries||[];
-  $('#cbody').innerHTML=`<div class="row nb0" id="cmem-back" style="padding:4px 0 16px;cursor:pointer"><span style="font-size:20px">‹</span><div><p>返回聊天设置</p></div></div>
-  <div class="cap">总结指令</div><div class="card"><p class="note">自定义 AI 总结聊天时要遵循的额外规则。留空则使用默认总结规则。</p><textarea id="cs-summary-instruction" rows="5" placeholder="例如：优先记录关系变化、双方明确说过的偏好和承诺；每条尽量简短，避免重复人设资料。">${esc(cc.summaryInstruction||'')}</textarea><button class="btn fill" id="cs-save-summary-instruction" type="button">保存总结指令</button></div>
-  <div class="cap">生成记忆条目</div><div class="card"><label class="chk"><input type="checkbox" id="cs-auto-summary" ${cc.autoSummary?'checked':''}>自动总结聊天记忆</label><label>自动总结间隔（消息条数）</label><input id="cs-summary-interval" type="number" min="20" max="2000" step="20" value="${Number(cc.summaryInterval)||200}"><p class="note">默认每 200 条消息总结一次。只有总结成功后，才会新增记忆条目。副 API 留空会使用主 API。</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label>起始消息序号</label><input id="cs-summary-start" type="number" min="1" value="1"></div><div><label>结束消息序号</label><input id="cs-summary-end" type="number" min="1" value="${(S.chats[cur]||[]).length}"></div></div><button class="btn fill" id="cs-summary-now" type="button">生成记忆条目</button></div>
-  <div class="cap">已生成的记忆条目（${cc.memoryEntries.length}）</div><div id="cs-memory-entries">${cc.memoryEntries.map((m,i)=>`<div class="card" data-memory-entry="${esc(m.id)}"><div class="row nb0" style="justify-content:space-between"><small>记忆 ${i+1} · ${m.createdAt?new Date(m.createdAt).toLocaleDateString('zh-CN'):'日期未知'}</small><button class="btn" data-memory-delete="${esc(m.id)}" type="button">删除</button></div><textarea data-memory-text="${esc(m.id)}" rows="4">${esc(m.text||'')}</textarea><button class="btn" data-memory-save="${esc(m.id)}" type="button">保存修改</button></div>`).join('')||'<div class="card"><p class="note">还没有记忆条目。先选择聊天范围并点击「生成记忆条目」，生成成功后条目会显示在这里。</p></div>'}</div>
-  <details class="mem-traditional-fold" style="margin:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0" id="cs-traditional-fold"><summary style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;list-style:none;font-size:16px;font-weight:600;padding:4px 0"><span>传统记忆 <small style="font-weight:400;color:var(--muted)">（${(cc.traditionalMemories||[]).length+(cc.traditionalMemory&&!((cc.traditionalMemories||[]).length)?1:0)}）</small></span><span style="font-size:20px;color:var(--muted)">⌄</span></summary><p class="note" style="margin:12px 0">手动整理的角色记忆，支持分条保存。与自动生成的记忆条目独立，不会互相覆盖。</p><div id="cs-traditional-list">${(()=>{let a=(cc.traditionalMemories||[]).slice();if(!a.length&&cc.traditionalMemory&&String(cc.traditionalMemory).trim())a=[{id:'legacy-traditional-memory',text:cc.traditionalMemory}];return a.map((m,i)=>`<div class="card" style="margin:10px 0;padding:14px" data-trad-card="${esc(m.id)}"><div style="font-size:13px;color:var(--muted);margin-bottom:8px">传统记忆 ${i+1}</div><textarea data-trad-text="${esc(m.id)}" rows="3" style="line-height:1.6;resize:vertical" placeholder="输入这一条角色记忆……">${esc(m.text||'')}</textarea><div style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:10px"><button class="btn" data-trad-delete="${esc(m.id)}" type="button" style="width:auto;min-width:84px;padding:9px 16px;margin:0">删除</button><button class="btn" data-trad-save="${esc(m.id)}" type="button" style="width:auto;min-width:104px;padding:9px 16px;margin:0">保存修改</button></div></div>`).join('')})()}</div><textarea id="cs-traditional-new" rows="3" style="margin-top:8px;line-height:1.6;resize:vertical" placeholder="添加一条新的角色记忆……"></textarea><div class="row nb0" style="gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap"><button class="btn" id="cs-traditional-add" type="button">添加记忆</button><button class="btn" id="cs-import-traditional-memory" type="button">导入 .txt / .md</button><button class="btn" id="cs-clear-traditional-memory" type="button">清空全部</button></div><input id="cs-traditional-memory-file" type="file" accept=".txt,.md,.markdown,.text,text/plain,text/markdown" hidden></details>
-  <div class="cap">向量记忆条目</div><div class="card"><p class="note">向量记忆用于语义检索，与上面的总结条目分开管理。</p><textarea id="cs-vector-new" rows="3" placeholder="手动添加一条独立记忆"></textarea><button class="btn fill" id="cs-vector-add" type="button">添加向量记忆</button><div id="cs-vector-list" style="margin-top:10px">${(cc.vectorMemories||[]).map(m=>`<div class="row nb0" style="align-items:flex-start;border-top:1px solid var(--line);padding:10px 0"><div style="flex:1;white-space:pre-wrap;overflow-wrap:anywhere">${esc(m.text)}</div><button class="btn" data-vmem-del="${esc(m.id)}" type="button">删除</button></div>`).join('')||'<p class="note">还没有向量记忆条目</p>'}</div></div>`;
-  $('#cmem-back').onclick=()=>{csetPage='main';rCset()};
+  {const ttl=document.querySelector('#v-cset .bar h2');if(ttl)ttl.textContent='记忆管理'}
+  const tradList=(()=>{let a=(cc.traditionalMemories||[]).slice();if(!a.length&&cc.traditionalMemory&&String(cc.traditionalMemory).trim())a=[{id:'legacy-traditional-memory',text:cc.traditionalMemory}];return a})();
+  const dstr=t=>t?new Date(t).toLocaleDateString('zh-CN'):'日期未知';
+  $('#cbody').innerHTML=`<div class="is-wrap mem2">
+  <div class="is-h">总结指令</div>
+  <div class="is-g mm-box"><p class="mm-hint">自定义 AI 总结聊天时要遵循的额外规则，留空则使用默认规则。</p><textarea id="cs-summary-instruction" class="mm-ta" rows="4" placeholder="例如：优先记录关系变化、双方明确说过的偏好和承诺；每条尽量简短，避免重复人设资料。">${esc(cc.summaryInstruction||'')}</textarea><div class="mm-act"><button class="mm-b" id="cs-save-summary-instruction" type="button">保存</button></div></div>
+
+  <div class="is-h">生成记忆条目</div>
+  <div class="is-g">
+    <div class="is-c"><span class="is-t"><b>自动总结聊天记忆</b></span><span class="is-sw"><input type="checkbox" id="cs-auto-summary" ${cc.autoSummary?'checked':''}><i></i></span></div>
+    <div class="is-c"><span class="is-t"><b>自动总结间隔</b><small>每隔多少条消息总结一次</small></span><input id="cs-summary-interval" class="mm-num" type="number" min="20" max="2000" step="20" value="${Number(cc.summaryInterval)||200}"></div>
+    <div class="is-c"><span class="is-t"><b>起始消息序号</b></span><input id="cs-summary-start" class="mm-num" type="number" min="1" value="1"></div>
+    <div class="is-c"><span class="is-t"><b>结束消息序号</b></span><input id="cs-summary-end" class="mm-num" type="number" min="1" value="${(S.chats[cur]||[]).length}"></div>
+    <div class="mm-box"><button class="mm-b pri full" id="cs-summary-now" type="button">生成记忆条目</button></div>
+  </div>
+  <div class="mm-foot">只有总结成功后才会新增记忆条目；副 API 留空会使用主 API。</div>
+
+  <div class="is-h">已生成的记忆条目（${cc.memoryEntries.length}）</div>
+  <div id="cs-memory-entries">${cc.memoryEntries.map((m,i)=>`<div class="is-g mm-box mm-card" data-memory-entry="${esc(m.id)}"><div class="mm-hd"><span>记忆 ${i+1} · ${dstr(m.createdAt)}</span><button class="mm-link dg" data-memory-delete="${esc(m.id)}" type="button">删除</button></div><textarea class="mm-ta" data-memory-text="${esc(m.id)}" rows="4">${esc(m.text||'')}</textarea><div class="mm-act"><button class="mm-b" data-memory-save="${esc(m.id)}" type="button">保存修改</button></div></div>`).join('')||'<div class="is-g mm-box"><p class="mm-hint" style="margin:0">还没有记忆条目。先选好聊天范围并点「生成记忆条目」，成功后会显示在这里。</p></div>'}</div>
+
+  <div class="is-h">传统记忆</div>
+  <details class="is-g mm-fold" id="cs-traditional-fold"><summary class="is-c is-tap"><span class="is-t"><b>传统记忆</b><small>手动整理的角色记忆，分条保存</small></span><span class="mm-count">${tradList.length}</span><span class="mm-chev">›</span></summary>
+    <div class="mm-box mm-in">
+      <div id="cs-traditional-list">${tradList.map((m,i)=>`<div class="mm-sub" data-trad-card="${esc(m.id)}"><div class="mm-hd"><span>传统记忆 ${i+1}</span><button class="mm-link dg" data-trad-delete="${esc(m.id)}" type="button">删除</button></div><textarea class="mm-ta" data-trad-text="${esc(m.id)}" rows="3" placeholder="输入这一条角色记忆……">${esc(m.text||'')}</textarea><div class="mm-act"><button class="mm-b" data-trad-save="${esc(m.id)}" type="button">保存修改</button></div></div>`).join('')}</div>
+      <textarea id="cs-traditional-new" class="mm-ta" rows="3" placeholder="添加一条新的角色记忆……"></textarea>
+      <div class="mm-act wrap"><button class="mm-b pri" id="cs-traditional-add" type="button">添加</button><button class="mm-b" id="cs-import-traditional-memory" type="button">导入 .txt / .md</button><button class="mm-b dg" id="cs-clear-traditional-memory" type="button">清空全部</button></div>
+      <input id="cs-traditional-memory-file" type="file" accept=".txt,.md,.markdown,.text,text/plain,text/markdown" hidden>
+    </div>
+  </details>
+
+  <div class="is-h">向量记忆条目</div>
+  <div class="is-g mm-box"><p class="mm-hint">向量记忆用于语义检索，与上面的总结条目分开管理。</p><textarea id="cs-vector-new" class="mm-ta" rows="3" placeholder="手动添加一条独立记忆"></textarea><div class="mm-act"><button class="mm-b pri" id="cs-vector-add" type="button">添加向量记忆</button></div><div id="cs-vector-list">${(cc.vectorMemories||[]).map(m=>`<div class="mm-item"><div class="mm-txt">${esc(m.text)}</div><button class="mm-link dg" data-vmem-del="${esc(m.id)}" type="button">删除</button></div>`).join('')||'<p class="mm-hint" style="margin:12px 0 0">还没有向量记忆条目</p>'}</div></div>
+  </div>`;
+  {const fit=t=>{t.style.height='auto';t.style.height=Math.min(Math.max(t.scrollHeight,0),280)+'px'};const fitAll=()=>$$('#cbody .mm-ta').forEach(t=>{if(t.offsetParent!==null)fit(t)});$$('#cbody .mm-ta').forEach(t=>t.addEventListener('input',()=>fit(t)));fitAll();const fd=$('#cs-traditional-fold');if(fd)fd.addEventListener('toggle',fitAll)}
   const normalizeTraditional=()=>{cc.traditionalMemories=cc.traditionalMemories||[];if(!cc.traditionalMemories.length&&cc.traditionalMemory&&String(cc.traditionalMemory).trim()){cc.traditionalMemories.push({id:uid(),text:String(cc.traditionalMemory),createdAt:Date.now()});}cc.traditionalMemory=cc.traditionalMemories.map(m=>m.text||'').filter(Boolean).join('\n');};
   normalizeTraditional();
   $('#cs-traditional-add').onclick=()=>{const field=$('#cs-traditional-new'),text=field.value.trim();if(!text)return toast('先输入一条记忆');cc.traditionalMemories=cc.traditionalMemories||[];cc.traditionalMemories.push({id:uid(),text,createdAt:Date.now()});cc.traditionalMemory=cc.traditionalMemories.map(m=>m.text||'').filter(Boolean).join('\n');save();rChatMemory();const fold=$('#cs-traditional-fold');if(fold)fold.open=true;toast('传统记忆已添加')};
@@ -4972,6 +4999,7 @@ function rChatMemory(){
 }
 function rCset(){
   if(csetPage==='memory'){rChatMemory();return;}
+  {const ttl=document.querySelector('#v-cset .bar h2');if(ttl)ttl.textContent='聊天设置'}
   const p=P(cur),cc=CC(cur);
   $('#cbody').innerHTML=`<div class="is-wrap">
   <div class="is-g"><div class="is-c is-tap is-prof" data-go="personas"><div class="av">${av(p)}</div><div class="is-t"><b>${esc(p.name)}</b><small>编辑名字、简介、开场白、人设提示词</small></div><span class="is-chev">${rpSvg('chr')}</span></div></div>
@@ -5309,7 +5337,7 @@ function rSettings(){
 请保持角色固定的说话习惯、音色氛围与情绪表达。语音内容应像自然聊天，不要朗读系统提示或动作描写；根据情绪使用自然停顿，避免夸张播音腔。`,on:true,scope:'global',trigger:'global',position:'after',contacts:[]};S.worlds.push(w);save();editWorld(w)};
   $('#manage-voice-worlds').onclick=()=>{$('[data-go=worlds]')?.click();};
   FS.forEach(([s,o,k])=>{const e=$(s);e.value=S[o][k]??'';e.oninput=()=>{S[o][k]=e.type==='number'?Number(e.value):e.value;if(o==='me'&&S.activeUserProfile){const up=S.userProfiles.find(x=>x.id===S.activeUserProfile);if(up)up[k]=S.me[k]}save();if(o==='me'&&k==='name')$('#ios-name').textContent=S.me.name||'我的资料'}});[['c-secondary-base','secondaryBase'],['c-secondary-key','secondaryKey'],['c-secondary-model','secondaryModel']].forEach(([id,k])=>{const e=$('#'+id);if(e){e.value=S.cfg[k]||'';e.oninput=()=>{S.cfg[k]=e.value.trim();save()}}});secApiInit();sysInit();fontUi();pzInitAll();
-  {const fb=$('#c-fball');if(fb){fb.checked=!!S.cfg.fball;fb.onchange=()=>{S.cfg.fball=fb.checked;save();fballSync();toast(fb.checked?'悬浮球已开启':'悬浮球已关闭')}}}{const pv=$('#c-fball-prev'),sy=()=>{if(pv)pv.style.backgroundImage=S.cfg.fballImg?'url("'+String(S.cfg.fballImg).replace(/"/g,'%22')+'")':'none'};sy();const bi=$('#c-fball-img');if(bi)bi.onclick=async()=>{const src=await desktopImageSource('悬浮球图片',192);if(src===null)return;if(!src)return toast('没有选择图片');S.cfg.fballImg=src;save();fballSync();sy();toast('悬浮球图片已更新')};const bc=$('#c-fball-img-clear');if(bc)bc.onclick=()=>{S.cfg.fballImg='';save();fballSync();sy();toast('已恢复默认悬浮球')}}$('#c-stream').checked=!!S.cfg.stream;$('#c-stream').onchange=e=>{S.cfg.stream=e.target.checked;save()};const imageToggle=$('#c-image-enabled');if(imageToggle){imageToggle.checked=!!S.cfg.imageEnabled;imageToggle.onchange=()=>{S.cfg.imageEnabled=imageToggle.checked;save();toast(imageToggle.checked?'已开启对方生图':'已关闭对方生图')}};
+  {const fb=$('#c-fball');if(fb){fb.checked=!!S.cfg.fball;fb.onchange=()=>{S.cfg.fball=fb.checked;save();fballSync();toast(fb.checked?'悬浮球已开启':'悬浮球已关闭')}}}{const pv=$('#c-fball-prev'),sy=()=>{if(pv){pv.classList.toggle('img',!!S.cfg.fballImg);pv.classList.toggle('round',!!S.cfg.fballRound)}if(pv)pv.style.backgroundImage=S.cfg.fballImg?'url("'+String(S.cfg.fballImg).replace(/"/g,'%22')+'")':'none'};sy();const bi=$('#c-fball-img');if(bi)bi.onclick=async()=>{const src=await desktopImageSource('悬浮球图片',192);if(src===null)return;if(!src)return toast('没有选择图片');S.cfg.fballImg=src;save();fballSync();sy();toast('悬浮球图片已更新')};const bc=$('#c-fball-img-clear');if(bc)bc.onclick=()=>{S.cfg.fballImg='';save();fballSync();sy();toast('已恢复默认悬浮球')};const rd=$('#c-fball-round');if(rd){rd.checked=!!S.cfg.fballRound;rd.onchange=()=>{S.cfg.fballRound=rd.checked;save();fballSync();sy()}}}$('#c-stream').checked=!!S.cfg.stream;$('#c-stream').onchange=e=>{S.cfg.stream=e.target.checked;save()};const imageToggle=$('#c-image-enabled');if(imageToggle){imageToggle.checked=!!S.cfg.imageEnabled;imageToggle.onchange=()=>{S.cfg.imageEnabled=imageToggle.checked;save();toast(imageToggle.checked?'已开启对方生图':'已关闭对方生图')}};
   const ip=$('#c-image-provider');if(ip){ip.value=S.cfg.imageProvider||'gpt';const syncImageProvider=()=>{S.cfg.imageProvider=ip.value;$('#image-gpt-fields').style.display=ip.value==='gpt'?'block':'none';$('#image-nai-fields').style.display=ip.value==='novelai'?'block':'none'};syncImageProvider();ip.onchange=syncImageProvider;
     const fields={ 'c-image-base':['imageBase','https://api.openai.com/v1'],'c-image-key':['imageKey',''],'c-image-model':['imageModel','gpt-image-1'],'c-gpt-positive':['gptPositive',''],'c-gpt-negative':['gptNegative',''],'c-gpt-detail':['gptDetail',''],'c-gpt-size':['gptSize','1024x1024'],'c-gpt-quality':['gptQuality','auto'],'c-gpt-style':['gptStyle',''],'c-gpt-n':['gptN',1],'c-nai-base':['naiBase','https://image.novelai.net'],'c-nai-key':['naiKey',''],'c-nai-model':['naiModel','nai-diffusion-4-full'],'c-nai-positive':['naiPositive',''],'c-nai-negative':['naiNegative',''],'c-nai-detail':['naiDetail',''],'c-nai-width':['naiWidth',832],'c-nai-height':['naiHeight',1216],'c-nai-scale':['naiScale',5],'c-nai-steps':['naiSteps',28],'c-nai-sampler':['naiSampler','k_euler_ancestral'],'c-nai-cfgrescale':['naiCfgRescale',0],'c-nai-seed':['naiSeed','']};
     const pzImg={list:()=>S.imagePresets,
@@ -7277,7 +7305,7 @@ function fballPlace(el){
   el.style.left=(pos.side==='l'?6:innerWidth-w-6)+'px';
   el.style.top=Math.max(10,Math.min(innerHeight-h-10,pos.y*innerHeight))+'px';
 }
-function fballSkin(el){const s=S.cfg.fballImg;el.classList.toggle('img',!!s);el.style.backgroundImage=s?'url("'+String(s).replace(/"/g,'%22')+'")':''}
+function fballSkin(el){const s=S.cfg.fballImg;el.classList.toggle('img',!!s);el.classList.toggle('round',!!S.cfg.fballRound);el.style.backgroundImage=s?'url("'+String(s).replace(/"/g,'%22')+'")':''}
 function fballSync(){
   let el=document.getElementById('fball');
   if(!S.cfg.fball){if(el)el.remove();return}
@@ -8474,5 +8502,50 @@ addEventListener('unhandledrejection',e=>{const r=e.reason,nm=(r&&r.name)||'',ms
 <script id="v125">
 document.addEventListener('selectstart',function(e){var t=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);if(t&&t.closest&&t.closest('#msgs .r,#msg-menu')&&!t.closest('input,textarea'))e.preventDefault()},true);
 </script>
+<style id="v127">
+#fball.img{background-color:transparent!important;box-shadow:none!important;border-radius:0;background-size:contain;opacity:1}
+#fball.img.round{border-radius:50%;background-size:cover}
+.fb-prev.img{background-color:transparent;background-size:contain;box-shadow:none;border-radius:0}
+.fb-prev.img.round{border-radius:50%;background-size:cover}
+/* 图片消息、表情包消息：去掉气泡 */
+#msgs .r .m.stk,#msgs .r .m.image-msg{background:none!important;padding:0!important;border-radius:0!important}
+#msgs .r .m.stk img{border-radius:0}
+#msgs .r .m.image-msg>div{display:inline-block;padding:7px 11px;border-radius:16px;background:var(--ai);color:var(--ink)}
+#msgs .r.me .m.image-msg>div{background:var(--me);color:var(--me-ink)}
+</style>
+<style id="v129">
+.mem2 .mm-box{padding:14px 16px}
+.mem2 .mm-hint{font-size:13px;line-height:1.6;color:#8e8e93;margin:0 0 10px}
+.mem2 .mm-ta{display:block;width:100%;box-sizing:border-box;background:var(--p);border:0;border-radius:10px;padding:11px 12px;font-size:15px;line-height:1.6;color:var(--ink);resize:none;overflow-y:auto;max-height:280px}
+[data-theme=dark] .mem2 .mm-ta{background:#2c2c2e}
+.mem2 .mm-act{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+.mem2 .mm-act.wrap{flex-wrap:wrap;justify-content:flex-start}
+.mem2 .mm-b{flex:none;display:inline-flex;align-items:center;justify-content:center;width:auto;height:36px;padding:0 16px;margin:0;border:0;border-radius:18px;background:var(--p);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap}
+[data-theme=dark] .mem2 .mm-b{background:#2c2c2e}
+.mem2 .mm-b.pri{background:#111;color:#fff}
+[data-theme=dark] .mem2 .mm-b.pri{background:#fff;color:#000}
+.mem2 .mm-b.full{display:flex;width:100%;height:46px;border-radius:14px;font-size:16px}
+.mem2 .mm-b.dg{color:var(--err)}
+.mem2 .mm-b:disabled{opacity:.55}
+.mem2 .mm-link{border:0;background:none;padding:4px 0 4px 12px;margin:0;width:auto;font-size:14px;font-weight:500;color:var(--sub)}
+.mem2 .mm-link.dg{color:var(--err)}
+.mem2 .mm-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;font-size:13px;color:#8e8e93}
+.mem2 .mm-card+.mm-card{margin-top:12px}
+.mem2 .mm-num{flex:none;width:96px;background:none;border:0;border-radius:0;padding:4px 0;text-align:right;font-size:17px;color:var(--ink)}
+.mem2 .is-sw input:checked+i{background:#111}
+[data-theme=dark] .mem2 .is-sw input:checked+i{background:#fff}
+[data-theme=dark] .mem2 .is-sw input:checked+i:after{background:#000}
+.mem2 .mm-fold>summary{list-style:none;cursor:pointer}
+.mem2 .mm-fold>summary::-webkit-details-marker{display:none}
+.mem2 .mm-count{color:#8e8e93;font-size:15px}
+.mem2 .mm-chev{color:#c4c4c7;font-size:22px;line-height:1;transition:transform .2s}
+.mem2 .mm-fold[open] .mm-chev{transform:rotate(90deg)}
+.mem2 .mm-in{padding-top:4px;border-top:.5px solid rgba(60,60,67,.29)}
+.mem2 .mm-sub{padding:12px 0 14px;border-bottom:.5px solid rgba(60,60,67,.29);margin-bottom:14px}
+.mem2 .mm-item{display:flex;align-items:flex-start;gap:8px;padding:12px 0;border-top:.5px solid rgba(60,60,67,.29)}
+.mem2 .mm-item:first-child{margin-top:12px}
+.mem2 .mm-txt{flex:1;min-width:0;font-size:15px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.mem2 .mm-foot{font-size:13px;line-height:1.5;color:#8e8e93;margin:8px 16px 0}
+</style>
 </body>
 </html>
