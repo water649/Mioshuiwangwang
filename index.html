@@ -2181,7 +2181,7 @@ button.feed-follow-plus{padding:0;cursor:pointer}
 </section>
 
 <section class="view" id="v-wallet"><div class="bar"><button class="bk" data-back>‹</button><h2>钱包</h2></div><div class="body" id="wl-body"></div></section>
-<section class="view" id="v-life"><div class="bar"><button class="bk" data-back aria-label="返回">‹</button><h2>生活</h2><div class="lf-hdr" id="lf-hdr"></div></div><div class="body" id="lf-root"></div><nav class="lf-tabs" id="lf-tabs"></nav></section>
+<section class="view" id="v-life"><div class="bar"><button class="bk" data-back aria-label="返回">‹</button><h2>Time is Nothing</h2><div class="lf-hdr" id="lf-hdr"></div></div><div class="body" id="lf-root"></div><nav class="lf-tabs" id="lf-tabs"></nav></section>
 
 <section class="view" id="v-music"><div class="ms" id="ms-root"></div></section>
 <section class="view" id="v-coread"></section>
@@ -2214,7 +2214,7 @@ button.feed-follow-plus{padding:0;cursor:pointer}
 </section>
 
 <section class="view" id="v-css">
-  <div class="bar"><button class="bk" data-back>‹</button><h2>美化</h2><button id="impc">导入</button><button id="addc">新增</button><input type="file" id="cssfile" accept=".css,.txt,text/css,text/plain" style="display:none"></div>
+  <div class="bar"><button class="bk" data-back>‹</button><h2>美化</h2><button id="impc">导入</button><button id="expc">导出</button><button id="addc">新增</button><input type="file" id="cssfile" accept=".css,.txt,text/css,text/plain" style="display:none"></div>
   <div class="body cx-body"><p class="note" style="margin:0 0 6px">写好的 CSS 只在聊天界面生效。常用选择器：.r（一行消息）、.m（气泡）、.me / .ai、.av、.nm、.tm、.dd、#inp、#msgs。</p><div class="cap" style="margin-top:20px">CSS Presets</div><div id="cx-list" class="pz-list"></div><div id="clist"></div></div>
 </section>
 
@@ -5098,15 +5098,42 @@ function rCss(){
   list.querySelectorAll('.pz-row').forEach(r=>r.onclick=()=>{cxSel=r.dataset.id;rCss()});
   const t=S.themes.find(x=>x.id===cxSel),box=$('#clist');
   if(!t){box.innerHTML='<div class="cx-empty">点右上角「新增」或「导入」</div>';return}
-  box.innerHTML=`<div class="cx-card"><label>名称</label><input class="cx-in tn" placeholder="美化名称" value="${esc(t.name)}"><label>CSS</label><textarea class="cx-in tc" spellcheck="false" autocapitalize="off" autocorrect="off" wrap="off">${esc(t.css)}</textarea><div class="cx-act"><button class="cx-btn" id="cx-imp" type="button">导入覆盖</button><button class="cx-btn dark" id="cx-save" type="button">保存</button></div><button class="cx-del" id="cx-del" type="button">删除此美化</button></div>`;
+  box.innerHTML=`<div class="cx-card"><label>名称</label><input class="cx-in tn" placeholder="美化名称" value="${esc(t.name)}"><label class="cx-lb"><span>CSS</span><button type="button" id="cx-fs">全屏</button></label><textarea class="cx-in tc" spellcheck="false" autocapitalize="off" autocorrect="off" wrap="off">${esc(t.css)}</textarea><div class="cx-act"><button class="cx-btn" id="cx-imp" type="button">导入覆盖</button><button class="cx-btn dark" id="cx-save" type="button">保存</button></div><button class="cx-del" id="cx-del" type="button">删除此美化</button></div>`;
   const tn=box.querySelector('.tn'),tc=box.querySelector('.tc');
   tn.oninput=()=>{t.name=tn.value;save();const b=list.querySelector('.pz-row.on b');if(b)b.textContent=tn.value||'未命名'};
   tc.oninput=()=>{t.css=tc.value;save()};
+  $('#cx-fs').onclick=()=>cxFull(t,tc);
   $('#cx-save').onclick=()=>{t.name=tn.value;t.css=tc.value;save();rCss();toast('已保存')};
   $('#cx-imp').onclick=()=>cxPick(txt=>{t.css=txt;save();rCss();toast('已导入并覆盖')});
   $('#cx-del').onclick=()=>{if(!confirm('删除「'+(t.name||'未命名')+'」？'))return;S.themes=S.themes.filter(x=>x!==t);Object.values(S.cc).forEach(v=>{if(v.css===t.id)v.css=''});save();cxSel='';rCss()};
 }
+
+function cxFull(t,tc){
+  const old=document.getElementById('cxfull');if(old)old.remove();
+  const el=document.createElement('div');el.id='cxfull';
+  el.innerHTML='<div class="cxf-bar"><b>'+esc(t.name||'未命名')+'</b><button type="button" data-x>完成</button></div><textarea class="cxf-ta" spellcheck="false" autocapitalize="off" autocorrect="off" wrap="off"></textarea>';
+  const ta=el.querySelector('textarea');ta.value=t.css||'';
+  ta.oninput=()=>{t.css=ta.value;if(tc)tc.value=ta.value;save()};
+  el.querySelector('[data-x]').onclick=()=>{el.remove();rCss()};
+  document.body.appendChild(el);
+}
+function cxExport(){
+  const t=S.themes.find(x=>x.id===cxSel);if(!t)return toast('请先选中一个美化');
+  const old=document.getElementById('cxexp');if(old)old.remove();
+  const el=document.createElement('div');el.id='cxexp';
+  const safe=(t.name||'美化').replace(/[\\\/:*?"<>|]+/g,'_').slice(0,40)||'美化';
+  el.innerHTML='<div class="cxe-card"><div class="cxe-t">导出美化</div><div class="cxe-s">'+esc(t.name||'未命名')+'</div><button type="button" class="cxe-row" data-f="css"><span>CSS 文件</span><small>.css</small></button><button type="button" class="cxe-row" data-f="txt"><span>文本文件</span><small>.txt</small></button><button type="button" class="cxe-row cxe-cancel" data-x>取消</button></div>';
+  document.body.appendChild(el);requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('on')));
+  const close=()=>{el.classList.remove('on');setTimeout(()=>el.remove(),230)};
+  el.addEventListener('click',e=>{
+    if(e.target===el||e.target.closest('[data-x]'))return close();
+    const b=e.target.closest('[data-f]');if(!b)return;
+    const f=b.dataset.f;downloadBlob(new Blob([t.css||''],{type:f==='css'?'text/css;charset=utf-8':'text/plain;charset=utf-8'}),safe+'.'+f);
+    close();toast('已导出 '+safe+'.'+f);
+  });
+}
 function cxPick(cb,nameCb){const f=$('#cssfile');f.value='';f.onchange=()=>{const file=f.files&&f.files[0];if(!file)return;const r=new FileReader();r.onload=()=>cb(String(r.result||''),file.name.replace(/\.[^.]+$/,''));r.onerror=()=>toast('读取失败');r.readAsText(file,'utf-8')};f.click()}
+$('#expc').onclick=cxExport;
 $('#addc').onclick=()=>{const t={id:uid(),name:'新美化',css:''};S.themes.push(t);cxSel=t.id;save();rCss()};
 $('#impc').onclick=()=>cxPick((txt,nm)=>{const t={id:uid(),name:nm||'导入的美化',css:txt};S.themes.push(t);cxSel=t.id;save();rCss();toast('已导入')});
 
@@ -6869,7 +6896,7 @@ function lfPush(o,role){const h=S.chats[o.pid]||(S.chats[o.pid]=[]);const m={rol
 function lifeCardHTML(m){const o=lfData().orders.find(x=>x.id===(m.life&&m.life.id));if(!o)return '<div class="lf-card"><div class="lf-bd"><div class="lf-t"><b>订单记录已删除</b></div></div></div>';const st=lfStage(o),rel=o.by===o.to?lfWho(o.by)+' 给自己'+lfVerb(o.kind):lfWho(o.by)+' 给 '+lfWho(o.to)+lfVerb(o.kind);return '<div class="lf-card"><div class="lf-hd">'+esc(rel)+'</div><div class="lf-bd"><span class="lf-ic">'+LF_IC[o.kind]+'</span><div class="lf-t"><b>'+esc(o.kind==='ride'?(o.from||'当前位置')+' → '+(o.dest||''):o.title+(o.qty>1?' ×'+o.qty:''))+'</b><small>'+esc((o.kind==='ride'?o.title+' · ':(o.shop?o.shop+' · ':''))+'¥'+fmtAmt(o.price))+'</small></div></div><div class="lf-ft"><span>'+LF_ST[o.kind][st]+'</span><span>'+(st<3?'预计 '+lfEta(o)+' 分钟':'已完成')+'</span></div></div>'}
 function lfEstimate(carId){const km=Math.round((3+(msHash((LFS.from||'')+'>'+(LFS.dest||''))%200)/10)*10)/10,c=LF_CAR.find(x=>x.id===(carId||LFS.car))||LF_CAR[0];return {km,price:Math.round((c.b+km*2.3*c.k)*10)/10,eta:Math.round(km*2+4),c}}
 function lfListHTML(){const k=LFS.tab,src=lfItems(k),q=LFS.q.trim().toLowerCase();const ls=src.map((x,i)=>({x,i})).filter(o=>!q||(o.x.t+o.x.s+(o.x.d||'')).toLowerCase().includes(q));return '<div class="lf-grid">'+ls.map(o=>'<button type="button" class="lf-item" data-a="item:'+k+':'+o.i+'"><div class="lf-img"><span>'+esc(o.x.d||o.x.t)+'</span></div><b>'+esc(o.x.t)+'</b><small>'+esc(o.x.s)+'</small><div class="lf-pr"><em>¥'+fmtAmt(o.x.p)+'</em><i>＋</i></div></button>').join('')+'<button type="button" class="lf-item lf-custom" data-a="custom:'+k+'"><b>＋ 自己输入</b><small>'+(k==='food'?'想吃的别的东西':'想买的别的东西')+'</small></button></div>'}
-function lfMetaHTML(k){const g=lfData().items&&lfData().items[k];if(!g||!g.list||!g.list.length)return '<div class="lf-meta"><span>内置目录 · 输入想要的方向，点「前往页面」</span></div>';const p=P(g.pid);return '<div class="lf-meta"><span>AI 为 '+esc(p?p.name:'角色')+' 生成'+(g.q?' · '+esc(g.q):'')+'</span><button type="button" data-a="reset:'+k+'">恢复内置</button></div>'}
+function lfMetaHTML(k){const g=lfData().items&&lfData().items[k];if(!g||!g.list||!g.list.length)return '<div class="lf-meta"><span>If the future seems far away, hold me tight now</span></div>';const p=P(g.pid);return '<div class="lf-meta"><span>If the future seems far away, hold me tight now</span><button type="button" data-a="reset:'+k+'">恢复内置</button></div>'}
 function lfCarsHTML(){const e=lfEstimate();return '<div class="lf-cars">'+LF_CAR.map(c=>'<button type="button" class="'+(c.id===LFS.car?'on':'')+'" data-a="car:'+c.id+'"><b>'+c.n+'</b><small>¥'+fmtAmt(lfEstimate(c.id).price)+'</small></button>').join('')+'</div><div class="lf-est">约 '+e.km+' 公里 · 约 '+e.eta+' 分钟</div>'}
 function lfProfileHTML(){
   const u=lfUser(),bs=lfBound(),sign=String(u.sign||'').trim(),h=String(u.handle||'').trim(),shown=bs.slice(0,7);
@@ -6954,11 +6981,36 @@ function lfRcPrint(){
 }
 
 function lfFire(k){const r=$('#lf-root');if(!r)return;const b=document.createElement('button');b.dataset.a=k;b.style.display='none';r.appendChild(b);b.click();b.remove()}
+function lfIconsHTML(k){
+  const g=lfData().items&&lfData().items[k],gen=g&&g.list&&g.list.length;
+  return '<div class="lf-ico" aria-hidden="true">'
+   +'<svg viewBox="0 0 24 24"><path d="M12.5 4.5H7.5a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h9a3 3 0 0 0 3-3v-5"/><path d="M17.2 3.8a1.6 1.6 0 0 1 2.3 2.3l-6.6 6.6-3 .7.7-3z"/></svg>'
+   +'<svg viewBox="0 0 24 24"><path d="M4.5 11h15v9h-15z"/><path d="M3.5 7.5h17V11h-17z"/><path d="M12 7.5V20"/><path d="M12 7.5C10.8 4.2 7 4 7 6.2c0 1.2 1.6 1.3 5 1.3zm0 0c1.2-3.3 5-3.5 5-1.3 0 1.2-1.6 1.3-5 1.3z"/></svg>'
+   +'<svg viewBox="0 0 24 24"><path d="M14 4.5l7 6.3-7 6.2v-3.6c-4.800 0-8 1.600-10 5.600.4-5.800 3.600-9.700 10-10.500z"/></svg>'
+   +'<span class="lf-ico-r">'+(gen?'<button type="button" data-a="reset:'+k+'">恢复内置</button>':'')+'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></span></div>'
+}
 function lfMenuPop(){
-  const w=wlOf('me'),items=[{label:'钱包  '+fmtMoney(w.balance),run:()=>lfFire('wallet')}];
-  if(S.userProfiles.length>1)items.push({label:'切换用户',run:()=>lfFire('user')});
-  const p=P(lfPid());items.push({label:'切换聊天对象'+(p?'：'+p.name:''),run:()=>lfFire('pick')});
-  iosSheet({title:'生活',items});
+  const old=document.getElementById('lfauto');if(old)old.remove();
+  const el=document.createElement('div');el.id='lfauto';
+  const build=()=>{
+    const w=wlOf('me'),bs=lfBound(),cp=lfPid();
+    el.innerHTML='<div class="lfa-card"><div class="lfa-hd"><b>生活</b><button type="button" data-x>完成</button></div>'
+     +'<button type="button" class="lfa-row lfa-btn" data-w><b>钱包</b><span class="lfa-val">'+fmtMoney(w.balance)+'  ›</span></button>'
+     +'<div class="lfa-sub">切换用户</div>'
+     +S.userProfiles.map(u=>'<button type="button" class="lfa-row lfa-btn" data-u="'+esc(u.id)+'"><span class="lfa-who"><span class="lf-av">'+av(u)+'</span><b>'+esc(u.name||'未命名')+'</b></span><i class="lfa-ck'+(u.id===S.activeUserProfile?' on':'')+'"></i></button>').join('')
+     +'<div class="lfa-sub">聊天对象</div>'
+     +(bs.length?bs.map(p=>'<button type="button" class="lfa-row lfa-btn" data-c="'+esc(p.id)+'"><span class="lfa-who"><span class="lf-av">'+av(p)+'</span><b>'+esc(p.name)+'</b></span><i class="lfa-ck'+(p.id===cp?' on':'')+'"></i></button>').join(''):'<div class="lfa-empty">当前用户还没有绑定的角色</div>')+'</div>'};
+  build();document.body.appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('on')));
+  const close=()=>{el.classList.remove('on');setTimeout(()=>{el.remove();lifeRender()},230)};
+  el.addEventListener('click',e=>{
+    if(e.target===el||e.target.closest('[data-x]'))return close();
+    if(e.target.closest('[data-w]')){el.remove();return lfFire('wallet')}
+    const ub=e.target.closest('[data-u]');
+    if(ub){const u=S.userProfiles.find(x=>x.id===ub.dataset.u);if(!u||u.id===S.activeUserProfile)return;switchUser(u.id);S.me={name:u.name||'',handle:u.handle||'',bio:u.bio||'',avatar:u.avatar||''};LFS.pid='';saveNow();lifeRender();build();return}
+    const cb=e.target.closest('[data-c]');
+    if(cb){LFS.pid=cb.dataset.c;lifeRender();build()}
+  });
 }
 function lfAutoPop(){
   const old=document.getElementById('lfauto');if(old)old.remove();
@@ -6977,11 +7029,11 @@ function lfAutoPop(){
 function lifeRender(){
   const root=$('#lf-root');if(!root)return;const pid=lfPid(),p=P(pid),u=lfUser(),w=wlOf('me');
   let body='';
-  if(LFS.tab==='shop'||LFS.tab==='food')body='<div class="lf-bar"><input id="lf-q" class="lf-in" type="search" placeholder="'+(LFS.tab==='food'?'搜索，或写下想吃的方向':'搜索，或写下想买的方向')+'" value="'+esc(LFS.q)+'" autocomplete="off"><button type="button" class="lf-gen" data-a="gen:'+LFS.tab+'"'+(LFGEN?' disabled':'')+'>'+(LFGEN===LFS.tab?'生成中…':'前往页面')+'</button></div>'+lfMetaHTML(LFS.tab)+'<div id="lf-list">'+lfListHTML()+'</div>';
+  if(LFS.tab==='shop'||LFS.tab==='food')body='<div class="lf-bar"><input id="lf-q" class="lf-in" type="search" placeholder="'+'Send your requirement'+'" value="'+esc(LFS.q)+'" autocomplete="off"><button type="button" class="lf-gen" data-a="gen:'+LFS.tab+'"'+(LFGEN?' disabled':'')+'>'+(LFGEN===LFS.tab?'Searching':'Search')+'</button></div>'+lfIconsHTML(LFS.tab)+'<div id="lf-list">'+lfListHTML()+'</div>';
   else if(LFS.tab==='receipt')body=lfReceiptTab();
   else body=lfOrdersHTML(pid);
   root.innerHTML='<div class="lf">'+body+'</div>';
-  const hd=$('#lf-hdr');if(hd){const on=lfData().aiOn!==false;hd.innerHTML='<button type="button" class="lf-hb" data-a="bell" aria-label="角色自主购物"><svg viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15z"/><path d="M10 21.5h4"/></svg>'+(on?'':'<i class="lf-slash"></i>')+'</button><button type="button" class="lf-hb" data-a="menu" aria-label="菜单"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 12h11M13 17h7"/></svg></button>'}
+  const hd=$('#lf-hdr');if(hd){if(LFS.tab==='orders'){const on=lfData().aiOn!==false;hd.innerHTML='<button type="button" class="lf-hb" data-a="bell" aria-label="角色自主购物"><svg viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15z"/><path d="M10 21.5h4"/></svg>'+(on?'':'<i class="lf-slash"></i>')+'</button><button type="button" class="lf-hb" data-a="menu" aria-label="菜单"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 12h11M13 17h7"/></svg></button>'}else hd.innerHTML='<button type="button" class="lf-balb" data-a="wallet">'+fmtMoney(w.balance)+'</button><div class="lf-stk"><button type="button" data-a="user" aria-label="切换用户">'+av(u)+'</button><button type="button" data-a="pick" aria-label="切换角色"'+(p?'':' class="lf-empty"')+'>'+(p?av(p):'＋')+'</button></div>'}
   const tb=$('#lf-tabs');if(tb)tb.innerHTML=LF_TABS.map(t=>'<button type="button" class="'+(LFS.tab===t[0]?'on':'')+'" data-a="tab:'+t[0]+'">'+LF_IC[t[2]]+'<span>'+t[1]+'</span></button>').join('');
   if(LFS.open){const id=LFS.open;LFS.open='';lfDetail(id)}
   try{lfFloatSync()}catch(_){}
@@ -7115,8 +7167,7 @@ document.addEventListener('click',e=>{const c=e.target.closest('.lf-card');if(!c
   const onClick=e=>{
     const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,i=a.indexOf(':'),k=i<0?a:a.slice(0,i),v=i<0?'':a.slice(i+1);
     if(k==='tab'){LFS.tab=v;LFS.q='';lifeRender()}
-    else if(k==='pick'){const ps=lfBound();if(!ps.length)return toast('当前用户还没有绑定的角色');iosSheet({title:'切换角色',items:ps.map(x=>({label:x.name,av:av(x),on:x.id===lfPid(),run:()=>{LFS.pid=x.id;lifeRender()}}))})}
-    else if(k==='user'){iosSheet({title:'切换用户',items:S.userProfiles.map(u=>({label:u.name||'未命名',av:av(u),on:u.id===S.activeUserProfile,run:()=>{if(u.id===S.activeUserProfile)return;switchUser(u.id);S.me={name:u.name||'',handle:u.handle||'',bio:u.bio||'',avatar:u.avatar||''};LFS.pid='';saveNow();lifeRender();toast('已切换到 '+(u.name||'未命名'))}}))})}
+    else if(k==='pick'||k==='user')lfMenuPop();
     else if(k==='wallet'){WLS.owner='me';go('wallet')}
     else if(k==='bell')lfAutoPop();
     else if(k==='menu')lfMenuPop();
@@ -9256,6 +9307,59 @@ document.addEventListener('selectstart',function(e){var t=e.target&&e.target.nod
 [data-theme=dark] #lfauto .is-sw input:checked+i{background:#fff}
 [data-theme=dark] #lfauto .is-sw input:checked+i:after{background:#000}
 </style>
+<style id="v145-head">
+#v-life .bar{position:relative;padding:12px 16px 8px 20px}
+#v-life .bar .bk{position:absolute;left:0;top:0;bottom:0;width:56px;padding:0;opacity:0;z-index:3}
+#v-life .bar h2{margin:0;text-align:left;font-family:"Helvetica Neue","Avenir Next",-apple-system,"PingFang SC",sans-serif;font-size:40px;font-weight:300;letter-spacing:-.03em;line-height:1.15}
+#v-life .bar h2:after{top:6px}
+#v-life .lf-in{background:#fff;border:1px solid #d6d6db;color:#111}
+#v-life .lf-in::placeholder{color:#a1a1a6}
+[data-theme=dark] #v-life .lf-in{background:#000;border-color:#3a3a3c;color:#fff}
+#v-life .lf-meta{font-size:13px;color:#111;margin:2px 2px 12px}
+[data-theme=dark] #v-life .lf-meta{color:#fff}
+#v-life .lf-meta button{color:#8e8e93}
+</style>
+<style id="v146-head">
+#v-life .bar h2{font-size:26px;font-weight:300;letter-spacing:-.02em;white-space:nowrap}
+#v-life .bar h2:after{content:none!important}
+.lf-ico{display:flex;align-items:center;gap:18px;margin:12px 2px 14px;color:#242933}
+.lf-ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.lf-ico-r{margin-left:auto;display:flex;align-items:center;gap:12px}
+.lf-ico-r svg{fill:currentColor;stroke:none;width:22px}
+.lf-ico-r button{border:0;background:none;color:#8e8e93;font-size:12px;text-decoration:underline;padding:0}
+[data-theme=dark] .lf-ico{color:#fff}
+#lfauto .lfa-btn{width:100%;border-width:0 0 .5px;border-style:solid;border-color:rgba(120,120,128,.25);background:none;color:inherit;font:inherit;text-align:left}
+#lfauto .lfa-val{font-size:15px;color:#8e8e93;font-weight:500}
+#lfauto .lfa-ck{flex:none;position:relative;width:22px;height:22px;box-sizing:border-box;border-radius:50%;border:1.5px solid #c7c7cc}
+#lfauto .lfa-ck.on{background:#111;border-color:#111}
+#lfauto .lfa-ck.on:after{content:"";position:absolute;left:6px;top:2.5px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+[data-theme=dark] #lfauto .lfa-ck{border-color:#48484a}
+[data-theme=dark] #lfauto .lfa-ck.on{background:#fff;border-color:#fff}
+[data-theme=dark] #lfauto .lfa-ck.on:after{border-color:#000}
+</style>
+<style id="v147-css">
+#v-life .bar{padding-left:32px;padding-right:32px}
+#v-life .lf-hdr .lf-hb:last-child{margin-right:-8px}
+.cx-card label.cx-lb{display:flex;align-items:center;justify-content:space-between}
+.cx-lb button{padding:3px 14px;border:1px solid #dcdce0;border-radius:14px;background:#fff;color:#111;font-size:13px}
+#cxfull{position:fixed;inset:0;z-index:10200;height:100vh;height:100dvh;display:flex;flex-direction:column;background:#fff;color:#111}
+#cxfull .cxf-bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 12px) 20px 10px;border-bottom:.5px solid #e4e4e7}
+#cxfull .cxf-bar b{font-size:17px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#cxfull .cxf-bar button{flex:none;border:0;background:#111;color:#fff;border-radius:16px;padding:6px 18px;font-size:14px;font-weight:600}
+#cxfull .cxf-ta{flex:1;min-height:0;width:100%;box-sizing:border-box;border:0;outline:0;resize:none;padding:16px 20px calc(env(safe-area-inset-bottom,0px) + 16px);background:#fff;color:#111;font-family:ui-monospace,Menlo,monospace;font-size:14px;line-height:1.6;white-space:pre;overflow:auto;-webkit-overflow-scrolling:touch}
+#cxexp{position:fixed;inset:0;z-index:10200;background:rgba(0,0,0,.45);display:grid;place-items:center;opacity:0;transition:opacity .22s ease}
+#cxexp.on{opacity:1}
+#cxexp .cxe-card{width:min(86vw,320px);box-sizing:border-box;padding:18px 20px 6px;border-radius:16px;background:#fff;color:#111;transform:scale(.96);transition:transform .22s ease}
+#cxexp.on .cxe-card{transform:none}
+#cxexp .cxe-t{font-size:17px;font-weight:700}
+#cxexp .cxe-s{margin:4px 0 10px;font-size:12px;color:#8e8e93;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#cxexp .cxe-row{display:flex;align-items:center;justify-content:space-between;width:100%;padding:15px 0;border:0;border-top:.5px solid rgba(120,120,128,.25);background:none;color:#111;font-size:16px;text-align:left}
+#cxexp .cxe-row small{font-size:12px;color:#8e8e93}
+#cxexp .cxe-cancel{justify-content:center;color:#8e8e93}
+</style>
+
+
+
 
 
 
