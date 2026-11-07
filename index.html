@@ -4787,6 +4787,42 @@ function showRecalled(m){const me=m.role==='user',old=document.getElementById('r
 function recalledMenu(i){const h=S.chats[cur],m=h&&h[i];if(!m)return;showMsgMenu([[{label:'查看被撤回的内容',icon:'eye',run:()=>showRecalled(m)}],[{label:'删除这条撤回提示',icon:'trash',danger:1,run:()=>{h.splice(i,1);save();draw()}}]])}
 $('#msgs').addEventListener('pointerdown',e=>{const r=e.target.closest('.r,.recalled-row');if(!r||r.dataset.i===undefined||e.target.closest('.av')||e.target.closest('button'))return;msgLongPressed=false;const i=+r.dataset.i,isRc=r.classList.contains('recalled-row');msgPressTimer=setTimeout(()=>{msgLongPressed=true;isRc?recalledMenu(i):messageMenu(i)},520)});
 ['pointerup','pointercancel','pointerleave'].forEach(ev=>$('#msgs').addEventListener(ev,()=>{if(msgPressTimer)clearTimeout(msgPressTimer);msgPressTimer=null}));
+
+(function(){
+  const box=$('#msgs');let st=null;
+  box.addEventListener('touchstart',e=>{
+    if(multiSelectMode||e.touches.length!==1){st=null;return}
+    const r=e.target.closest('.r');
+    if(!r||r.dataset.i===undefined||r.classList.contains('recalled-row')||e.target.closest('button,input,textarea,[data-thought-i]')){st=null;return}
+    st={r,x:e.touches[0].clientX,y:e.touches[0].clientY,lock:0,ready:false,ic:null,pos:r.style.position}
+  },{passive:true});
+  box.addEventListener('touchmove',e=>{
+    if(!st)return;const t=e.touches[0],dx=t.clientX-st.x,dy=t.clientY-st.y;
+    if(!st.lock){
+      if(Math.abs(dx)<8&&Math.abs(dy)<8)return;
+      st.lock=(dx<0&&Math.abs(dx)>Math.abs(dy)*1.3)?1:2;
+      if(st.lock===1){
+        if(msgPressTimer){clearTimeout(msgPressTimer);msgPressTimer=null}
+        const r=st.r;if(getComputedStyle(r).position==='static')r.style.position='relative';
+        st.ic=document.createElement('span');st.ic.className='sq-ic';
+        st.ic.innerHTML='<svg viewBox="0 0 24 24"><path d="M10 7L4 12l6 5"/><path d="M4 12h9a7 7 0 0 1 7 7"/></svg>';
+        r.appendChild(st.ic);r.style.transition='none';
+      }
+    }
+    if(st.lock!==1)return;
+    st.r.style.transform='translateX('+Math.max(-76,dx*.7)+'px)';
+    const rd=dx<=-64;
+    if(rd!==st.ready){st.ready=rd;st.ic.classList.toggle('on',rd);if(rd&&navigator.vibrate){try{navigator.vibrate(8)}catch(_){}}}
+  },{passive:true});
+  const end=()=>{
+    if(!st)return;const s=st;st=null;if(s.lock!==1)return;
+    const r=s.r;r.style.transition='transform .22s ease';r.style.transform='';
+    setTimeout(()=>{r.style.transition='';r.style.position=s.pos||'';if(s.ic)s.ic.remove()},240);
+    if(s.ready){const m=(S.chats[cur]||[])[+r.dataset.i];if(m&&!m.narr&&!m.recalled)setQuote(m)}
+  };
+  box.addEventListener('touchend',end);box.addEventListener('touchcancel',end);
+})();
+
 $('#msgs').onclick=e=>{
  const ms=e.target.closest('[data-ms-all],[data-ms-forward],[data-ms-delete],[data-ms-cancel]');if(ms){e.preventDefault();e.stopPropagation();if(ms.hasAttribute('data-ms-cancel'))exitMultiSelect();else if(ms.hasAttribute('data-ms-all')){const h=S.chats[cur]||[];selectedMsgIndices=new Set(h.map((m,i)=>m.recalled?-1:i).filter(i=>i>=0));draw()}else if(ms.hasAttribute('data-ms-forward'))forwardSelected();else if(ms.hasAttribute('data-ms-delete'))deleteSelected();return}
  const thought=e.target.closest('[data-thought-i]');if(thought){const m=S.chats[cur][+thought.dataset.thoughtI];if(m){ipodOpen(+thought.dataset.thoughtI)}return}
@@ -4912,7 +4948,7 @@ async function gen(){
   const p=P(cur),h=S.chats[cur];setBusy(1);const el=bub({role:'assistant',content:'···'},-1,1,0);
   try{
     const basePrompt=build(p,h,true,{pre:1});if((S.cfg.memoryMode||'traditional')==='vector'){try{const vm=await vectorMemoryPrompt(p,h);if(vm)basePrompt.push({role:'system',content:vm})}catch(memErr){toast('向量记忆检索失败，本次继续普通聊天：'+memErr.message)}}const prompt=basePrompt.concat([{role:'system',content:'在保持角色人设和自然对话的前提下，请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条独立聊天消息","第二条独立聊天消息"],"reply":"兼容字段","thought":"角色此刻未说出口的内心想法","image_prompt":""}。messages 是角色按真实聊天节奏连续发送的消息数组：结合语境，适合分开发的内容就拆成 2-5 条短消息，每条只放一个自然聊天气泡；不要把几句话用换行或一大段塞进同一个气泡。只有确实一句就能说清时才只输出一条。不要机械地每次都拆成多条。reply 可作为 messages 的兼容备用字段。thought 是简短内心活动。若用户明确要求生成/发图片，image_prompt 填画面描述，否则留空。如果某条回复是针对对话里某一条具体消息的回应（用户说的或你自己之前说的都可以），可以偶尔（不要每条都用）把这一条写成对象 {"text":"回复内容","quote":"被引用消息的原文片段，原样摘抄，不超过30字"}，其余条目仍写成普通字符串。'},{role:'system',content:TRF_PROMPT()},{role:'system',content:LIFE_PROMPT()}].concat([{role:'system',content:SONG_PROMPT}]).concat(avPrompt(cur)).concat((window.__callPrompt&&window.__callPrompt(cur))?[{role:'system',content:window.__callPrompt(cur)}]:[]).concat(CC(cur).narrOn?[{role:'system',content:NARR_PROMPT}]:[]).concat(CC(cur).trOn?[{role:'system',content:trMsgPrompt(CC(cur).trTo||'简体中文')}]:[]));
-    {const _t=prTip(p);if(_t)prompt.push({role:'system',content:_t})}prompt.push({role:'system',content:FMT_RULE});if(redoNote)prompt.push({role:'system',content:redoNote});if(h.length&&h[h.length-1].role==='assistant')prompt.push({role:'user',content:proNudge(p,0,'cont')});{const lm=h[h.length-1];if(lm&&lm.role==='user'&&lm.t&&Date.now()-lm.t>=3600000)prompt.push({role:'user',content:gapNote(lm.t)});else{const _g=gapOpenNote(h);if(_g)prompt.push({role:'user',content:_g})}}window.__lastPrompt={t:Date.now(),id:p.id,msgs:prompt};const raw=stripTs(await ask(prompt,null,undefined,chatCfg(p.id)));const data=parseAI(raw)
+    {const _t=prTip(p);if(_t)prompt.push({role:'system',content:_t})}prompt.push({role:'system',content:ANTI_ECHO});prompt.push({role:'system',content:FMT_RULE});if(redoNote)prompt.push({role:'system',content:redoNote});if(h.length&&h[h.length-1].role==='assistant')prompt.push({role:'user',content:proNudge(p,0,'cont')});{const lm=h[h.length-1];if(lm&&lm.role==='user'&&lm.t&&Date.now()-lm.t>=3600000)prompt.push({role:'user',content:gapNote(lm.t)});else{const _g=gapOpenNote(h);if(_g)prompt.push({role:'user',content:_g})}}window.__lastPrompt={t:Date.now(),id:p.id,msgs:prompt};const raw=stripTs(await ask(prompt,null,undefined,chatCfg(p.id)));const data=parseAI(raw)
     let replyQuotes=[],replies=[],replyNarr=[],replyTr=[];if(Array.isArray(data.messages)){data.messages.forEach(x=>{const isO=x&&typeof x==='object',nr=isO&&x.narr?String(x.narr).trim():'',tx=nr||String(isO?(x.text||x.content||x.reply||''):(x||'')).trim();if(tx){replies.push(tx);replyQuotes.push(isO&&!nr?String(x.quote||'').trim():'');replyNarr.push(!!nr);replyTr.push(isO&&!nr?String(x.tr||x.translation||'').trim():'')}})}if(!replies.length){const out=String(data.reply||raw).trim();replies=out.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);if(replies.length===1&&out.length>180){const parts=out.match(/[^。！？!?]+[。！？!?]?/g)||[out];if(parts.length>=3)replies=parts.map(x=>x.trim()).filter(Boolean)}}if(!replies.length)replies=[String(data.reply||raw).trim()];if(el&&el.parentNode)el.remove();const thoughtTr=String(data.thought_tr||data.thoughtTr||'').trim();const songObj=(()=>{const x=data.song;if(!x||typeof x!=='object')return null;const t=String(x.title||'').trim();return t?{title:t,artist:String(x.artist||'').trim(),lyric:String(x.lyric||'').trim(),tag:String(x.tag||'').trim()}:null})();for(let k=0;k<replies.length;k++)if(replyNarr[k])replies[k]=await narrCN(replies[k]);const replyChatId=cur;let thoughtDone=0;for(let idx=0;idx<replies.length;idx++){if(cur!==replyChatId)break;if(idx>0){await new Promise(resolve=>setTimeout(resolve,520+Math.floor(Math.random()*420)));}const isN=!!replyNarr[idx];h.push({role:'assistant',content:replies[idx],...(isN?{narr:1}:((!thoughtDone&&(thoughtDone=1))?{thought:String(data.thought||'').trim(),...(thoughtTr&&thoughtTr!==String(data.thought||'').trim()?{thoughtTr}:{}),...(songObj?{song:songObj}:{})}:{thought:''})),t:Date.now(),...(isN?{}:findQuote(h,replyQuotes[idx])),...(!isN&&replyTr[idx]?{tr:replyTr[idx],trLang:CC(cur).trTo||'简体中文'}:{})});save();draw();}trfApplyAI(h,data);try{lifeApplyAI(h,data)}catch(_){}try{avApplyAI(replyChatId,data)}catch(_){}try{window.__callApplyAI&&window.__callApplyAI(replyChatId,data)}catch(_){}if(S.cfg.imageEnabled&&String(data.image_prompt||'').trim()){try{const im=await generateImage(String(data.image_prompt).trim());h.push({role:'assistant',content:'',image:im,thought:'我把刚才描述的画面生成出来了。',t:Date.now()})}catch(imgErr){h.push({role:'assistant',content:'图片生成失败：'+imgErr.message,t:Date.now()})}}save();try{await maybeAutoSummarize(cur)}catch(_){}
   }catch(e){el.textContent='请求失败：'+e.message;el.classList.add('err');setBusy(0);return}
   setBusy(0);draw();
@@ -5453,6 +5489,7 @@ function notifyMsg(pid,m){
 }
 {const g0=gen;gen=async function(){const pid=cur,n0=(S.chats[pid]||[]).length;await g0.apply(this,arguments);const h=S.chats[pid]||[],m=h[h.length-1];if(h.length>n0&&m&&m.role==='assistant'){notifyMsg(pid,m);try{dyAutoNote(pid)}catch(e){}}}}
 /* ===== v9.57 主动发消息 / 接着说 ===== */
+const ANTI_ECHO='【不要复述用户的话，每次回复都必须遵守】1. 不要把用户刚说的话原样重复、换个说法重述，也不要用「你是说……」「你刚才说……」「也就是说……」「所以你……」这类句式把用户的意思再总结一遍；用户自己知道自己说了什么。2. 不要先复述或确认用户的话再回答，第一句就给出你自己的反应：想法、情绪、新信息、追问、动作，或把事情往前推一步。3. 只有确有必要时才引用用户的原话，比如反驳、翻旧账、接梗，而且最多引用几个字，并立刻带出你自己的新内容。4. 每条回复都要比用户的话多提供一点新东西（观点、细节、感受、问题、话题推进），不要只是附和、同义反复，或把对方当镜子照回去。5. 对你自己说过的话同理：不要换种说法重复自己，也不要把旁白里已经写出的动作再用台词讲一遍。';
 const FMT_RULE='【输出格式硬性规定，每次都必须遵守】1. 只输出一个 JSON 对象，前后不要有任何文字、解释或 Markdown 代码块（不要出现 ```）。2. 必须有 messages 数组：每个元素是一个聊天气泡，写成字符串，或对象（{"text":"内容","quote":"引用原文"}、带译文的 {"text":..,"tr":..}、旁白 {"narr":"内容"}，对象写法以其他提示的要求为准）；不要把多个气泡塞进同一个字符串，也不要用换行硬拆。3. 字符串里的双引号必须转义，换行写成 \\n，括号和引号必须闭合。4. messages 里只放角色说的话（开启旁白时的旁白除外），不要出现字段名、系统提示、括号里的格式说明，也不要加「角色名：」前缀。5. 旁白（narr）一律使用简体中文，即使角色的输出语种是日语、英语等外语也不例外，旁白不翻译。6. 其他提示要求的可选字段（thought、narr、song、call、tr、image_prompt 等）仍按各自要求放在对应位置，没有就留空或不写。7. 始终保持角色人设，不要跳出角色去解释格式。';
 function parseAI(raw){raw=String(raw||'');const t=raw.replace(/^\s*```(?:json)?\s*/i,'').replace(/\s*```\s*$/,'').trim();try{return JSON.parse(t)}catch(_){}const a=t.indexOf('{'),b=t.lastIndexOf('}');if(a>=0&&b>a){try{return JSON.parse(t.slice(a,b+1))}catch(_){}}const m=t.match(/"messages"\s*:\s*\[([\s\S]*?)(\]|$)/);if(m&&!/\{/.test(m[1])){const arr=[...m[1].matchAll(/"((?:[^"\\]|\\.)*)"/g)].map(x=>{try{return JSON.parse('"'+x[1]+'"')}catch(_){return x[1]}}).filter(Boolean);if(arr.length){const th=t.match(/"thought"\s*:\s*"((?:[^"\\]|\\.)*)"/);return{messages:arr,thought:th?th[1]:''}}}return{reply:raw,thought:''}}
 async function narrCN(t){t=String(t||'');if(!(/[\u3040-\u30ff\uac00-\ud7af]/.test(t)||!/[\u4e00-\u9fff]/.test(t)))return t;try{const o=await ask([{role:'system',content:'把用户给的旁白翻译成简体中文，保持第三人称、每句的主语、语气和长度，不要省略主语，只输出译文，不加引号、括号和解释。'},{role:'user',content:t}],null);const r=String(o||'').trim();return r||t}catch(_){return t}}
@@ -9357,6 +9394,13 @@ document.addEventListener('selectstart',function(e){var t=e.target&&e.target.nod
 #cxexp .cxe-row small{font-size:12px;color:#8e8e93}
 #cxexp .cxe-cancel{justify-content:center;color:#8e8e93}
 </style>
+<style id="v148-swipe">
+#msgs .r{touch-action:pan-y}
+.sq-ic{position:absolute;right:-46px;top:50%;width:30px;height:30px;margin-top:-15px;border-radius:50%;background:#e8e8ec;color:#8e8e93;display:grid;place-items:center;pointer-events:none;transform:scale(.85);transition:background .15s,color .15s,transform .15s}
+.sq-ic.on{background:#111;color:#fff;transform:scale(1)}
+.sq-ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
 
 
 
