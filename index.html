@@ -2269,7 +2269,7 @@ button.feed-follow-plus{padding:0;cursor:pointer}
   <div id="msgs"></div>
   <div id="qbar"></div>
   <div id="inp">
-    <div id="pm"><button id="redo">重回</button><button id="clear">清空对话</button><button id="pm-image" type="button">发送图片</button><button id="pm-transfer" type="button">转账</button><button id="pm-voice" type="button">发送语音（模拟）</button><button id="pm-call" type="button">语音通话</button><button id="pm-calltog" type="button">对方来电：开</button><button id="pm-narr" type="button" style="display:none">发送旁白</button><input id="chat-image-file" type="file" accept="image/*" hidden></div>
+    <div id="pm"><button id="redo">重回</button><button id="clear">清空对话</button><button id="pm-image" type="button">发送图片</button><button id="pm-transfer" type="button">转账</button><button id="pm-kin" type="button">赠送亲属卡</button><button id="pm-voice" type="button">发送语音（模拟）</button><button id="pm-call" type="button">语音通话</button><button id="pm-calltog" type="button">对方来电：开</button><button id="pm-narr" type="button" style="display:none">发送旁白</button><input id="chat-image-file" type="file" accept="image/*" hidden></div>
     <div id="sp"></div>
     <button id="plus" data-ic="pl" aria-label="菜单"></button>
     <div class="ib"><textarea id="ta" rows="1" placeholder="输入一条信息"></textarea><button id="smile" type="button" aria-label="表情包"></button><button id="send" type="button" aria-label="发送 / AI 回复"></button></div>
@@ -2376,7 +2376,13 @@ button.feed-follow-plus{padding:0;cursor:pointer}
       <div class="mem-field"><label for="c-embedding-model-select">可选模型</label><select id="c-embedding-model-select"><option value="">Fetch models first</option></select></div>
       <p class="mem-status" id="embedding-models-result">填写向量接口地址和 Key 后点击「Fetch Models列表」。模型列表能被获取，不代表每个模型都支持 Embedding；最终以实际接口响应为准。</p>
     </div>
-    <div class="mem-section"><div class="mem-section-title">检索范围</div><p class="note" style="margin-top:3px">每次回复最多取回多少条相关记忆。数量越大，带入提示词的内容通常越多。</p><div class="mem-field"><label for="c-memory-topk">每次检索条数（1–12）</label><input id="c-memory-topk" type="number" min="1" max="12" value="5"></div></div>
+    <div class="mem-section" id="vector-retrieval-card"><div class="mem-section-title">检索范围</div><p class="note" style="margin-top:3px">每次回复最多取回多少条相关记忆，以及相似度达到多少才会被取回。</p>
+      <div class="mem-grid">
+        <div class="mem-field"><label for="c-memory-topk">每次检索条数（1–12）</label><input id="c-memory-topk" type="number" inputmode="numeric" min="1" max="12" step="1" value="12"></div>
+        <div class="mem-field"><label for="c-memory-minscore">相似度阈值（0.05–0.95）</label><input id="c-memory-minscore" type="number" inputmode="decimal" min="0.05" max="0.95" step="0.05" value="0.4"></div>
+      </div>
+      <p class="mem-status">阈值越高越严格，不相关的记忆不会被带入；太高则可能一条都取不到。text-embedding-3-small 下相关内容多在 0.3–0.5，建议 0.35–0.45。</p>
+    </div>
     <button class="btn fill mem-primary" id="save-memory-settings">保存记忆Settings</button>
   </div>
   <div class="body settings-sub" id="settings-profile" style="display:none">
@@ -2446,7 +2452,7 @@ se:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',mn:'<path d="M4
 const ic=(k,f)=>`<svg viewBox="0 0 24 24" fill="${f?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${I[k]}</svg>`;
 const BADGE='<svg class="bd" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" style="fill:var(--ink)"/><path d="M7.5 12.5l3 3 6-6.5" fill="none" style="stroke:var(--bg)" stroke-width="2.2"/></svg>';
 
-const DEF=()=>({cfg:{base:'https://api.openai.com/v1',key:'',model:'gpt-4o-mini',secondaryBase:'',secondaryKey:'',secondaryModel:'',temp:.8,hist:30,stream:true,memoryMode:'traditional',embeddingBase:'',embeddingKey:'',embeddingModel:'text-embedding-3-small',memoryTopK:5,imageEnabled:false,imageProvider:'gpt',imageBase:'https://api.openai.com/v1',imageKey:'',imageModel:'gpt-image-1',gptPositive:'',gptNegative:'',gptDetail:'',gptSize:'1024x1024',gptQuality:'auto',gptStyle:'',gptN:1,naiBase:'https://image.novelai.net',naiKey:'',naiModel:'nai-diffusion-4-full',naiPositive:'',naiNegative:'',naiDetail:'',naiWidth:832,naiHeight:1216,naiScale:5,naiSteps:28,naiSampler:'k_euler_ancestral',naiCfgRescale:0,naiSeed:'',naiSm:false,naiSmDyn:false,voiceEnabled:false,voiceBase:'https://api.minimax.io/v1',voiceKey:'',voiceGroupId:'',voiceModel:'speech-02-turbo',voiceId:'female-shaonv',voiceSpeed:1,voiceVol:1,voicePitch:0},
+const DEF=()=>({cfg:{base:'https://api.openai.com/v1',key:'',model:'gpt-4o-mini',secondaryBase:'',secondaryKey:'',secondaryModel:'',temp:.8,hist:30,stream:true,memoryMode:'traditional',embeddingBase:'',embeddingKey:'',embeddingModel:'text-embedding-3-small',memoryTopK:12,memoryMinScore:0.4,imageEnabled:false,imageProvider:'gpt',imageBase:'https://api.openai.com/v1',imageKey:'',imageModel:'gpt-image-1',gptPositive:'',gptNegative:'',gptDetail:'',gptSize:'1024x1024',gptQuality:'auto',gptStyle:'',gptN:1,naiBase:'https://image.novelai.net',naiKey:'',naiModel:'nai-diffusion-4-full',naiPositive:'',naiNegative:'',naiDetail:'',naiWidth:832,naiHeight:1216,naiScale:5,naiSteps:28,naiSampler:'k_euler_ancestral',naiCfgRescale:0,naiSeed:'',naiSm:false,naiSmDyn:false,voiceEnabled:false,voiceBase:'https://api.minimax.io/v1',voiceKey:'',voiceGroupId:'',voiceModel:'speech-02-turbo',voiceId:'female-shaonv',voiceSpeed:1,voiceVol:1,voicePitch:0},
   me:{name:'我',handle:'me',bio:'',avatar:''},
   personas:[{id:'p1',name:'默认',handle:'',bio:'',prompt:'你是一个温柔、简洁的聊天伙伴，用自然的口语回复。',greet:'',avatar:''}],
   worlds:[],apiPresets:[],chats:{},posts:[],memo:'',memoImage:'',memoImageTitle:'备忘录图片',desktop:{wallpaper:'',icons:{},widgets:[],order:{}},last:'',theme:'light',stickers:[],cc:{},themes:[],globalPrompt:'',userProfiles:[],activeUserProfile:'',diaries:[],postDecorations:[],
@@ -2854,7 +2860,8 @@ function build(p,h,split,opt){
   if(manualMem.length)sys+='\n\n【传统记忆】\n'+manualMem.join('\n');
   if(!(opt&&opt.noTr)&&cc.trOn&&(cc.trOut||[]).length)sys+='\n\n【输出语言】请用以下语言回复用户：'+cc.trOut.join('、')+'。'+(cc.trOut.length>1?'可以在同一条消息里自然地混用这些语言。':'')+'不要在回复里自行附带翻译或括号注释。';
   /* L2/L3 换段才变：最近几张纸条 */
-  const notes=(cc.memoryEntries||[]).filter(m=>m&&String(m.text||'').trim()).slice(-NOTE_KEEP).map(m=>{const d=m.createdAt?new Date(m.createdAt).toLocaleDateString('zh-CN'):'';return(d?'['+d+'] ':'')+String(m.text).trim().slice(0,NOTE_CHARS)});
+  const _ne=(cc.memoryEntries||[]).filter(m=>m&&String(m.text||'').trim()),_old=_ne.filter(m=>m.merged),notes=_ne.filter(m=>!m.merged).slice(-NOTE_KEEP).map(m=>{const d=m.createdAt?new Date(m.createdAt).toLocaleDateString('zh-CN'):'';return(d?'['+d+'] ':'')+String(m.text).trim().slice(0,NOTE_CHARS)});
+  if(_old.length)sys+='\n\n【早期记忆（旧纸条合并）】\n'+_old.map(m=>String(m.text).trim()).join('\n---\n').slice(-2400);
   if(notes.length)sys+='\n\n【最近的纸条】\n'+notes.join('\n---\n').slice(-NOTE_TOTAL);
   {const offm=offlineCtx(p);if(offm)sys+='\n\n'+offm}
   /* L4/L5 尾巴：每轮可能变，放缓存断点之后 */
@@ -4762,7 +4769,7 @@ function bub(m,i,first,last){
   r.className='r '+(me?'me':'ai')+(first?' first':'');if(i>=0)r.dataset.i=i;
   r.innerHTML=`<div class="av" ${!me&&i>=0?'data-thought-i="'+i+'" title="查看角色内心想法"':''}>${av(u)}</div><div class="col">${first&&!me?`<div class="nm">${esc((CC(cur).roleNote||'').trim()||u.name)}</div>`:''}${quoteHTML(m,me)}<div class="bw"><div class="m"></div>${last&&m.t&&CC(cur).tsMode!=='wx'?`<span class="tm">${hm(m.t)}</span>`:''}</div></div>`;
   const el=r.querySelector('.m'),sk=m.stk&&S.stickers.find(x=>x.id===m.stk);
-  if(m.fcard){el.classList.add('fc-msg');el.innerHTML=fmCardHTML(m.fcard)}else if(m.life){el.classList.add('lf-msg');['background:none','padding:0','border:0','border-radius:0','box-shadow:none','outline:0'].forEach(d=>{const[a,b]=d.split(':');el.style.setProperty(a,b,'important')});el.innerHTML=lifeCardHTML(m)}else if(m.transfer){el.classList.add('tf-msg');el.innerHTML=trfCardHTML(m)}else if(m.image){el.classList.add('image-msg');el.innerHTML=`${m.content?`<div>${esc(m.content)}</div>`:''}<img src="${m.image}" alt="聊天图片" style="display:block;max-width:min(240px,62vw);max-height:320px;object-fit:contain;border-radius:12px;margin-top:${m.content?'6px':'0'}">`}else if(sk){el.classList.add('stk');el.innerHTML=`<img src="${sk.src}" alt="">`}else if(m.audio){el.classList.add('voice-msg');el.innerHTML=`<button type="button" class="voice-play" data-play-audio="${i}" aria-label="展开或收起语音文字"><span class="voice-arrow" aria-hidden="true"></span><span class="voice-wave" aria-hidden="true">${'<i></i>'.repeat(9)}</span></button><span class="voice-transcript">${esc(m.content||'语音消息')}</span>`;el.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();el.classList.toggle('show-text')})}else {el.textContent=m.content}if(CC(cur).trOn&&m.trOpen&&m.role==='assistant'&&!m.image&&!m.audio&&!sk)r.querySelector('.col').insertAdjacentHTML('beforeend',trBoxHTML(m));$('#msgs').appendChild(r);$('#msgs').scrollTop=1e9;return el;
+  if(m.fcard){el.classList.add('fc-msg');el.innerHTML=fmCardHTML(m.fcard)}else if(m.life){el.classList.add('lf-msg');['background:none','padding:0','border:0','border-radius:0','box-shadow:none','outline:0'].forEach(d=>{const[a,b]=d.split(':');el.style.setProperty(a,b,'important')});el.innerHTML=lifeCardHTML(m)}else if(m.kin){el.classList.add('kn-msg');el.innerHTML=kinMsgHTML(m)}else if(m.transfer){el.classList.add('tf-msg');el.innerHTML=trfCardHTML(m)}else if(m.image){el.classList.add('image-msg');el.innerHTML=`${m.content?`<div>${esc(m.content)}</div>`:''}<img src="${m.image}" alt="聊天图片" style="display:block;max-width:min(240px,62vw);max-height:320px;object-fit:contain;border-radius:12px;margin-top:${m.content?'6px':'0'}">`}else if(sk){el.classList.add('stk');el.innerHTML=`<img src="${sk.src}" alt="">`}else if(m.audio){el.classList.add('voice-msg');el.innerHTML=`<button type="button" class="voice-play" data-play-audio="${i}" aria-label="展开或收起语音文字"><span class="voice-arrow" aria-hidden="true"></span><span class="voice-wave" aria-hidden="true">${'<i></i>'.repeat(9)}</span></button><span class="voice-transcript">${esc(m.content||'语音消息')}</span>`;el.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();el.classList.toggle('show-text')})}else {el.textContent=m.content}if(CC(cur).trOn&&m.trOpen&&m.role==='assistant'&&!m.image&&!m.audio&&!sk)r.querySelector('.col').insertAdjacentHTML('beforeend',trBoxHTML(m));$('#msgs').appendChild(r);$('#msgs').scrollTop=1e9;return el;
 }
 function applyChatWall(){const v=$('#v-chat');if(!v)return;const u=(CC(cur).wall||S.chatWall||'');v.style.backgroundImage=u?`url("${String(u).replace(/"/g,'%22')}")`:'';v.style.backgroundSize='cover';v.style.backgroundPosition='center';v.classList.toggle('has-wall',!!u)}
 function pickWall(cb){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=()=>{const f=i.files&&i.files[0];if(!f)return;const im=new Image();im.onload=()=>{const k=Math.min(1,1400/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.82))};im.src=URL.createObjectURL(f)};i.click()}
@@ -4840,13 +4847,14 @@ function chatRedo(i,note){
   }else toast('前面没有可供重回的用户消息');
 }
 
-function quoteText(m){return m.image?'[图片]'+(m.content?' '+m.content:''):m.stk?'[表情包]':m.audio?'[语音] '+(m.content||''):m.transfer?'[转账]':m.life?(m.life.cp?'[兑换券]':'[订单]'):(m.content||'')}
-function quoteHTML(m,me){if(!m.quote||!m.quote.text)return'';let qn='';try{const qr=m.quote.role;qn=qr==='user'?(who('me')||{}).name:(qr?(P(cur)||{}).name:'')}catch(e){}const d='<i class="qt-d"></i>',t='<span class="qt-t" data-qn="'+esc(qn?qn+'：':'')+'">'+esc(m.quote.text)+'</span>';return '<div class="qt" data-qt="'+(+m.quote.t||0)+'">'+(me?t+d:d+t)+'</div>'}
+function quoteText(m){return m.image?'[图片]'+(m.content?' '+m.content:''):m.stk?'[表情包]':m.audio?'[语音] '+(m.content||''):m.transfer?'[转账]':m.kin?'[亲属卡]':m.life?(m.life.cp?'[兑换券]':'[订单]'):(m.content||'')}
+function liveQuote(q,cid){if(!q||!q.text)return '';const t=+q.t||0;if(!t)return q.text;try{const o=(S.chats[cid||cur]||[]).find(x=>x&&(+x.t||0)===t&&x.role===q.role&&!x.recalled);if(o){const v=quoteText(o).replace(/\s+/g,' ').trim().slice(0,80);if(v)return v}}catch(e){}return q.text}
+function quoteHTML(m,me){if(!m.quote||!m.quote.text)return'';let qn='';try{const qr=m.quote.role;qn=qr==='user'?(who('me')||{}).name:(qr?(P(cur)||{}).name:'')}catch(e){}const d='<i class="qt-d"></i>',t='<span class="qt-t" data-qn="'+esc(qn?qn+'：':'')+'">'+esc(liveQuote(m.quote))+'</span>';return '<div class="qt" data-qt="'+(+m.quote.t||0)+'">'+(me?t+d:d+t)+'</div>'}
 function setQuote(m){pendingQuote={chat:cur,role:m.role,text:quoteText(m).replace(/\s+/g,' ').trim().slice(0,80),t:m.t||0};renderQBar();$('#ta').focus()}
 function takeQuote(){const q=pendingQuote&&pendingQuote.chat===cur?{quote:{role:pendingQuote.role,text:pendingQuote.text,t:pendingQuote.t}}:{};pendingQuote=null;renderQBar();return q}
 function renderQBar(){const b=document.getElementById('qbar');if(!b)return;if(pendingQuote&&pendingQuote.chat!==cur)pendingQuote=null;if(!pendingQuote){b.classList.remove('on');b.innerHTML='';return}b.classList.add('on');b.innerHTML='<span class="qb-t">'+(pendingQuote.role==='user'?'引用我的消息：':'引用 '+esc((P(cur)||{}).name||'')+'：')+esc(pendingQuote.text)+'</span><button type="button" id="qb-x" aria-label="取消引用">×</button>';document.getElementById('qb-x').onclick=()=>{pendingQuote=null;renderQBar()}}
 function findQuote(h,sn){sn=String(sn||'').trim();if(sn.length<2)return{};for(let k=h.length-1;k>=0;k--){const x=h[k],c=(x.content||'').trim();if(x.recalled||!c)continue;if(c.includes(sn)||(c.length>=2&&sn.includes(c)))return{quote:{role:x.role,text:quoteText(x).replace(/\s+/g,' ').trim().slice(0,80),t:x.t||0}}}return{}}
-function qc(m){if(m.narr)return '[旁白] '+(m.content||'');const c0=(m.audio&&m.role==='user'&&m.content)?'[用户发来一条语音消息（你听到的是TA的声音，不是文字），语音里说的是：「'+m.content+'」]':m.content;if(m.quote&&m.quote.text&&m.role==='user')return '[用户引用了'+(m.quote.role==='user'?'用户自己':'你')+'之前的消息：「'+m.quote.text+'」]\n'+(c0||'');return c0}
+function qc(m){if(m.narr)return '[旁白] '+(m.content||'');const c0=(m.audio&&m.role==='user'&&m.content)?'[用户发来一条语音消息（你听到的是TA的声音，不是文字），语音里说的是：「'+m.content+'」]':m.content;if(m.quote&&m.quote.text&&m.role==='user')return '[用户引用了'+(m.quote.role==='user'?'用户自己':'你')+'之前的消息：「'+liveQuote(m.quote)+'」]\n'+(c0||'');return c0}
 function showRecalled(m){const me=m.role==='user',old=document.getElementById('rcv');if(old)old.remove();const sk=m.stk&&S.stickers.find(x=>x.id===m.stk);let body;if(sk)body='<img src="'+sk.src+'" alt="">';else if(m.image)body=(m.content?'<div class="rc-body">'+esc(m.content)+'</div>':'')+'<img src="'+m.image+'" alt="">';else body='<div class="rc-body">'+esc(m.content||'（空消息）')+'</div>';const d=document.createElement('div');d.id='rcv';d.innerHTML='<div><small>'+(me?'你':esc((P(cur)||{}).name||'对方'))+' 撤回的消息'+(m.t?' · '+hm(m.t):'')+'</small>'+body+'<button type="button">关闭</button></div>';d.onclick=e=>{if(e.target===d||e.target.tagName==='BUTTON')d.remove()};document.body.appendChild(d)}
 function recalledMenu(i){const h=S.chats[cur],m=h&&h[i];if(!m)return;showMsgMenu([[{label:'查看被撤回的内容',icon:'eye',run:()=>showRecalled(m)}],[{label:'删除这条撤回提示',icon:'trash',danger:1,run:()=>{h.splice(i,1);save();draw()}}]])}
 $('#msgs').addEventListener('pointerdown',e=>{const r=e.target.closest('.r,.recalled-row');if(!r||r.dataset.i===undefined||e.target.closest('.av')||e.target.closest('button'))return;msgLongPressed=false;const i=+r.dataset.i,isRc=r.classList.contains('recalled-row');msgPressTimer=setTimeout(()=>{msgLongPressed=true;isRc?recalledMenu(i):messageMenu(i)},520)});
@@ -4988,22 +4996,48 @@ async function embedText(text){
  if(!res.ok)throw new Error('Embedding API HTTP '+res.status);const j=await res.json();const v=j.data&&j.data[0]&&j.data[0].embedding;if(!Array.isArray(v))throw new Error('Embedding 返回格式不正确');return v;
 }
 function cosine(a,b){if(!Array.isArray(a)||!Array.isArray(b)||a.length!==b.length)return -1;let dot=0,aa=0,bb=0;for(let i=0;i<a.length;i++){dot+=a[i]*b[i];aa+=a[i]*a[i];bb+=b[i]*b[i]}return aa&&bb?dot/Math.sqrt(aa*bb):-1}
+function splitNote(t){
+ t=String(t||'').trim();const out=[],re=/【([^】]+)】([\s\S]*?)(?=【[^】]+】|$)/g;let m;
+ while((m=re.exec(t))){const k=m[1].trim(),b=m[2].trim();if(!b||k==='睁开眼')continue;
+  if(k==='事实'||k==='长期事实'){b.split('\n').map(x=>x.replace(/^\s*(?:[-–—·•*]|\d{1,2}[、.)）](?!\d))\s*/,'').trim()).filter(x=>x.length>=6).forEach(x=>out.push(x))}
+  else out.push('【'+k+'】'+b.replace(/\n+/g,' '))}
+ return out.length?out:[t]}
 async function vectorMemoryPrompt(p,h){
  if((S.cfg.memoryMode||'traditional')!=='vector')return '';const cc=CC(p.id),items=cc.vectorMemories||[];if(!items.length)return '';
- const query=h.slice(-4).map(m=>m.content||'').filter(Boolean).join('\n').slice(-3000);if(!query)return '';
- const qv=await embedText(query);for(const m of items){if(!m.embedding){try{m.embedding=await embedText(m.text)}catch(e){}}}save();
- const ranked=items.map(m=>({m,score:cosine(qv,m.embedding)})).filter(x=>x.score>=0).sort((a,b)=>b.score-a.score).slice(0,Math.max(1,Math.min(12,Number(S.cfg.memoryTopK)||5)));
+ const msgs=h.map(m=>String(m.content||'').trim()).filter(Boolean),long=msgs.filter(x=>x.length>=4);
+ const query=(long.length?long:msgs).slice(-4).join('\n').slice(-3000);if(!query)return '';
+ const qv=await embedText(query);let fail=0,dirty=0;
+ for(const m of items){if(!Array.isArray(m.embedding)||m.embedding.length!==qv.length){try{m.embedding=await embedText(m.text);dirty=1}catch(e){m.embedding=null;fail++}}}
+ if(dirty)save();
+ if(fail&&!vectorMemoryPrompt._w){vectorMemoryPrompt._w=1;toast(fail+' 条向量记忆生成失败，未参与检索')}
+ const recent=(cc.memoryEntries||[]).filter(m=>!m.merged).slice(-NOTE_KEEP),rid=new Set(recent.map(m=>m.id)),rtxt=recent.map(m=>String(m.text||'')).join('\n');
+ const min=Number(S.cfg.memoryMinScore)||0.4,k=Math.max(1,Math.min(12,Number(S.cfg.memoryTopK)||12));
+ const ranked=items.filter(m=>Array.isArray(m.embedding)&&!(m.src&&rid.has(m.src))&&!rtxt.includes(String(m.text||'').trim())).map(m=>({m,score:cosine(qv,m.embedding)})).filter(x=>x.score>=min).sort((a,b)=>b.score-a.score).slice(0,k);
  return ranked.length?'【向量检索到的相关记忆】\n'+ranked.map(x=>'- '+x.m.text).join('\n'):'';
+}
+async function compressOldNotes(chatId){
+ const cc=CC(chatId),all=cc.memoryEntries||[],norm=all.filter(m=>!m.merged),keep=norm.slice(-NOTE_KEEP),old=norm.slice(0,Math.max(0,norm.length-NOTE_KEEP)),merged=all.filter(m=>m.merged);
+ if(old.length<3)throw new Error('较早的纸条不足 3 张，暂不需要压缩');
+ const sec={base:(S.cfg.secondaryBase||'').trim()||S.cfg.base,key:(S.cfg.secondaryKey||'').trim()||S.cfg.key,model:(S.cfg.secondaryModel||'').trim()||S.cfg.model,temp:0.2,stream:false};
+ if(!sec.base||!sec.key||!sec.model)throw new Error('请先在「设置 → 模型与 API」配置主 API');
+ const p=P(chatId);
+ const body=[...merged,...old].map(m=>(m.createdAt?'['+new Date(m.createdAt).toLocaleDateString('zh-CN')+'] ':'')+String(m.text||'').trim()).join('\n---\n').slice(-24000);
+ const ins='今天是'+new Date().toLocaleDateString('zh-CN')+'。你是聊天记忆整理助手。下面是按时间排序的旧纸条，把它们合并压缩成一份“早期记忆”，给未来的自己长期参考。严格按格式输出，不要开场白：\n【长期事实】按时间顺序，每条以具体日期开头，只保留仍然有效的事实、关系变化、称呼、偏好；被后来推翻的只写最新状态；不臆测，区分谁说的。\n【未了的事】仍没兑现的承诺和没解决的事，已经完成的删掉。\n全文不超过800字。';
+ const text=await ask([{role:'system',content:ins},{role:'user',content:'联系人：'+(p&&p.name||chatId)+'\n\n旧纸条：\n'+body}],null,{max_tokens:2000},sec);
+ if(!String(text||'').trim())throw new Error('模型返回了空结果');
+ const f0=merged[0]||old[0],l0=old[old.length-1];
+ cc.memoryEntries=[{id:uid(),text:String(text).trim(),createdAt:f0.createdAt||Date.now(),rangeStart:f0.rangeStart,rangeEnd:l0.rangeEnd,merged:1},...keep];
+ save();return old.length;
 }
 async function summarizeRange(chatId,start,end,automatic){
  const h=S.chats[chatId]||[],msgs=h.slice(start,end).filter(m=>!m.recalled&&((m.content||'').trim()||m.image||m.stk));if(!msgs.length)throw new Error('选定范围没有可总结的消息');
  const cc=CC(chatId),p=P(chatId);const transcript=msgs.map(m=>`${m.role==='user'?'我':(p?.name||'对方')}: ${m.call&&window.__callCtx?window.__callCtx(m):(m.content|| (m.image?'[图片]':m.stk?'[表情包]':'[消息]'))}`).join('\n').slice(-30000);
  const primary=S.cfg;const sec={base:(S.cfg.secondaryBase||'').trim()||S.cfg.base,key:(S.cfg.secondaryKey||'').trim()||S.cfg.key,model:(S.cfg.secondaryModel||'').trim()||S.cfg.model,temp:0.2,stream:false};
  if(!sec.base||!sec.key||!sec.model)throw new Error('请先在「设置 → 模型与 API」配置主 API');
- const existing=[cc.traditionalMemory||'',...(cc.memoryEntries||[]).map(m=>m.text||'')].filter(Boolean).join('\n');const custom=(cc.summaryInstruction||'').trim();const baseInstruction='今天是'+new Date().toLocaleDateString('zh-CN')+'。你是聊天记忆整理助手。写的不是摘要，而是一张给“下一段的自己”看的纸条，换段后第一眼就能接上口气。严格按此格式输出，不要开场白：\n【睁开眼】一行：此刻在哪、什么心情、还欠对方一句什么。\n【事实】3～6条，每条以具体日期开头（把“昨天”“刚才”换算成日期）；只写确定的事实、关系变化、称呼，区分谁说的，不臆测，不把临时情绪写成永久事实。\n【答应过】没做到的承诺和未解决的事。\n【没说完的】话到一半、情绪没收的地方。\n全文不超过600字。';const summary=await ask([{role:'system',content:baseInstruction+(custom?'\n\n【用户自定义总结指令，优先遵守】\n'+custom:'')}, {role:'user',content:`联系人：${p?.name||chatId}\n已有记忆（请避免重复，必要时补充修正）：\n${existing}\n\n本次聊天记录：\n${transcript}\n\n请生成一条新的记忆条目。`}],null,{max_tokens:1800},sec);
- if(!summary.trim())throw new Error('模型返回了空总结');cc.memoryEntries=cc.memoryEntries||[];cc.memoryEntries.push({id:uid(),text:summary.trim(),createdAt:Date.now(),rangeStart:start+1,rangeEnd:end});if((S.cfg.memoryMode||'traditional')==='vector'){cc.vectorMemories=cc.vectorMemories||[];cc.vectorMemories.push({id:uid(),text:summary.trim(),embedding:null,createdAt:Date.now()})}if(automatic)cc.lastAutoSummaryCount=end;save();return msgs.length;
+ const _me=cc.memoryEntries||[],existing=[(cc.traditionalMemories&&cc.traditionalMemories.length?cc.traditionalMemories.map(m=>m.text||'').join('\n'):(cc.traditionalMemory||'')),..._me.filter(m=>m.merged).map(m=>m.text||''),..._me.filter(m=>!m.merged).slice(-NOTE_KEEP).map(m=>m.text||'')].filter(Boolean).join('\n');const custom=(cc.summaryInstruction||'').trim();const baseInstruction='今天是'+new Date().toLocaleDateString('zh-CN')+'。你是聊天记忆整理助手。写的不是摘要，而是一张给“下一段的自己”看的纸条，换段后第一眼就能接上口气。严格按此格式输出，不要开场白：\n【睁开眼】一行：此刻在哪、什么心情、还欠对方一句什么。\n【事实】3～6条，每条以具体日期开头（把“昨天”“刚才”换算成日期）；只写确定的事实、关系变化、称呼，区分谁说的，不臆测，不把临时情绪写成永久事实。\n【答应过】没做到的承诺和未解决的事。\n【没说完的】话到一半、情绪没收的地方。\n全文不超过600字。';const summary=await ask([{role:'system',content:baseInstruction+(custom?'\n\n【用户自定义总结指令，优先遵守】\n'+custom:'')}, {role:'user',content:`联系人：${p?.name||chatId}\n已有记忆（请避免重复，必要时补充修正）：\n${existing}\n\n本次聊天记录：\n${transcript}\n\n请生成一条新的记忆条目。`}],null,{max_tokens:1800},sec);
+ if(!summary.trim())throw new Error('模型返回了空总结');cc.memoryEntries=cc.memoryEntries||[];const nid=uid();cc.memoryEntries.push({id:nid,text:summary.trim(),createdAt:Date.now(),rangeStart:start+1,rangeEnd:end});if((S.cfg.memoryMode||'traditional')==='vector'){cc.vectorMemories=cc.vectorMemories||[];splitNote(summary.trim()).forEach(t=>cc.vectorMemories.push({id:uid(),text:t,embedding:null,createdAt:Date.now(),src:nid}))}if(automatic)cc.lastAutoSummaryCount=end;save();return msgs.length;
 }
-async function maybeAutoSummarize(chatId){const cc=CC(chatId),h=S.chats[chatId]||[],interval=Math.max(20,Math.min(2000,Number(cc.summaryInterval)||200));if(!cc.autoSummary)return;const last=Number(cc.lastAutoSummaryCount)||0;if(h.length-last<interval)return;const end=h.length;try{await summarizeRange(chatId,last,end,true);toast('已自动总结聊天记忆')}catch(e){toast('自动记忆总结失败：'+e.message)}}
+async function maybeAutoSummarize(chatId){const cc=CC(chatId),h=S.chats[chatId]||[],interval=Math.max(20,Math.min(2000,Number(cc.summaryInterval)||200));if(!cc.autoSummary)return;const last=Number(cc.lastAutoSummaryCount)||0;if(h.length-last<interval)return;if(cc.autoSumFail&&Date.now()-cc.autoSumFail<6e5)return;const end=h.length;try{await summarizeRange(chatId,last,end,true);cc.autoSumFail=0;toast('已自动总结聊天记忆')}catch(e){cc.autoSumFail=Date.now();save();toast('自动记忆总结失败，10 分钟后重试：'+e.message)}}
 const SONG_PROMPT='【心声歌曲】在输出的 JSON 里再加一个 song 字段：{"title":"歌名","artist":"歌手","lyric":"一小句歌词","tag":"专辑或曲风，可留空"}。song 是你此刻的内心想法让你联想到的一首歌，要贴合 thought 和当前对话的气氛；歌曲不限语言和形式（真实存在的歌、纯音乐、童谣、你自己编的歌都可以）；lyric 只写一小句（不超过一行），也可以是你自己仿写的一句；歌名、歌手、歌词都不要加书名号或引号。另外再加一个 thought_tr 字段：把 thought 翻译成简体中文；如果 thought 本身就是简体中文，thought_tr 留空字符串。';
 function narrPrompt(arr){
   const rec=(arr||[]).filter(m=>m&&m.narr&&m.role==='assistant').slice(-3).map(m=>String(m.content||'').trim()).filter(x=>x.length>2);
@@ -5016,7 +5050,7 @@ async function gen(){
   try{
     const basePrompt=build(p,h,true,{pre:1});if((S.cfg.memoryMode||'traditional')==='vector'){try{const vm=await vectorMemoryPrompt(p,h);if(vm)basePrompt.push({role:'system',content:vm})}catch(memErr){toast('向量记忆检索失败，本次继续普通聊天：'+memErr.message)}}const prompt=basePrompt.concat([{role:'system',content:'在保持角色人设和自然对话的前提下，请一次性输出严格 JSON，不要 Markdown 代码块，格式为 {"messages":["第一条独立聊天消息","第二条独立聊天消息"],"reply":"兼容字段","thought":"角色此刻未说出口的内心想法","image_prompt":""}。messages 是角色按真实聊天节奏连续发送的消息数组：结合语境，适合分开发的内容就拆成 2-5 条短消息，每条只放一个自然聊天气泡；不要把几句话用换行或一大段塞进同一个气泡。只有确实一句就能说清时才只输出一条。不要机械地每次都拆成多条。reply 可作为 messages 的兼容备用字段。thought 是简短内心活动。若用户明确要求生成/发图片，image_prompt 填画面描述，否则留空。如果某条回复是针对对话里某一条具体消息的回应（用户说的或你自己之前说的都可以），可以偶尔（不要每条都用）把这一条写成对象 {"text":"回复内容","quote":"被引用消息的原文片段，原样摘抄，不超过30字"}，其余条目仍写成普通字符串。'},{role:'system',content:TRF_PROMPT()},{role:'system',content:LIFE_PROMPT()}].concat([{role:'system',content:SONG_PROMPT}]).concat(avPrompt(cur)).concat((window.__callPrompt&&window.__callPrompt(cur))?[{role:'system',content:window.__callPrompt(cur)}]:[]).concat(CC(cur).narrOn?[{role:'system',content:narrPrompt(S.chats[cur])}]:[]).concat(CC(cur).trOn?[{role:'system',content:trMsgPrompt(CC(cur).trTo||'简体中文')}]:[]));
     {const _t=prTip(p);if(_t)prompt.push({role:'system',content:_t})}{let _n=0;for(let i=h.length-1;i>=0&&h[i].role==='user';i--)_n++;if(_n>1)prompt.push({role:'system',content:'【本轮用户连发了'+_n+'条消息】上面最后一个用户回合里，每一行（或每个「[用户引用了…]」块）都是用户单独发的一条。请逐条回应，每条都要有对应的反应，不要只回最后一句；带「引用」的那条是在回复被引用的旧消息，要针对被引用的内容回应。'})}prompt.push({role:'system',content:ANTI_ECHO});prompt.push({role:'system',content:FMT_RULE});if(redoNote)prompt.push({role:'system',content:redoNote});if(h.length&&h[h.length-1].role==='assistant')prompt.push({role:'user',content:proNudge(p,0,'cont')});{const lm=h[h.length-1];if(lm&&lm.role==='user'&&lm.t&&Date.now()-lm.t>=3600000)prompt.push({role:'user',content:gapNote(lm.t)});else{const _g=gapOpenNote(h);if(_g)prompt.push({role:'user',content:_g})}}window.__lastPrompt={t:Date.now(),id:p.id,msgs:prompt};const raw=await askClean(prompt,chatCfg(p.id));const data=banFilter(parseAI(raw))
-    let replyQuotes=[],replies=[],replyNarr=[],replyTr=[];if(Array.isArray(data.messages)){data.messages.forEach(x=>{const isO=x&&typeof x==='object',nr=isO&&x.narr?String(x.narr).trim():'',tx=nr||String(isO?(x.text||x.content||x.reply||''):(x||'')).trim();if(tx){replies.push(tx);replyQuotes.push(isO&&!nr?String(x.quote||'').trim():'');replyNarr.push(!!nr);replyTr.push(isO&&!nr?String(x.tr||x.translation||'').trim():'')}})}if(!replies.length){const out=String(data.reply||raw).trim();replies=out.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);if(replies.length===1&&out.length>180){const parts=out.match(/[^。！？!?]+[。！？!?]?/g)||[out];if(parts.length>=3)replies=parts.map(x=>x.trim()).filter(Boolean)}}if(!replies.length)replies=[String(data.reply||raw).trim()];if(el&&el.parentNode)el.remove();const thoughtTr=String(data.thought_tr||data.thoughtTr||'').trim();const songObj=(()=>{const x=data.song;if(!x||typeof x!=='object')return null;const t=String(x.title||'').trim();return t?{title:t,artist:String(x.artist||'').trim(),lyric:String(x.lyric||'').trim(),tag:String(x.tag||'').trim()}:null})();for(let k=0;k<replies.length;k++)if(replyNarr[k])replies[k]=await narrCN(replies[k]);const replyChatId=cur;let thoughtDone=0;for(let idx=0;idx<replies.length;idx++){if(cur!==replyChatId)break;if(idx>0){await new Promise(resolve=>setTimeout(resolve,520+Math.floor(Math.random()*420)));}const isN=!!replyNarr[idx];h.push({role:'assistant',content:replies[idx],...(isN?{narr:1}:((!thoughtDone&&(thoughtDone=1))?{thought:String(data.thought||'').trim(),...(thoughtTr&&thoughtTr!==String(data.thought||'').trim()?{thoughtTr}:{}),...(songObj?{song:songObj}:{})}:{thought:''})),t:Date.now(),...(isN?{}:findQuote(h,replyQuotes[idx])),...(!isN&&replyTr[idx]?{tr:replyTr[idx],trLang:CC(cur).trTo||'简体中文'}:{})});save();draw();}trfApplyAI(h,data);try{lifeApplyAI(h,data)}catch(_){}try{avApplyAI(replyChatId,data)}catch(_){}try{window.__callApplyAI&&window.__callApplyAI(replyChatId,data)}catch(_){}if(S.cfg.imageEnabled&&String(data.image_prompt||'').trim()){try{const im=await generateImage(String(data.image_prompt).trim());h.push({role:'assistant',content:'',image:im,thought:'我把刚才描述的画面生成出来了。',t:Date.now()})}catch(imgErr){h.push({role:'assistant',content:'图片生成失败：'+imgErr.message,t:Date.now()})}}save();try{await maybeAutoSummarize(cur)}catch(_){}
+    let replyQuotes=[],replies=[],replyNarr=[],replyTr=[];if(Array.isArray(data.messages)){data.messages.forEach(x=>{const isO=x&&typeof x==='object',nr=isO&&x.narr?String(x.narr).trim():'',tx=nr||String(isO?(x.text||x.content||x.reply||''):(x||'')).trim();if(tx){replies.push(tx);replyQuotes.push(isO&&!nr?String(x.quote||'').trim():'');replyNarr.push(!!nr);replyTr.push(isO&&!nr?String(x.tr||x.translation||'').trim():'')}})}if(!replies.length){const out=String(data.reply||raw).trim();replies=out.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);if(replies.length===1&&out.length>180){const parts=out.match(/[^。！？!?]+[。！？!?]?/g)||[out];if(parts.length>=3)replies=parts.map(x=>x.trim()).filter(Boolean)}}if(!replies.length)replies=[String(data.reply||raw).trim()];if(el&&el.parentNode)el.remove();const thoughtTr=String(data.thought_tr||data.thoughtTr||'').trim();const songObj=(()=>{const x=data.song;if(!x||typeof x!=='object')return null;const t=String(x.title||'').trim();return t?{title:t,artist:String(x.artist||'').trim(),lyric:String(x.lyric||'').trim(),tag:String(x.tag||'').trim()}:null})();for(let k=0;k<replies.length;k++)if(replyNarr[k])replies[k]=await narrCN(replies[k]);const replyChatId=cur;let thoughtDone=0;for(let idx=0;idx<replies.length;idx++){if(cur!==replyChatId)break;if(idx>0){await new Promise(resolve=>setTimeout(resolve,520+Math.floor(Math.random()*420)));}const isN=!!replyNarr[idx];h.push({role:'assistant',content:replies[idx],...(isN?{narr:1}:((!thoughtDone&&(thoughtDone=1))?{thought:String(data.thought||'').trim(),...(thoughtTr&&thoughtTr!==String(data.thought||'').trim()?{thoughtTr}:{}),...(songObj?{song:songObj}:{})}:{thought:''})),t:Date.now(),...(isN?{}:findQuote(h,replyQuotes[idx])),...(!isN&&replyTr[idx]?{tr:replyTr[idx],trLang:CC(cur).trTo||'简体中文'}:{})});save();draw();}trfApplyAI(h,data);try{kinApplyAI(h,data)}catch(_){}try{lifeApplyAI(h,data)}catch(_){}try{avApplyAI(replyChatId,data)}catch(_){}try{window.__callApplyAI&&window.__callApplyAI(replyChatId,data)}catch(_){}if(S.cfg.imageEnabled&&String(data.image_prompt||'').trim()){try{const im=await generateImage(String(data.image_prompt).trim());h.push({role:'assistant',content:'',image:im,thought:'我把刚才描述的画面生成出来了。',t:Date.now()})}catch(imgErr){h.push({role:'assistant',content:'图片生成失败：'+imgErr.message,t:Date.now()})}}save();try{await maybeAutoSummarize(cur)}catch(_){}
   }catch(e){el.textContent='请求失败：'+e.message;el.classList.add('err');setBusy(0);return}
   setBusy(0);draw();
 }
@@ -5059,25 +5093,39 @@ function rChatMemory(){
   {const ttl=document.querySelector('#v-cset .bar h2');if(ttl)ttl.textContent='记忆管理'}
   const tradList=(()=>{let a=(cc.traditionalMemories||[]).slice();if(!a.length&&cc.traditionalMemory&&String(cc.traditionalMemory).trim())a=[{id:'legacy-traditional-memory',text:cc.traditionalMemory}];return a})();
   const dstr=t=>t?new Date(t).toLocaleDateString('zh-CN'):'日期未知';
-  $('#cbody').innerHTML=`<div class="is-wrap mem2">
-  <div class="is-h">总结指令</div>
-  <div class="is-g mm-box"><p class="mm-hint">自定义 AI 总结聊天时要遵循的额外规则，留空则使用默认规则。</p><textarea id="cs-summary-instruction" class="mm-ta" rows="4" placeholder="例如：优先记录关系变化、双方明确说过的偏好和承诺；每条尽量简短，避免重复人设资料。">${esc(cc.summaryInstruction||'')}</textarea><div class="mm-act"><button class="mm-b" id="cs-save-summary-instruction" type="button">保存</button></div></div>
-
-  <div class="is-h">生成记忆条目</div>
-  <div class="is-g">
-    <div class="is-c"><span class="is-t"><b>自动总结聊天记忆</b></span><span class="is-sw"><input type="checkbox" id="cs-auto-summary" ${cc.autoSummary?'checked':''}><i></i></span></div>
-    <div class="is-c"><span class="is-t"><b>自动总结间隔</b><small>每隔多少条消息总结一次</small></span><input id="cs-summary-interval" class="mm-num" type="number" min="20" max="2000" step="20" value="${Number(cc.summaryInterval)||200}"></div>
-    <div class="is-c"><span class="is-t"><b>起始消息序号</b></span><input id="cs-summary-start" class="mm-num" type="number" min="1" value="1"></div>
-    <div class="is-c"><span class="is-t"><b>结束消息序号</b></span><input id="cs-summary-end" class="mm-num" type="number" min="1" value="${(S.chats[cur]||[]).length}"></div>
-    <div class="mm-box"><button class="mm-b pri full" id="cs-summary-now" type="button">生成记忆条目</button></div>
+  const mode=(S.cfg.memoryMode||'traditional')==='vector'?'vector':'traditional';
+  const vecList=cc.vectorMemories||[],vecOk=vecList.filter(m=>Array.isArray(m.embedding)).length;
+  const norm=cc.memoryEntries.filter(m=>!m.merged),inj=new Set(norm.slice(-NOTE_KEEP).map(m=>m.id)),oldCnt=Math.max(0,norm.length-NOTE_KEEP);
+  const pv=t=>{const l=String(t||'').replace(/【[^】]*】/g,' ').split('\n').map(x=>x.trim()).filter(Boolean);return l[0]||'（空）'};
+  const len=(S.chats[cur]||[]).length,lastN=Number(cc.lastAutoSummaryCount)||0,ivN=Math.max(20,Number(cc.summaryInterval)||200),remain=ivN-(len-lastN);
+  const st0=($('#cbody')||{}).scrollTop||0;
+  const noteCards=cc.memoryEntries.map((m,i)=>({m,i})).reverse().map(({m,i})=>`<details class="is-g m3-note" data-memory-entry="${esc(m.id)}"><summary><div class="m3-top"><b>${m.merged?'早期':'#'+(i+1)}</b><span>${dstr(m.createdAt)}</span>${m.merged?'<i class="m3-tag">合并</i>':(inj.has(m.id)?'<i class="m3-tag on">注入中</i>':'')}<em>${m.rangeStart?'消息 '+m.rangeStart+'–'+m.rangeEnd:''}</em><u class="m3-chev">›</u></div><p class="m3-pv">${esc(pv(m.text))}</p></summary><div class="m3-body"><textarea class="mm-ta" data-memory-text="${esc(m.id)}" rows="4">${esc(m.text||'')}</textarea><div class="mm-act"><button class="mm-b dg" data-memory-delete="${esc(m.id)}" type="button">删除</button><button class="mm-b pri" data-memory-save="${esc(m.id)}" type="button">保存修改</button></div></div></details>`).join('');
+  const vecShow=vecList.slice(-60).reverse();
+  $('#cbody').innerHTML=`<div class="is-wrap mem2 mem3">
+  <div class="is-g m3-hero">
+    <div class="m3-stats"><div><b>${cc.memoryEntries.length}</b><span>纸条</span></div><div><b>${tradList.length}</b><span>传统记忆</span></div><div><b>${vecList.length}</b><span>向量记忆</span></div></div>
+    <div class="m3-mode"><i class="m3-dot"></i><b>${mode==='vector'?'向量模式':'传统模式'}</b><span>每次注入最近 ${Math.min(NOTE_KEEP,norm.length)} 张纸条${mode==='vector'?' + 语义检索':''}</span></div>
   </div>
-  <div class="mm-foot">只有总结成功后才会新增记忆条目；副 API 留空会使用主 API。</div>
 
-  <div class="is-h">已生成的记忆条目（${cc.memoryEntries.length}）</div>
-  <div id="cs-memory-entries">${cc.memoryEntries.map((m,i)=>`<div class="is-g mm-box mm-card" data-memory-entry="${esc(m.id)}"><div class="mm-hd"><span>记忆 ${i+1} · ${dstr(m.createdAt)}</span><button class="mm-link dg" data-memory-delete="${esc(m.id)}" type="button">删除</button></div><textarea class="mm-ta" data-memory-text="${esc(m.id)}" rows="4">${esc(m.text||'')}</textarea><div class="mm-act"><button class="mm-b" data-memory-save="${esc(m.id)}" type="button">保存修改</button></div></div>`).join('')||'<div class="is-g mm-box"><p class="mm-hint" style="margin:0">还没有记忆条目。先选好聊天范围并点「生成记忆条目」，成功后会显示在这里。</p></div>'}</div>
+  <div class="is-h">自动总结</div>
+  <div class="is-g">
+    <div class="is-c"><span class="is-t"><b>自动总结聊天记忆</b><small>${cc.autoSummary?(remain>0?'再聊 '+remain+' 条后生成下一张':'下一轮对话后生成'):'已关闭'}</small></span><span class="is-sw"><input type="checkbox" id="cs-auto-summary" ${cc.autoSummary?'checked':''}><i></i></span></div>
+    <div class="is-c"><span class="is-t"><b>总结间隔</b><small>每隔多少条消息（20–2000）</small></span><input id="cs-summary-interval" class="mm-num" type="number" min="20" max="2000" step="20" value="${Number(cc.summaryInterval)||200}"></div>
+  </div>
+
+  <div class="is-h">手动生成纸条</div>
+  <div class="is-g mm-box">
+    <div class="m3-range"><label><span>起始序号</span><input id="cs-summary-start" class="m3-in" type="number" min="1" value="1"></label><i></i><label><span>结束序号</span><input id="cs-summary-end" class="m3-in" type="number" min="1" value="${len}"></label></div>
+    <button class="mm-b pri full" id="cs-summary-now" type="button" style="margin-top:12px">生成纸条</button>
+  </div>
+  <div class="mm-foot">只有总结成功后才会新增纸条；副 API 留空会使用主 API。</div>
+
+  <div class="is-h m3-hrow"><span>纸条（${cc.memoryEntries.length}）</span>${oldCnt>=3?`<button class="m3-lk" id="cs-compress" type="button">压缩 ${oldCnt} 张旧纸条</button>`:''}</div>
+  <div id="cs-memory-entries">${noteCards||'<div class="is-g mm-box"><p class="mm-hint" style="margin:0">还没有纸条。选好范围点「生成纸条」，或打开自动总结。</p></div>'}</div>
+  ${oldCnt&&mode==='traditional'?`<div class="mm-foot">较早的 ${oldCnt} 张纸条不会进入提示词，只会每天随机想起一条。压缩后会合并成一份“早期记忆”长期保留。</div>`:''}
 
   <div class="is-h">传统记忆</div>
-  <details class="is-g mm-fold" id="cs-traditional-fold"><summary class="is-c is-tap"><span class="is-t"><b>传统记忆</b><small>手动整理的角色记忆，分条保存</small></span><span class="mm-count">${tradList.length}</span><span class="mm-chev">›</span></summary>
+  <details class="is-g mm-fold" id="cs-traditional-fold"><summary class="is-c is-tap"><span class="is-t"><b>手动记忆</b><small>每次全文注入，适合人设、关系、长期约定</small></span><span class="mm-count">${tradList.length}</span><span class="mm-chev">›</span></summary>
     <div class="mm-box mm-in">
       <div id="cs-traditional-list">${tradList.map((m,i)=>`<div class="mm-sub" data-trad-card="${esc(m.id)}"><div class="mm-hd"><span>传统记忆 ${i+1}</span><button class="mm-link dg" data-trad-delete="${esc(m.id)}" type="button">删除</button></div><textarea class="mm-ta" data-trad-text="${esc(m.id)}" rows="3" placeholder="输入这一条角色记忆……">${esc(m.text||'')}</textarea><div class="mm-act"><button class="mm-b" data-trad-save="${esc(m.id)}" type="button">保存修改</button></div></div>`).join('')}</div>
       <textarea id="cs-traditional-new" class="mm-ta" rows="3" placeholder="添加一条新的角色记忆……"></textarea>
@@ -5086,10 +5134,22 @@ function rChatMemory(){
     </div>
   </details>
 
-  <div class="is-h">向量记忆条目</div>
-  <div class="is-g mm-box"><p class="mm-hint">向量记忆用于语义检索，与上面的总结条目分开管理。</p><textarea id="cs-vector-new" class="mm-ta" rows="3" placeholder="手动添加一条独立记忆"></textarea><div class="mm-act"><button class="mm-b pri" id="cs-vector-add" type="button">添加向量记忆</button></div><div id="cs-vector-list">${(cc.vectorMemories||[]).map(m=>`<div class="mm-item"><div class="mm-txt">${esc(m.text)}</div><button class="mm-link dg" data-vmem-del="${esc(m.id)}" type="button">删除</button></div>`).join('')||'<p class="mm-hint" style="margin:12px 0 0">还没有向量记忆条目</p>'}</div></div>
+  <div class="is-h m3-hrow"><span>向量记忆（${vecList.length}）</span><span class="m3-sub">${vecOk} / ${vecList.length} 已向量化</span></div>
+  <div class="is-g mm-box">
+    <p class="mm-hint">${mode==='vector'?'按当前对话做语义检索，相似度低于阈值的不会注入。新纸条会自动拆成一条一个事实。':'当前是传统模式，向量记忆暂不参与回复；在设置里切到向量模式后生效。'}</p>
+    <textarea id="cs-vector-new" class="mm-ta" rows="3" placeholder="手动添加一条独立记忆"></textarea>
+    <div class="mm-act"><button class="mm-b pri" id="cs-vector-add" type="button">添加向量记忆</button></div>
+    ${vecList.length?`<div class="mm-act wrap m3-vact"><button class="mm-b" data-vec-act="fill" type="button">补全向量${vecList.length-vecOk?'（'+(vecList.length-vecOk)+'）':''}</button><button class="mm-b" data-vec-act="rebuild" type="button">重建全部</button><span id="cs-vec-prog"></span></div>`:''}
+    <div id="cs-vector-list">${vecShow.map(m=>{const ok=Array.isArray(m.embedding);return `<div class="mm-item"><div class="mm-txt">${esc(m.text)}<div class="m3-meta"><i class="m3-tag ${ok?'on':''}">${ok?'已向量化':'未向量化'}</i><span>${dstr(m.createdAt)}</span></div></div><button class="mm-link dg" data-vmem-del="${esc(m.id)}" type="button">删除</button></div>`}).join('')||'<p class="mm-hint" style="margin:12px 0 0">还没有向量记忆条目</p>'}</div>
+    ${vecList.length>60?'<p class="mm-hint" style="margin:10px 0 0">仅显示最近 60 条</p>':''}
+  </div>
+
+  <div class="is-h">总结指令</div>
+  <details class="is-g mm-fold" id="cs-instr-fold"><summary class="is-c is-tap"><span class="is-t"><b>自定义总结规则</b><small>${cc.summaryInstruction&&cc.summaryInstruction.trim()?'已自定义':'使用默认规则'}</small></span><span class="mm-chev">›</span></summary>
+    <div class="mm-box mm-in"><p class="mm-hint" style="margin-top:10px">额外规则会优先于默认规则，留空则使用默认。</p><textarea id="cs-summary-instruction" class="mm-ta" rows="4" placeholder="例如：优先记录关系变化、双方明确说过的偏好和承诺；每条尽量简短，避免重复人设资料。">${esc(cc.summaryInstruction||'')}</textarea><div class="mm-act"><button class="mm-b pri" id="cs-save-summary-instruction" type="button">保存</button></div></div>
+  </details>
   </div>`;
-  {const fit=t=>{t.style.height='auto';t.style.height=Math.min(Math.max(t.scrollHeight,0),280)+'px'};const fitAll=()=>$$('#cbody .mm-ta').forEach(t=>{if(t.offsetParent!==null)fit(t)});$$('#cbody .mm-ta').forEach(t=>t.addEventListener('input',()=>fit(t)));fitAll();const fd=$('#cs-traditional-fold');if(fd)fd.addEventListener('toggle',fitAll)}
+  {const fit=t=>{t.style.height='auto';t.style.height=Math.min(Math.max(t.scrollHeight,0),280)+'px'};const fitAll=()=>$$('#cbody .mm-ta').forEach(t=>{if(t.offsetParent!==null)fit(t)});$$('#cbody .mm-ta').forEach(t=>t.addEventListener('input',()=>fit(t)));fitAll();$$('#cbody details').forEach(d=>d.addEventListener('toggle',fitAll));$('#cbody').scrollTop=st0}
   const normalizeTraditional=()=>{cc.traditionalMemories=cc.traditionalMemories||[];if(!cc.traditionalMemories.length&&cc.traditionalMemory&&String(cc.traditionalMemory).trim()){cc.traditionalMemories.push({id:uid(),text:String(cc.traditionalMemory),createdAt:Date.now()});}cc.traditionalMemory=cc.traditionalMemories.map(m=>m.text||'').filter(Boolean).join('\n');};
   normalizeTraditional();
   $('#cs-traditional-add').onclick=()=>{const field=$('#cs-traditional-new'),text=field.value.trim();if(!text)return toast('先输入一条记忆');cc.traditionalMemories=cc.traditionalMemories||[];cc.traditionalMemories.push({id:uid(),text,createdAt:Date.now()});cc.traditionalMemory=cc.traditionalMemories.map(m=>m.text||'').filter(Boolean).join('\n');save();rChatMemory();const fold=$('#cs-traditional-fold');if(fold)fold.open=true;toast('传统记忆已添加')};
@@ -5103,8 +5163,17 @@ function rChatMemory(){
   $('#cs-summary-now').onclick=async()=>{const btn=$('#cs-summary-now');if(window.__sumBusy)return toast('正在生成中，请稍等');const a=Math.max(1,Number($('#cs-summary-start').value)||1),b=Math.min((S.chats[cur]||[]).length,Number($('#cs-summary-end').value)||((S.chats[cur]||[]).length));if(b<a)return toast('结束序号不能小于起始序号');window.__sumBusy=1;const t0=Date.now(),lab=btn.textContent;btn.disabled=true;btn.style.opacity='.55';const tick=()=>{btn.textContent='生成中… 已等待 '+Math.floor((Date.now()-t0)/1000)+' 秒'};tick();const iv=setInterval(tick,1000);toast('开始生成记忆条目，请稍等，不用重复点击');try{const count=await summarizeRange(cur,a-1,b,false);toast('已生成记忆条目（读取 '+count+' 条消息）');rChatMemory()}catch(e){toast('记忆总结失败：'+e.message)}finally{clearInterval(iv);window.__sumBusy=0;if(btn.isConnected){btn.disabled=false;btn.style.opacity='';btn.textContent=lab}}};
   $('#cs-vector-add').onclick=async()=>{const text=$('#cs-vector-new').value.trim();if(!text)return toast('先输入一条记忆');cc.vectorMemories=cc.vectorMemories||[];const item={id:uid(),text,embedding:null,createdAt:Date.now()};cc.vectorMemories.push(item);save();rChatMemory();if(S.cfg.key&&S.cfg.embeddingModel){try{item.embedding=await embedText(text);save();toast('已添加并生成向量')}catch(e){toast('记忆已保存，但向量生成失败：请检查 Embedding 模型/API')}}else toast('记忆已保存；配置 API 后可生成向量')};
   $$('#cbody [data-vmem-del]').forEach(b=>b.onclick=()=>{cc.vectorMemories=(cc.vectorMemories||[]).filter(m=>m.id!==b.dataset.vmemDel);save();rChatMemory()});
-  $$('#cbody [data-memory-save]').forEach(b=>b.onclick=()=>{const m=(cc.memoryEntries||[]).find(x=>x.id===b.dataset.memorySave);if(!m)return;m.text=$(`[data-memory-text="${CSS.escape(m.id)}"]`).value.trim();save();toast('记忆条目已保存');rChatMemory()});
+  $$('#cbody [data-memory-save]').forEach(b=>b.onclick=()=>{const m=(cc.memoryEntries||[]).find(x=>x.id===b.dataset.memorySave);if(!m)return;m.text=$(`[data-memory-text="${CSS.escape(m.id)}"]`).value.trim();save();toast('记忆条目已保存');rChatMemory();{const d=$(`[data-memory-entry=\"${CSS.escape(m.id)}\"]`);if(d){d.open=true;d.scrollIntoView({block:'nearest'});$$('#cbody .mm-ta').forEach(t=>{if(t.offsetParent!==null){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,280)+'px'}})}}});
   $$('#cbody [data-memory-delete]').forEach(b=>b.onclick=()=>{if(!confirm('确定删除这条记忆吗？'))return;cc.memoryEntries=(cc.memoryEntries||[]).filter(m=>m.id!==b.dataset.memoryDelete);save();rChatMemory()});
+  {const cb=$('#cs-compress');if(cb)cb.onclick=async()=>{if(window.__cmpBusy)return toast('正在压缩，请稍等');if(!confirm('把较早的 '+oldCnt+' 张纸条合并成一份“早期记忆”？原纸条会被替换，建议先备份。'))return;window.__cmpBusy=1;cb.disabled=true;cb.textContent='压缩中…';try{const n=await compressOldNotes(cur);toast('已合并 '+n+' 张旧纸条');rChatMemory()}catch(e){toast('压缩失败：'+e.message);if(cb.isConnected){cb.disabled=false;cb.textContent='压缩 '+oldCnt+' 张旧纸条'}}finally{window.__cmpBusy=0}}}
+  $$('#cbody [data-vec-act]').forEach(b=>b.onclick=async()=>{
+    if(window.__vecBusy)return toast('正在处理，请稍等');const rebuild=b.dataset.vecAct==='rebuild',list=cc.vectorMemories||[];
+    if(rebuild){if(!list.length)return;if(!confirm('清掉全部已有向量并重新生成？更换 Embedding 模型后需要这样做。'))return;list.forEach(m=>{m.embedding=null})}
+    const todo=list.filter(m=>!Array.isArray(m.embedding));if(!todo.length)return toast('没有需要补全的向量');
+    window.__vecBusy=1;$$('#cbody [data-vec-act]').forEach(x=>x.disabled=true);let ok=0,bad=0;
+    try{for(const m of todo){try{m.embedding=await embedText(m.text);ok++}catch(e){bad++;if(bad===1)toast('向量生成失败：'+e.message)}const lab=$('#cs-vec-prog');if(lab)lab.textContent=(ok+bad)+' / '+todo.length}}
+    finally{window.__vecBusy=0;save();toast('向量完成：成功 '+ok+(bad?'，失败 '+bad:''));if($('#cbody .mem3'))rChatMemory()}
+  });
 }
 function rCset(){
   if(csetPage==='memory'){rChatMemory();return;}
@@ -5464,7 +5533,7 @@ $('#import-worlds').onclick=()=>importTextFile((t,n)=>{let parsed=null;try{parse
 const FS=[['#c-base','cfg','base'],['#c-key','cfg','key'],['#c-model','cfg','model'],['#c-temp','cfg','temp'],['#c-hist','cfg','hist'],['#m-name','me','name'],['#m-handle','me','handle'],['#m-bio','me','bio']];
 let settingsPage='main';
 function rSettings(){
-  const showSetting=k=>{settingsPage=k;$('#v-settings').classList.toggle('detail',k!=='main');$$('#v-settings .body').forEach(e=>e.style.display='none');const target=$('#settings-'+k);if(target)target.style.display='block';if(k==='prompt')rRolePrompt();if(k==='memory'){const mode=S.cfg.memoryMode||'traditional';$('#memory-mode-traditional').checked=mode==='traditional';$('#memory-mode-vector').checked=mode==='vector';$('#c-embedding-base').value=S.cfg.embeddingBase||'';$('#c-embedding-key').value=S.cfg.embeddingKey||'';$('#c-embedding-model').value=S.cfg.embeddingModel||'text-embedding-3-small';$('#c-memory-topk').value=S.cfg.memoryTopK||5;$('#ios-memory-mode').textContent=mode==='vector'?'向量记忆':'传统记忆';$('#vector-connection-card').style.display=mode==='vector'?'block':'none'}$('#v-settings .bar h2').textContent=k==='main'?'设置':({'profile':'我的资料','appearance':'外观','api':'模型与 API','imageapi':'生图 API','data':'数据与备份','prompt':'AI 扮演提示词','memory':'记忆模式','voice':'语音接入（MiniMax）','system':'系统（保活与通知）'}[k]||'设置');if(k==='voice'){const en=$('#c-voice-enabled');if(en)en.checked=!!S.cfg.voiceEnabled;const v=[['c-voice-base','voiceBase','https://api.minimax.io/v1'],['c-voice-key','voiceKey',''],['c-voice-group','voiceGroupId',''],['c-voice-model','voiceModel','speech-02-turbo'],['c-voice-id','voiceId','female-shaonv'],['c-voice-speed','voiceSpeed',1],['c-voice-vol','voiceVol',1],['c-voice-pitch','voicePitch',0]];v.forEach(([id,key,def])=>{const el=$('#'+id);if(el)el.value=S.cfg[key]??def})}};
+  const showSetting=k=>{settingsPage=k;$('#v-settings').classList.toggle('detail',k!=='main');$$('#v-settings .body').forEach(e=>e.style.display='none');const target=$('#settings-'+k);if(target)target.style.display='block';if(k==='prompt')rRolePrompt();if(k==='memory'){const mode=S.cfg.memoryMode||'traditional';$('#memory-mode-traditional').checked=mode==='traditional';$('#memory-mode-vector').checked=mode==='vector';$('#c-embedding-base').value=S.cfg.embeddingBase||'';$('#c-embedding-key').value=S.cfg.embeddingKey||'';$('#c-embedding-model').value=S.cfg.embeddingModel||'text-embedding-3-small';$('#ios-memory-mode').textContent=mode==='vector'?'向量记忆':'传统记忆';$('#vector-connection-card').style.display=mode==='vector'?'block':'none';$('#vector-retrieval-card').style.display=mode==='vector'?'block':'none';$('#c-memory-topk').value=S.cfg.memoryTopK||12;$('#c-memory-minscore').value=S.cfg.memoryMinScore||0.4}$('#v-settings .bar h2').textContent=k==='main'?'设置':({'profile':'我的资料','appearance':'外观','api':'模型与 API','imageapi':'生图 API','data':'数据与备份','prompt':'AI 扮演提示词','memory':'记忆模式','voice':'语音接入（MiniMax）','system':'系统（保活与通知）'}[k]||'设置');if(k==='voice'){const en=$('#c-voice-enabled');if(en)en.checked=!!S.cfg.voiceEnabled;const v=[['c-voice-base','voiceBase','https://api.minimax.io/v1'],['c-voice-key','voiceKey',''],['c-voice-group','voiceGroupId',''],['c-voice-model','voiceModel','speech-02-turbo'],['c-voice-id','voiceId','female-shaonv'],['c-voice-speed','voiceSpeed',1],['c-voice-vol','voiceVol',1],['c-voice-pitch','voicePitch',0]];v.forEach(([id,key,def])=>{const el=$('#'+id);if(el)el.value=S.cfg[key]??def})}};
   $$('#v-settings [data-setting-section]').forEach(b=>b.onclick=()=>showSetting(b.dataset.settingSection));
   const openProfile=$('#open-settings-profile');if(openProfile)openProfile.onclick=()=>showSetting('profile');
   showSetting(settingsPage||'main');
@@ -5486,8 +5555,8 @@ function rSettings(){
     pzMount('#pz-img',pzImg);
     Object.entries(fields).forEach(([id,[key,def]])=>{const el=$('#'+id);if(el)el.value=S.cfg[key]??def});$('#c-nai-sm').checked=!!S.cfg.naiSm;$('#c-nai-sm-dyn').checked=!!S.cfg.naiSmDyn;
     
-  const syncMemoryModeUI=()=>{$('#vector-connection-card').style.display=document.querySelector('input[name="memory-mode"]:checked')?.value==='vector'?'block':'none'};$$('input[name="memory-mode"]').forEach(el=>el.onchange=syncMemoryModeUI);
-  const saveMemorySettings=()=>{const picked=document.querySelector('input[name="memory-mode"]:checked');S.cfg.memoryMode=picked?picked.value:'traditional';S.cfg.embeddingBase=$('#c-embedding-base').value.trim().replace(/\/+$/,'');S.cfg.embeddingKey=$('#c-embedding-key').value.trim();S.cfg.embeddingModel=$('#c-embedding-model').value.trim()||'text-embedding-3-small';S.cfg.memoryTopK=Math.max(1,Math.min(12,Number($('#c-memory-topk').value)||5));save();$('#ios-memory-mode').textContent=S.cfg.memoryMode==='vector'?'向量记忆':'传统记忆';toast('记忆设置已保存')};
+  const syncMemoryModeUI=()=>{const on=document.querySelector('input[name="memory-mode"]:checked')?.value==='vector'?'block':'none';$('#vector-connection-card').style.display=on;$('#vector-retrieval-card').style.display=on};$$('input[name="memory-mode"]').forEach(el=>el.onchange=syncMemoryModeUI);
+  const saveMemorySettings=()=>{const picked=document.querySelector('input[name="memory-mode"]:checked');S.cfg.memoryMode=picked?picked.value:'traditional';S.cfg.embeddingBase=$('#c-embedding-base').value.trim().replace(/\/+$/,'');S.cfg.embeddingKey=$('#c-embedding-key').value.trim();S.cfg.embeddingModel=$('#c-embedding-model').value.trim()||'text-embedding-3-small';S.cfg.memoryTopK=Math.max(1,Math.min(12,Math.round(Number($('#c-memory-topk').value))||12));{const t=parseFloat($('#c-memory-minscore').value);S.cfg.memoryMinScore=isFinite(t)?Math.min(.95,Math.max(.05,Math.round(t*100)/100)):0.4}save();$('#ios-memory-mode').textContent=S.cfg.memoryMode==='vector'?'向量记忆':'传统记忆';toast('记忆设置已保存')};
   $('#save-memory-settings').onclick=saveMemorySettings;
   $('#use-main-embedding-api').onclick=()=>{$('#c-embedding-base').value='';$('#c-embedding-key').value='';toast('已改为沿用「模型与 API」设置；记得保存记忆设置')};
   $('#pull-embedding-models').onclick=async()=>{const btn=$('#pull-embedding-models'),out=$('#embedding-models-result'),base=($('#c-embedding-base').value.trim()||$('#c-base').value.trim()).replace(/\/+$/,''),key=$('#c-embedding-key').value.trim()||$('#c-key').value.trim();if(!base)return toast('请先填写 Embedding 接口地址或主 API 地址');if(!key)return toast('请先填写 Embedding API Key 或主 API Key');btn.disabled=true;btn.textContent='拉取中…';out.textContent='正在获取模型列表…';try{const res=await fetch(base+'/models',{headers:{Authorization:'Bearer '+key}});if(!res.ok)throw new Error('HTTP '+res.status+'：'+(await res.text()).slice(0,160));const json=await res.json(),models=Array.isArray(json.data)?json.data.map(x=>x.id).filter(Boolean):Array.isArray(json.models)?json.models.map(x=>typeof x==='string'?x:x.id).filter(Boolean):[];if(!models.length)throw new Error('接口没有返回可识别的模型列表');models.sort((a,b)=>a.localeCompare(b));const sel=$('#c-embedding-model-select');sel.innerHTML='<option value="">请选择模型（共 '+models.length+' 个）</option>'+models.map(id=>'<option value="'+esc(id)+'">'+esc(id)+'</option>').join('');sel.onchange=()=>{if(sel.value){$('#c-embedding-model').value=sel.value;out.textContent='已选择模型：'+sel.value+'。请保存记忆设置。'}};const current=$('#c-embedding-model').value;if(models.includes(current))sel.value=current;out.textContent='已获取 '+models.length+' 个模型，请点选。注意：模型列表不保证每个模型都支持 Embedding。'}catch(e){out.textContent='拉取失败：'+e.message+'。请检查 /models、Key 和浏览器 CORS。'}finally{btn.disabled=false;btn.textContent='拉取模型列表'}};
@@ -6906,8 +6975,8 @@ async function importStickerLinkFiles(files,where,grp){
 Object.assign(RPI,{car:'<path d="M5 15v-3l1.8-4.5A2 2 0 0 1 8.7 6h6.6a2 2 0 0 1 1.9 1.5L19 12v3"/><rect x="3.5" y="12" width="17" height="5" rx="1.5"/><circle cx="7.5" cy="17.5" r="1.4" fill="currentColor"/><circle cx="16.5" cy="17.5" r="1.4" fill="currentColor"/>'});
 const TRF_ST={pending:'待收款',accepted:'已收款',refunded:'已退还'};
 const WLS={owner:'me',tab:'cards'};
-function wlNorm(w){w.balance=Number(w.balance)||0;w.records=w.records||[];w.cards=w.cards||[];w.houses=w.houses||[];w.cars=w.cars||[];return w}
-function wlOf(o){if(o==='me'){if(!S.wallet)S.wallet={balance:1000,records:[],cards:[],houses:[],cars:[]};return wlNorm(S.wallet)}const c=S.cwallets||(S.cwallets={});if(!c[o])c[o]={balance:20000,records:[],cards:[],houses:[],cars:[]};return wlNorm(c[o])}
+function wlNorm(w){w.balance=Number(w.balance)||0;w.records=w.records||[];w.cards=w.cards||[];w.houses=w.houses||[];w.cars=w.cars||[];w.incomes=w.incomes||[];return w}
+function wlOf(o){if(o==='me'){const k=S.activeUserProfile||((S.userProfiles||[])[0]||{}).id||'default',u=S.uwallets||(S.uwallets={});if(!u[k]){if(S.wallet&&!S.walletAdopted){u[k]=S.wallet;S.walletAdopted=k}else u[k]={balance:1000,records:[],cards:[],houses:[],cars:[],incomes:[]}}return wlNorm(u[k])}const c=S.cwallets||(S.cwallets={});if(!c[o])c[o]={balance:20000,records:[],cards:[],houses:[],cars:[],incomes:[]};return wlNorm(c[o])}
 const fmtAmt=n=>String(Math.round(Number(n)*100)/100);
 const fmtMoney=n=>(n<0?'-':'')+'¥ '+Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
 const fmtBig=n=>{n=Math.round(n);return '¥ '+(n>=1e8?(n/1e8).toFixed(2)+' 亿':n>=1e4?(n/1e4).toFixed(n>=1e6?0:1)+' 万':String(n))};
@@ -6929,14 +6998,16 @@ function trfApplyAI(h,data){
 }
 function wlSummary(pid){
  const w=wlOf(pid),bits=[];
- if(w.cards.length)bits.push('银行卡：'+w.cards.map(c=>c.bank+c.type).join('、'));
+ if(w.cards.some(c=>!c.kin))bits.push('银行卡：'+w.cards.filter(c=>!c.kin).map(c=>c.bank+c.type).join('、'));
+ if(w.incomes.length)bits.push('收入来源：'+w.incomes.map(i=>i.name+(i.amount?' 约¥'+fmtAmt(i.amount)+(i.period?'/'+String(i.period).replace(/^每/,''):''):'')).join('、'));
+ w.cards.filter(c=>c.kin).forEach(c=>bits.push(c.kin==='in'?'收到'+(c.peer==='me'?'用户':lfWho(c.peer))+'赠送的亲属卡（月额度 ¥'+fmtAmt(c.limit)+'）':'送给'+(c.peer==='me'?'用户':lfWho(c.peer))+'一张亲属卡（月额度 ¥'+fmtAmt(c.limit)+'）'));
  if(w.houses.length)bits.push('房产：'+w.houses.map(h=>h.name).join('、'));
  if(w.cars.length)bits.push('车辆：'+w.cars.map(c=>c.name).join('、'));
  return '你的钱包余额约 ¥'+fmtAmt(w.balance)+'，转账金额不要超过余额。'+(bits.length?'你的资产（模拟）：'+bits.join('；')+'。聊天里涉及时请与之保持一致。':'');
 }
 function TRF_PROMPT(){
  const h=S.chats[cur]||[],pend=[...h].reverse().find(x=>x.transfer&&x.role==='user'&&x.transfer.status==='pending');
- return '【转账与钱包（模拟）】聊天里可以模拟转账。JSON 里额外有两个可选字段：transfer 和 transfer_action。transfer 默认为 null；只有在符合角色性格和当前剧情、确实想给用户转钱时，才填 {"amount":数字,"note":"转账备注"}，不要频繁使用，金额要合理。transfer_action 只用于处理用户发来的转账：填 "accept" 表示收款，填 "refund" 表示退还，其余情况留空。'+wlSummary(cur)+(pend?'用户有一笔待处理的转账：¥'+fmtAmt(pend.transfer.amount)+(pend.transfer.note?'，备注「'+pend.transfer.note+'」':'')+'。请结合人设自然地回应，并用 transfer_action 决定收款还是退还。':'');
+ return '【转账与钱包（模拟）】聊天里可以模拟转账。JSON 里额外有两个可选字段：transfer 和 transfer_action。transfer 默认为 null；只有在符合角色性格和当前剧情、确实想给用户转钱时，才填 {"amount":数字,"note":"转账备注"}，不要频繁使用，金额要合理。transfer_action 只用于处理用户发来的转账：填 "accept" 表示收款，填 "refund" 表示退还，其余情况留空。'+wlSummary(cur)+KIN_PROMPT()+(pend?'用户有一笔待处理的转账：¥'+fmtAmt(pend.transfer.amount)+(pend.transfer.note?'，备注「'+pend.transfer.note+'」':'')+'。请结合人设自然地回应，并用 transfer_action 决定收款还是退还。':'');
 }
 function trfKeepScroll(){const b=$('#msgs'),y=b.scrollTop;draw();b.scrollTop=y}
 function trfTap(m){
@@ -6957,6 +7028,72 @@ function trfOpen(){
    S.chats[cur].push(m);S.last=cur;wlMove('me','send',a,cur,note);save();el.classList.remove('on');draw();toast('已转账 ¥'+fmtAmt(a))}};
 }
 $('#pm-transfer').onclick=()=>{$('#pm').classList.remove('on');trfOpen()};
+/* ===== 亲属卡 / 收入来源 ===== */
+function kinWallets(){return [...Object.values(S.uwallets||{}),...Object.values(S.cwallets||{})]}
+function kinAlive(kid){return kinWallets().some(w=>(w.cards||[]).some(c=>c.kid===kid))}
+function kinYm(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)}
+function kinUsed(c){return c.ym===kinYm()?(Number(c.used)||0):0}
+function kinLeft(c){return Math.max(0,Math.round(((Number(c.limit)||0)-kinUsed(c))*100)/100)}
+function kinUse(kid,amt){const ym=kinYm();kinWallets().forEach(w=>(w.cards||[]).forEach(c=>{if(c.kid!==kid)return;if(c.ym!==ym){c.ym=ym;c.used=0}c.used=Math.round(((Number(c.used)||0)+amt)*100)/100}))}
+function kinPayCards(){return wlOf('me').cards.filter(c=>c.kin==='in'&&P(c.peer))}
+function lfPayChips(pm){const cs=kinPayCards();if(!cs.length)return '';return '<div class="lfs-lb">支付方式</div><div class="lfs-chips"><button type="button" class="'+(pm==='wallet'?'on':'')+'" data-s="pay:wallet">我的钱包</button>'+cs.map(c=>'<button type="button" class="'+(pm===c.kid?'on':'')+'" data-s="pay:'+esc(c.kid)+'">亲属卡 · '+esc(lfWho(c.peer))+'</button>').join('')+'</div>'}
+function lfPayCheck(pm,pay){
+  if(!pm||pm==='wallet')return pay>wlOf('me').balance?{err:'钱包余额不足，请先在钱包里充值'}:{kc:null};
+  const kc=wlOf('me').cards.find(c=>c.kid===pm&&c.kin==='in');
+  if(!kc||!kinAlive(pm))return {err:'这张亲属卡已失效'};
+  if(pay>kinLeft(kc))return {err:'超出本月额度，剩余 ¥'+fmtAmt(kinLeft(kc))};
+  if(pay>wlOf(kc.peer).balance)return {err:lfWho(kc.peer)+' 的钱包余额不足'};
+  return {kc};
+}
+function lfPayDo(kc,pay,to,title){
+  if(kc){wlMove(kc.peer,'pay',pay,'me','亲属卡 · '+lfWho('me')+' · '+title);wlOf('me').records.unshift({id:uid(),t:Date.now(),type:'pay',amount:pay,pid:kc.peer,note:'亲属卡 · '+title});kinUse(kc.kid,pay)}
+  else wlMove('me','pay',pay,to,title);
+}
+function lfPaySrc(pm){const kc=pm&&pm!=='wallet'?wlOf('me').cards.find(c=>c.kid===pm&&c.kin==='in'):null;return kc?'亲属卡 · 从「'+lfWho(kc.peer)+'」的钱包支付 · 本月剩余 '+fmtMoney(kinLeft(kc)):'从「'+(lfUser().name||'我')+'」的钱包支付 · 余额 '+fmtMoney(wlOf('me').balance)}
+function kinRemove(kid){kinWallets().forEach(w=>{w.cards=(w.cards||[]).filter(c=>c.kid!==kid)})}
+function kinSetLimit(kid,v){kinWallets().forEach(w=>(w.cards||[]).forEach(c=>{if(c.kid===kid)c.limit=v}))}
+function kinGive(from,to,limit){
+  wlOf(from).cards.filter(c=>c.kin==='out'&&c.peer===to).map(c=>c.kid).forEach(kinRemove);
+  const kid=uid(),last4=String(1000+Math.floor(Math.random()*9000)),t=Date.now();
+  wlOf(from).cards.unshift({id:uid(),kin:'out',peer:to,kid,limit,last4,t,bank:'亲属卡',type:'亲属卡'});
+  wlOf(to).cards.unshift({id:uid(),kin:'in',peer:from,kid,limit,last4,t,bank:'亲属卡',type:'亲属卡'});
+  return kid;
+}
+function kinText(m){const a='每月额度 ¥'+fmtAmt(m.kin.limit);return m.role==='user'?'[用户送了你一张亲属卡，'+a+']':'[你送了用户一张亲属卡，'+a+']'}
+function kinMsgHTML(m){const k=m.kin,alive=kinAlive(k.id),mine=m.role==='user';return '<div class="kn-card'+(alive?'':' off')+'"><div class="tf-main"><span class="tf-ico"><svg viewBox="2 4 20 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg></span><div class="tf-txt"><b>亲属卡</b><small>每月额度 ¥'+esc(fmtAmt(k.limit))+'</small></div></div><div class="tf-foot">'+(alive?(mine?'已赠送':'已收到')+' · 点击查看':'已收回')+'</div></div>'}
+function KIN_PROMPT(){
+  const w=wlOf(cur),out=w.cards.find(c=>c.kin==='out'&&c.peer==='me'),inn=w.cards.find(c=>c.kin==='in'&&c.peer==='me');
+  return '另有可选字段 kin_card（默认 null）：只有符合人设和剧情、确实想送用户一张亲属卡（用户可以在每月额度内花你的钱）时，才填 {"limit":每月额度数字}，很少使用，额度要符合你的财力。'+(out?'你已经送过用户一张亲属卡（月额度 ¥'+fmtAmt(out.limit)+'），不要重复送。':'')+(inn?'用户送过你一张亲属卡（月额度 ¥'+fmtAmt(inn.limit)+'），请结合人设自然地回应或提起。':'');
+}
+function kinApplyAI(h,data){
+  const k=data&&data.kin_card;if(!k||typeof k!=='object'||Array.isArray(k))return;
+  const lim=Math.round(Number(k.limit)*100)/100;if(!(lim>0&&lim<1e7))return;
+  const pid=cur;if(wlOf(pid).cards.some(c=>c.kin==='out'&&c.peer==='me'))return;
+  const kid=kinGive(pid,'me',lim),m={role:'assistant',content:'',kin:{id:kid,limit:lim,from:pid,to:'me'},t:Date.now()};
+  m.content=kinText(m);h.push(m);save();
+}
+function kinOpen(){
+  const p=P(cur);if(!p)return;if(p.blocked)return toast('已拉黑，请先解除拉黑');
+  let el=$('#trsheet');if(!el){el=document.createElement('div');el.id='trsheet';document.body.appendChild(el)}
+  const ex=wlOf('me').cards.find(c=>c.kin==='out'&&c.peer===cur);
+  el.innerHTML='<div class="trs-box"><div class="trs-top"><button type="button" data-kin="x">取消</button><b>赠送亲属卡给 '+esc(p.name)+'</b><span style="min-width:44px"></span></div><div class="trs-amt"><span>¥</span><input id="kin-amt" inputmode="decimal" placeholder="每月额度" autocomplete="off" value="'+(ex?esc(fmtAmt(ex.limit)):'')+'"></div><small class="trs-bal">'+(ex?'已送过一张，确认后会替换成新额度。':'对方可在每月额度内使用你的钱包（模拟）。')+'</small><button type="button" class="trs-ok" data-kin="ok">确认赠送</button></div>';
+  el.classList.add('on');setTimeout(()=>{const i=$('#kin-amt');if(i)i.focus()},60);
+  el.onclick=e=>{const b=e.target.closest('[data-kin]');if(e.target===el||(b&&b.dataset.kin==='x')){el.classList.remove('on');return}
+    if(b&&b.dataset.kin==='ok'){const a=Math.round(parseFloat($('#kin-amt').value)*100)/100;if(!(a>0))return toast('请输入每月额度');if(a>=1e7)return toast('额度太大了');
+      const kid=kinGive('me',cur,a),m={role:'user',content:'',kin:{id:kid,limit:a,from:'me',to:cur},t:Date.now()};m.content=kinText(m);
+      S.chats[cur].push(m);S.last=cur;save();el.classList.remove('on');draw();toast('已赠送亲属卡')}};
+}
+$('#pm-kin').onclick=()=>{$('#pm').classList.remove('on');kinOpen()};
+document.addEventListener('click',e=>{const c=e.target.closest('.kn-card');if(!c)return;e.stopPropagation();e.preventDefault();WLS.owner='me';WLS.tab='cards';go('wallet')},true);
+function kinCardTap(i){
+  const w=wlOf(WLS.owner),c=w.cards[i];if(!c||!c.kin)return;const out=c.kin==='out';
+  msSheet([
+    {label:'修改月额度（当前 ¥'+fmtAmt(c.limit)+'）',run:async()=>{const v=await sgPrompt('每月额度',String(c.limit),'输入金额');if(v===null)return;const a=Math.round(parseFloat(v)*100)/100;if(!(a>0))return toast('请输入有效金额');kinSetLimit(c.kid,a);save();wlRender()}},
+    {label:out?'收回这张亲属卡':'删除这张亲属卡',run:()=>{if(!confirm('双方钱包里的这张亲属卡都会删除，继续吗？'))return;kinRemove(c.kid);save();wlRender();toast('已删除')}},
+    {label:'取消'}
+  ]);
+}
+
 /* wallet app */
 /* ===== life app (购物 / 外卖 / 叫车) ===== */
 const LF_ST={shop:['已下单','已发货','运输中','已签收'],food:['商家已接单','制作中','骑手配送中','已送达'],ride:['等待接单','司机已接单','行程中','已到达']};
@@ -7208,7 +7345,7 @@ function lfCartN(){const n=lfCartList().reduce((s,c)=>s+c.qty,0);return n>99?'99
 function lfCartBadge(){const n=lfCartN();document.querySelectorAll('.lf-cartb').forEach(b=>{b.classList.toggle('has',!!n);const em=b.querySelector('em');if(em)em.textContent=n})}
 function lfCartAdd(k,x,qty){const L=lfData(),u=S.activeUserProfile||'',f=L.cart.find(c=>c.kind===k&&c.title===x.t&&c.shop===(x.s||'')&&(c.u||'')===u);if(f)f.qty=Math.min(9,f.qty+(qty||1));else L.cart.push({id:uid(),u,kind:k,title:x.t,shop:x.s||'',unit:x.p,d:x.d||'',qty:Math.min(9,qty||1)});save();lfCartBadge()}
 function lfCartSheet(){
-  const el=lfSheet(),pid=lfPid(),p=P(pid);let to='me',note='',cpOn=false;
+  const el=lfSheet(),pid=lfPid(),p=P(pid);let to='me',note='',cpOn=false,pm='wallet';
   const draw=()=>{
     const ls=lfCartList(),n=ls.reduce((s,c)=>s+c.qty,0),sum=Math.round(ls.reduce((s,c)=>s+c.unit*c.qty,0)*100)/100;
     const nCp=lfCpCount(),canCp=nCp>0&&sum>=200;if(!canCp)cpOn=false;const fin=Math.max(0,Math.round((sum-(cpOn?30:0))*100)/100);
@@ -7217,7 +7354,7 @@ function lfCartSheet(){
       +'<div class="lfs-lb">买给</div><div class="lfs-chips"><button type="button" class="'+(to==='me'?'on':'')+'" data-s="to:me">我自己</button>'+(p?'<button type="button" class="'+(to!=='me'?'on':'')+'" data-s="to:ta">'+esc(p.name)+'</button>':'')+'</div>'
       +'<input id="lfs-note" class="lfs-in" placeholder="留言（送给 TA 时会出现在聊天里，可空）" value="'+esc(note)+'" autocomplete="off">'
       +(nCp?'<button type="button" class="lfs-cpb'+(cpOn?' on':'')+'" data-s="cpn">'+(canCp?(cpOn?'已使用':'使用')+'购物券 满200减30 · 剩'+nCp+'张':'购物券 满200减30 · 未满200')+'</button>':'')
-      +'<div class="lfs-foot"><small>从「'+esc(lfUser().name||'我')+'」的钱包支付 · 余额 '+fmtMoney(wlOf('me').balance)+'</small><button type="button" class="lfs-ok" data-s="ok">结算 ¥'+fmtAmt(fin)+'</button></div>'
+      +lfPayChips(pm)+'<div class="lfs-foot"><small>'+lfPaySrc(pm)+'</small><button type="button" class="lfs-ok" data-s="ok">结算 ¥'+fmtAmt(fin)+'</button></div>'
       :'<div class="lfc-empty">购物车是空的</div>')+'</div>'};
   draw();el.classList.add('on');
   el.oninput=e=>{if(e.target.id==='lfs-note')note=e.target.value};
@@ -7227,15 +7364,16 @@ function lfCartSheet(){
     if(a==='x'){el.classList.remove('on');return}
     if(a==='clr'){L.cart=L.cart.filter(c=>(c.u||'')!==u);save();draw();lfCartBadge();return}
     if(a==='cpn'){const sm=lfCartList().reduce((s,c)=>s+c.unit*c.qty,0);if(sm>=200&&lfCpCount())cpOn=!cpOn;draw();return}
+    if(a.indexOf('pay:')===0){pm=a.slice(4);draw();return}
     if(a.indexOf('to:')===0){to=a==='to:ta'?pid:'me';draw();return}
     if(a.indexOf('cq:')===0){const q=a.split(':'),c=L.cart.find(x=>x.id===q[1]);if(c){c.qty+=Number(q[2]);if(c.qty<1)L.cart=L.cart.filter(x=>x!==c);else c.qty=Math.min(9,c.qty);save()}draw();lfCartBadge();return}
     if(a==='ok'){
       const ls=lfCartList();if(!ls.length)return;
       const total=Math.round(ls.reduce((s,c)=>s+c.unit*c.qty,0)*100)/100,disc=(cpOn&&total>=200&&lfCpCount()>0)?30:0,pay=Math.round((total-disc)*100)/100;
-      if(pay>wlOf('me').balance)return toast('钱包余额不足，请先在钱包里充值');
+      const _pc=lfPayCheck(pm,pay);if(_pc.err)return toast(_pc.err);const kc=_pc.kc;
       const nt=String(note||'').trim().slice(0,60);
-      let rest=disc;const os=ls.map(c=>{let pr=Math.round(c.unit*c.qty*100)/100;const cut=Math.min(pr,rest);rest-=cut;pr=Math.round((pr-cut)*100)/100;return lfMake({kind:c.kind,pid,by:'me',to,title:c.title,shop:c.shop||'',price:pr,qty:c.qty,note:nt})});
-      wlMove('me','pay',pay,to,ls[0].title+(ls.length>1?' 等'+ls.length+'件':''));if(disc)lfCpUse();lfGachaEarn();
+      let rest=disc;const os=ls.map(c=>{let pr=Math.round(c.unit*c.qty*100)/100;const cut=Math.min(pr,rest);rest-=cut;pr=Math.round((pr-cut)*100)/100;return lfMake({kind:c.kind,pid,by:'me',to,title:c.title,shop:c.shop||'',price:pr,qty:c.qty,note:nt,card:kc?kc.kid:''})});
+      lfPayDo(kc,pay,to,ls[0].title+(ls.length>1?' 等'+ls.length+'件':''));if(disc)lfCpUse();lfGachaEarn();
       const forTa=to!=='me';if(forTa)os.forEach(o=>lfPush(o,'user'));
       L.cart=L.cart.filter(c=>(c.u||'')!==u);
       save();el.classList.remove('on');lifeRender();
@@ -7253,11 +7391,11 @@ function lfCheckout(it){
   +'<div class="lfs-lb">'+(isRide?'乘车人':'买给')+'</div><div class="lfs-chips"><button type="button" class="on" data-s="to:me">我自己</button>'+(p?'<button type="button" data-s="to:ta">'+esc(p.name)+'</button>':'')+'</div>'
   +(isRide?'':'<div class="lfs-row"><span>数量</span><div class="lfs-qty"><button type="button" data-s="q:-1">−</button><b id="lfs-q">1</b><button type="button" data-s="q:1">＋</button></div></div>')
   +'<input id="lfs-note" class="lfs-in" placeholder="留言（送给 TA 时会出现在聊天里，可空）" autocomplete="off">'
-  +(isRide?'':'<button type="button" class="lfs-cpb" id="lfs-cpb" data-s="cpn" hidden></button>')
-  +'<div class="lfs-foot"><small>从「'+esc(lfUser().name||'我')+'」的钱包支付 · 余额 '+fmtMoney(wlOf('me').balance)+'</small>'+(isRide||it.custom?'':'<button type="button" class="lfs-cart" data-s="cart">加入购物车</button>')+'<button type="button" class="lfs-ok" data-s="ok">付款 ¥<span id="lfs-total">0</span></button></div></div>';
+  +lfPayChips('wallet')+(isRide?'':'<button type="button" class="lfs-cpb" id="lfs-cpb" data-s="cpn" hidden></button>')
+  +'<div class="lfs-foot"><small id="lfs-paysrc">'+lfPaySrc('wallet')+'</small>'+(isRide||it.custom?'':'<button type="button" class="lfs-cart" data-s="cart">加入购物车</button>')+'<button type="button" class="lfs-ok" data-s="ok">付款 ¥<span id="lfs-total">0</span></button></div></div>';
   el.classList.add('on');
   const unit=()=>it.custom?Math.round((parseFloat(el.querySelector('#lfs-price').value)||0)*100)/100:it.unit;
-  let cpOn=false;
+  let cpOn=false,pm='wallet';
   const raw=()=>Math.round(unit()*(isRide?1:qty)*100)/100;
   const upd=()=>{const r=raw(),b=el.querySelector('#lfs-cpb'),n=lfCpCount();
     if(b){if(n&&r>=200){b.hidden=false;b.classList.toggle('on',cpOn);b.textContent=(cpOn?'已使用':'使用')+'购物券 满200减30 · 剩'+n+'张'}
@@ -7271,16 +7409,17 @@ function lfCheckout(it){
     if(a==='x'){el.classList.remove('on');return}
     if(a==='cpn'){if(raw()>=200&&lfCpCount()){cpOn=!cpOn;upd()}return}
     if(a==='cart'){lfCartAdd(k,{t:it.title,s:it.shop,p:it.unit,d:it.d},qty);el.classList.remove('on');toast('已加入购物车');return}
+    if(a.indexOf('pay:')===0){pm=a.slice(4);el.querySelectorAll('[data-s^="pay:"]').forEach(x=>x.classList.toggle('on',x===b));const ps=el.querySelector('#lfs-paysrc');if(ps)ps.textContent=lfPaySrc(pm);return}
     if(a.indexOf('to:')===0){to=a==='to:ta'?pid:'me';el.querySelectorAll('[data-s^="to:"]').forEach(x=>x.classList.toggle('on',x===b));return}
     if(a.indexOf('q:')===0){qty=Math.max(1,Math.min(9,qty+Number(a.slice(2))));el.querySelector('#lfs-q').textContent=qty;upd();return}
     if(a==='ok'){
       const u=unit(),title=it.custom?String(el.querySelector('#lfs-title').value||'').trim().slice(0,40):it.title;
       if(!title)return toast('请先写下想买的东西');if(!(u>0))return toast('请填写价格');
       const total=Math.round(u*(isRide?1:qty)*100)/100,disc=(cpOn&&!isRide&&total>=200&&lfCpCount()>0)?30:0,pay=Math.round((total-disc)*100)/100;
-      if(pay>wlOf('me').balance)return toast('钱包余额不足，请先在钱包里充值');
+      const _pc=lfPayCheck(pm,pay);if(_pc.err)return toast(_pc.err);const kc=_pc.kc;
       const note=String(el.querySelector('#lfs-note').value||'').trim().slice(0,60);
-      const o=lfMake({kind:k,pid,by:'me',to,title,shop:it.shop||'',price:pay,qty:isRide?1:qty,note,from:it.from||'',dest:it.dest||'',km:it.km||0});
-      wlMove('me','pay',pay,to,title);if(disc)lfCpUse();if(!isRide)lfGachaEarn();
+      const o=lfMake({kind:k,pid,by:'me',to,title,shop:it.shop||'',price:pay,qty:isRide?1:qty,note,from:it.from||'',dest:it.dest||'',km:it.km||0,card:kc?kc.kid:''});
+      lfPayDo(kc,pay,to,title);if(disc)lfCpUse();if(!isRide)lfGachaEarn();
       const forTa=to!=='me';if(forTa)lfPush(o,'user');
       save();el.classList.remove('on');lifeRender();
       lfWelcome(()=>{if(forTa)lfAsk(pid)});
@@ -7351,7 +7490,7 @@ setInterval(()=>{try{lfFloatSync()}catch(_){}},15000);
 setTimeout(()=>{try{lfFloatSync()}catch(_){}},1500);
 function lfDetail(id){
   const o=lfData().orders.find(x=>x.id===id);if(!o)return;const el=lfSheet(),st=lfStage(o),d=new Date(o.t);
-  const rows=[['类型',LF_KIND[o.kind]],['付款人',lfWho(o.by)],[o.kind==='ride'?'乘车人':'送给',o.by===o.to?'自己':lfWho(o.to)]].concat(o.kind==='ride'?[['路线',(o.from||'当前位置')+' → '+(o.dest||'')]]:[['数量',String(o.qty||1)]]).concat([['金额','¥'+fmtAmt(o.price)],['下单时间',(d.getMonth()+1)+'月'+d.getDate()+'日 '+hm(o.t)]]).concat(o.note?[['留言',o.note]]:[]);
+  const rows=[['类型',LF_KIND[o.kind]],['付款人',lfWho(o.by)],[o.kind==='ride'?'乘车人':'送给',o.by===o.to?'自己':lfWho(o.to)]].concat(o.kind==='ride'?[['路线',(o.from||'当前位置')+' → '+(o.dest||'')]]:[['数量',String(o.qty||1)]]).concat([['金额','¥'+fmtAmt(o.price)],['下单时间',(d.getMonth()+1)+'月'+d.getDate()+'日 '+hm(o.t)]]).concat(o.note?[['留言',o.note]]:[]).concat(o.card?[['支付方式','亲属卡']]:[]);
   el.innerHTML='<div class="lfs-box"><div class="lfs-hd"><b>'+esc(o.kind==='ride'?o.title:o.title)+'</b><button type="button" data-s="x">关闭</button></div><ul class="lfs-tl">'+LF_ST[o.kind].map((s,i)=>'<li class="'+(i<=st?'on':'')+(i===st?' cur':'')+'"><i></i><span>'+s+'</span></li>').join('')+'</ul><div class="lfs-info">'+rows.map(r=>'<div><span>'+r[0]+'</span><b>'+esc(r[1])+'</b></div>').join('')+'</div><button type="button" class="lfs-del" data-s="del">删除这条记录</button></div>';
   el.classList.add('on');el.oninput=null;
   el.onclick=e=>{if(e.target===el){el.classList.remove('on');return}const b=e.target.closest('[data-s]');if(!b)return;if(b.dataset.s==='x'){el.classList.remove('on');return}if(b.dataset.s==='del'){if(!confirm('删除这条订单记录？钱款不会退回。'))return;const L=lfData();L.orders=L.orders.filter(x=>x.id!==id);save();el.classList.remove('on');lifeRender()}};
@@ -7414,32 +7553,39 @@ document.addEventListener('click',e=>{const c=e.target.closest('.lf-card');if(!c
 
 const WL_BANK=['linear-gradient(135deg,#1f3a5f,#3b6ea5)','linear-gradient(135deg,#7a1f2b,#c2453a)','linear-gradient(135deg,#1d4d3b,#3f9b73)','linear-gradient(135deg,#3b2a63,#7a5cc2)','linear-gradient(135deg,#2c2c31,#5a5a63)'];
 const WL_META={send:'tfr',recv:'dl',refund:'tfr',topup:'pl',out:'dots',pay:'dots'};
-const WL_FIELDS={cards:[['bank','银行','例如：招商银行'],['type','类型','储蓄卡 或 信用卡'],['last4','卡号尾号','4 位数字'],['balance','余额（信用卡填额度）','数字']],houses:[['name','名称 / 位置','例如：滨江公寓 12 栋'],['area','面积（㎡）','数字'],['value','估值（元）','数字'],['note','备注','']],cars:[['name','品牌型号','例如：奥迪 A6L'],['plate','车牌','例如：沪A·12345'],['value','估值（元）','数字'],['note','备注','']]};
-function wlRecTitle(r){const other=r.pid==='me'?(S.me.name||'我'):(P(r.pid)?P(r.pid).name:'对方');return r.type==='recv'?'收到 '+other+' 的转账':r.type==='send'?'转账给 '+other:r.type==='refund'?'转账退还 · '+other:r.type==='topup'?'充值':r.type==='pay'?'消费 · '+(r.note||'订单'):'提现'}
-function wlPanel(w,own){
+const WL_FIELDS={cards:[['bank','银行','例如：招商银行'],['type','类型','储蓄卡 或 信用卡'],['last4','卡号尾号','4 位数字'],['balance','余额（信用卡填额度）','数字']],houses:[['name','名称 / 位置','例如：滨江公寓 12 栋'],['area','面积（㎡）','数字'],['value','估值（元）','数字'],['note','备注','']],cars:[['name','品牌型号','例如：奥迪 A6L'],['plate','车牌','例如：沪A·12345'],['value','估值（元）','数字'],['note','备注','']],incomes:[['name','收入来源','例如：工资 / 稿费 / 兼职 / 投资收益'],['amount','金额（元）','数字'],['period','周期','每月 / 每年 / 一次性'],['note','备注','']]};
+function wlRecTitle(r){const other=r.pid==='me'?(lfUser().name||S.me.name||'我'):(P(r.pid)?P(r.pid).name:'对方');return r.type==='recv'?'收到 '+other+' 的转账':r.type==='send'?'转账给 '+other:r.type==='refund'?'转账退还 · '+other:r.type==='topup'?'充值':r.type==='pay'?'消费 · '+(r.note||'订单'):'提现'}
+function wlPanel0(w,own){
  const tab=WLS.tab;
  if(tab==='cards')return w.cards.map((c,i)=>'<div class="wl-bank" style="background:'+WL_BANK[msHash(c.bank||'')%WL_BANK.length]+'" data-wl-edit="cards:'+i+'"><div class="wl-bt"><b>'+esc(c.bank||'银行')+'</b><span>'+esc(c.type||'储蓄卡')+'</span></div><div class="wl-no">•••• •••• •••• '+esc(c.last4||'0000')+'</div><div class="wl-bb"><span>'+(c.type==='信用卡'?'额度':'余额')+'</span><b>'+fmtMoney(Number(c.balance)||0)+'</b></div></div>').join('')+'<button type="button" class="wl-add" data-wl-add="cards">添加银行卡</button>';
  if(tab==='houses'||tab==='cars'){const k=tab,ic=k==='houses'?'hm':'car';return w[k].map((x,i)=>'<div class="wl-asset" data-wl-edit="'+k+':'+i+'"><span class="wl-i">'+rpSvg(ic)+'</span><div class="wl-t"><b>'+esc(x.name||'未命名')+'</b><small>'+esc((k==='houses'?(x.area?x.area+'㎡ · ':''):(x.plate?x.plate+' · ':''))+'估值 '+fmtBig(Number(x.value)||0)+(x.note?' · '+x.note:''))+'</small></div></div>').join('')+'<button type="button" class="wl-add" data-wl-add="'+k+'">'+(k==='houses'?'添加房产':'添加车辆')+'</button>'}
  return '<div class="wl-list">'+(w.records.map(r=>{const sg=({recv:1,refund:1,topup:1})[r.type]?1:-1,d=new Date(r.t);return '<div class="wl-r"><span class="wl-i">'+rpSvg(WL_META[r.type]||'tfr')+'</span><div class="wl-t"><b>'+esc(wlRecTitle(r))+'</b><small>'+esc((r.note?r.note+' · ':'')+(d.getMonth()+1)+'月'+d.getDate()+'日 '+hm(r.t))+'</small></div><span class="wl-a'+(sg>0?' p':'')+'">'+(sg>0?'+':'-')+fmtAmt(r.amount)+'</span></div>'}).join('')||'<div class="wl-e">还没有账单</div>')+'</div>';
 }
+
+function wlMonthly(w){return (w.incomes||[]).reduce((a,i)=>{const n=Number(i.amount)||0,pr=String(i.period||'每月');return a+(/一次|单次|偶/.test(pr)?0:/年/.test(pr)?n/12:/周/.test(pr)?n*4.33:/日|天/.test(pr)?n*30:n)},0)}
+function wlPanel(w,own){
+ if(WLS.tab==='incomes'){const m=wlMonthly(w);return '<div class="wl-inc-sum">预估月收入<b>'+fmtMoney(m)+'</b></div>'+w.incomes.map((x,i)=>'<div class="wl-asset" data-wl-edit="incomes:'+i+'"><span class="wl-i">'+rpSvg('dl')+'</span><div class="wl-t"><b>'+esc(x.name||'未命名')+'</b><small>'+esc((x.amount?'¥'+fmtAmt(x.amount)+(x.period?' / '+String(x.period).replace(/^每/,''):'')+' ':'')+(x.note?'· '+x.note:''))+'</small></div></div>').join('')+'<button type="button" class="wl-add" data-wl-add="incomes">添加收入来源</button>'}
+ if(WLS.tab==='cards')return w.cards.map((c,i)=>c.kin?'<div class="wl-bank wl-kin" data-wl-kin="'+i+'"><div class="wl-bt"><b>亲属卡</b><span>'+(c.kin==='in'?'来自 ':'已赠予 ')+esc(lfWho(c.peer))+'</span></div><div class="wl-no">•••• •••• •••• '+esc(c.last4||'0000')+'</div><div class="wl-bb"><span>本月剩余 / 额度 ¥'+fmtAmt(c.limit)+'</span><b>'+fmtMoney(kinLeft(c))+'</b></div></div>':'<div class="wl-bank" style="background:'+WL_BANK[msHash(c.bank||'')%WL_BANK.length]+'" data-wl-edit="cards:'+i+'"><div class="wl-bt"><b>'+esc(c.bank||'银行')+'</b><span>'+esc(c.type||'储蓄卡')+'</span></div><div class="wl-no">•••• •••• •••• '+esc(c.last4||'0000')+'</div><div class="wl-bb"><span>'+(c.type==='信用卡'?'额度':'余额')+'</span><b>'+fmtMoney(Number(c.balance)||0)+'</b></div></div>').join('')+'<button type="button" class="wl-add" data-wl-add="cards">添加银行卡</button>';
+ return wlPanel0(w,own)}
 function wlRender(){
  const box=$('#wl-body');if(!box)return;
- const own=(WLS.owner==='me'||!P(WLS.owner))?'me':WLS.owner;WLS.owner=own;
+ const own=(WLS.owner==='me'||!lfBound().some(x=>x.id===WLS.owner))?'me':WLS.owner;WLS.owner=own;
  const w=wlOf(own),isMe=own==='me',p=isMe?null:P(own);
- const total=w.balance+w.cards.filter(c=>c.type!=='信用卡').reduce((a,c)=>a+(Number(c.balance)||0),0)+w.houses.reduce((a,c)=>a+(Number(c.value)||0),0)+w.cars.reduce((a,c)=>a+(Number(c.value)||0),0);
- const chips=[{id:'me',name:'我',a:av(S.me)}].concat(S.personas.filter(x=>!x.blocked).map(x=>({id:x.id,name:x.name,a:av(x)})));
+ const total=w.balance+w.cards.filter(c=>c.type!=='信用卡'&&!c.kin).reduce((a,c)=>a+(Number(c.balance)||0),0)+w.houses.reduce((a,c)=>a+(Number(c.value)||0),0)+w.cars.reduce((a,c)=>a+(Number(c.value)||0),0);
+ const mu=lfUser(),chips=[{id:'me',name:mu.name||S.me.name||'我',a:av(mu)}].concat(lfBound().map(x=>({id:x.id,name:x.name,a:av(x)})));
  box.innerHTML='<div class="wl-who">'+chips.map(c=>'<button type="button" class="wl-chip'+(c.id===own?' on':'')+'" data-wl-owner="'+esc(c.id)+'"><span class="wl-av">'+c.a+'</span>'+esc(c.name)+'</button>').join('')+'</div>'
  +'<div class="wl-card"><small>'+(isMe?'我的余额':esc(p.name)+' 的余额')+'</small><b>'+fmtMoney(w.balance)+'</b><div class="wl-sub">总资产约 '+fmtBig(total)+'</div><div class="wl-act">'+(isMe?'<button type="button" data-wl="topup">充值</button><button type="button" data-wl="out">提现</button>':'<button type="button" data-wl="edit">修改余额</button><button type="button" data-wl="gen">AI 生成钱包</button>')+'</div></div>'
- +'<div class="wl-seg">'+[['cards','银行卡'],['houses','房产'],['cars','车辆'],['bills','账单']].map(t=>'<button type="button" class="'+(WLS.tab===t[0]?'on':'')+'" data-wl-tab="'+t[0]+'">'+t[1]+'</button>').join('')+'</div><div class="wl-panel">'+wlPanel(w,own)+'</div>';
+ +'<div class="wl-seg">'+[['cards','银行卡'],['incomes','收入'],['houses','房产'],['cars','车辆'],['bills','账单']].map(t=>'<button type="button" class="'+(WLS.tab===t[0]?'on':'')+'" data-wl-tab="'+t[0]+'">'+t[1]+'</button>').join('')+'</div><div class="wl-panel">'+wlPanel(w,own)+'</div>';
 }
 function wlForm(kind,idx){
  const list=wlOf(WLS.owner)[kind],old=idx>=0?list[idx]:{};
  let el=$('#wlform');if(!el){el=document.createElement('div');el.id='wlform';document.body.appendChild(el)}
- el.innerHTML='<div class="wlf-box"><div class="wlf-top"><button type="button" data-wlf="x">取消</button><b>'+({cards:'银行卡',houses:'房产',cars:'车辆'})[kind]+'</b><button type="button" class="ok" data-wlf="ok">保存</button></div>'+WL_FIELDS[kind].map(f=>'<label>'+f[1]+'</label><input data-k="'+f[0]+'" placeholder="'+f[2]+'" value="'+esc(old[f[0]]==null?'':old[f[0]])+'" autocomplete="off">').join('')+(idx>=0?'<button type="button" class="wlf-del" data-wlf="del">删除</button>':'')+'</div>';
+ el.innerHTML='<div class="wlf-box"><div class="wlf-top"><button type="button" data-wlf="x">取消</button><b>'+({cards:'银行卡',houses:'房产',cars:'车辆',incomes:'收入来源'})[kind]+'</b><button type="button" class="ok" data-wlf="ok">保存</button></div>'+WL_FIELDS[kind].map(f=>'<label>'+f[1]+'</label><input data-k="'+f[0]+'" placeholder="'+f[2]+'" value="'+esc(old[f[0]]==null?'':old[f[0]])+'" autocomplete="off">').join('')+(idx>=0?'<button type="button" class="wlf-del" data-wlf="del">删除</button>':'')+'</div>';
  el.classList.add('on');
  el.onclick=e=>{const b=e.target.closest('[data-wlf]');if(e.target===el||(b&&b.dataset.wlf==='x')){el.classList.remove('on');return}if(!b)return;
   if(b.dataset.wlf==='del'){if(!confirm('删除这一项？'))return;list.splice(idx,1);save();el.classList.remove('on');wlRender();return}
   const o={};el.querySelectorAll('[data-k]').forEach(i=>o[i.dataset.k]=i.value.trim());
+  if(kind==='incomes'){if(!o.name)return toast('请填写收入来源');o.amount=Number(String(o.amount).replace(/[^\d.]/g,''))||0;o.period=o.period||'每月'}
   if(kind==='cards'){o.type=/信用/.test(o.type)?'信用卡':'储蓄卡';o.last4=(o.last4||'').replace(/\D/g,'').slice(-4).padStart(4,'0')}
   if(idx>=0)Object.assign(list[idx],o);else list.push(Object.assign({id:uid()},o));save();el.classList.remove('on');wlRender()};
 }
@@ -7449,11 +7595,11 @@ async function wlGenerate(pid){
  const btn=document.querySelector('[data-wl="gen"]');if(btn){btn.disabled=true;btn.textContent='生成中…'}
  try{
   const sec=S.cfg.secondaryKey&&(S.cfg.secondaryBase||S.cfg.base),cfg=sec?{base:S.cfg.secondaryBase||S.cfg.base,key:S.cfg.secondaryKey,model:S.cfg.secondaryModel||S.cfg.model,temp:.8}:Object.assign({},S.cfg,{temp:.8});
-  const raw=await ask([{role:'system',content:(p.prompt||'')+'\n\n你要为这个角色生成一份模拟的钱包与资产，必须符合人设（职业、财力、生活方式）。只输出严格 JSON：{"balance":数字,"cards":[{"bank":"银行名","type":"储蓄卡或信用卡","last4":"4位数字","balance":数字}],"houses":[{"name":"房产名称或位置","area":数字,"value":数字,"note":"备注"}],"cars":[{"name":"品牌型号","plate":"车牌","value":数字,"note":"备注"}]}。cards 1-4 张，houses 和 cars 可以是空数组，金额单位为元，银行和地点用虚构或泛称。'},{role:'user',content:'生成'}],null,{},cfg);
+  const raw=await ask([{role:'system',content:(p.prompt||'')+'\n\n你要为这个角色生成一份模拟的钱包与资产，必须符合人设（职业、财力、生活方式）。只输出严格 JSON：{"balance":数字,"cards":[{"bank":"银行名","type":"储蓄卡或信用卡","last4":"4位数字","balance":数字}],"houses":[{"name":"房产名称或位置","area":数字,"value":数字,"note":"备注"}],"cars":[{"name":"品牌型号","plate":"车牌","value":数字,"note":"备注"}],"incomes":[{"name":"收入来源，如工资、稿费、投资收益","amount":数字,"period":"每月、每年或一次性","note":"备注"}]}。cards 1-4 张，incomes 1-3 条，houses 和 cars 可以是空数组，金额单位为元，银行和地点用虚构或泛称。'},{role:'user',content:'生成'}],null,{},cfg);
   const j=JSON.parse(String(raw).replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim().replace(/^[^{]*/,'').replace(/[^}]*$/,''));
   w.balance=Math.max(0,Number(j.balance)||0);
-  w.cards=(j.cards||[]).slice(0,6).map(c=>({id:uid(),bank:String(c.bank||''),type:/信用/.test(c.type)?'信用卡':'储蓄卡',last4:String(c.last4||'0000').replace(/\D/g,'').slice(-4).padStart(4,'0'),balance:Number(c.balance)||0}));
-  w.houses=(j.houses||[]).slice(0,6).map(h=>({id:uid(),name:String(h.name||''),area:h.area||'',value:Number(h.value)||0,note:String(h.note||'')}));
+  const _kin=w.cards.filter(c=>c.kin);w.cards=(j.cards||[]).slice(0,6).map(c=>({id:uid(),bank:String(c.bank||''),type:/信用/.test(c.type)?'信用卡':'储蓄卡',last4:String(c.last4||'0000').replace(/\D/g,'').slice(-4).padStart(4,'0'),balance:Number(c.balance)||0}));
+  w.cards=w.cards.concat(_kin);if(Array.isArray(j.incomes))w.incomes=j.incomes.slice(0,4).map(i=>({id:uid(),name:String(i.name||''),amount:Number(i.amount)||0,period:String(i.period||'每月'),note:String(i.note||'')}));w.houses=(j.houses||[]).slice(0,6).map(h=>({id:uid(),name:String(h.name||''),area:h.area||'',value:Number(h.value)||0,note:String(h.note||'')}));
   w.cars=(j.cars||[]).slice(0,6).map(c=>({id:uid(),name:String(c.name||''),plate:String(c.plate||''),value:Number(c.value)||0,note:String(c.note||'')}));
   save();toast('已生成 '+p.name+' 的钱包');
  }catch(e){toast('生成失败：'+(e.message||'返回内容无法解析'))}
@@ -7464,6 +7610,7 @@ $('#v-wallet').addEventListener('click',async e=>{
  if(x=q('[data-wl-owner]')){WLS.owner=x.dataset.wlOwner;wlRender();return}
  if(x=q('[data-wl-tab]')){WLS.tab=x.dataset.wlTab;wlRender();return}
  if(x=q('[data-wl-add]')){wlForm(x.dataset.wlAdd,-1);return}
+ if(x=q('[data-wl-kin]')){kinCardTap(+x.dataset.wlKin);return}
  if(x=q('[data-wl-edit]')){const p=x.dataset.wlEdit.split(':');wlForm(p[0],+p[1]);return}
  if(x=q('[data-wl]')){const k=x.dataset.wl,own=WLS.owner;
   if(k==='gen'){wlGenerate(own);return}
@@ -9688,5 +9835,62 @@ document.addEventListener('selectstart',function(e){var t=e.target&&e.target.nod
 
 
 
+<style id="mem3-css">
+.mem3 .m3-hero{padding:18px 8px 14px}
+.mem3 .m3-stats{display:grid;grid-template-columns:repeat(3,1fr)}
+.mem3 .m3-stats>div{position:relative;text-align:center;padding:2px 0}
+.mem3 .m3-stats>div+div:before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:.5px;background:rgba(60,60,67,.29)}
+.mem3 .m3-stats b{display:block;font-size:30px;font-weight:600;line-height:1.1;letter-spacing:-.02em;color:var(--ink)}
+.mem3 .m3-stats span{display:block;margin-top:5px;font-size:12px;color:#8e8e93}
+.mem3 .m3-mode{display:flex;align-items:center;gap:8px;margin:14px 12px 0;padding-top:12px;border-top:.5px solid rgba(60,60,67,.29);font-size:13px;color:var(--ink)}
+.mem3 .m3-mode b{font-weight:600}
+.mem3 .m3-mode span{margin-left:auto;color:#8e8e93;text-align:right}
+.mem3 .m3-dot{flex:none;width:7px;height:7px;border-radius:50%;background:var(--ink)}
+.mem3 .m3-hrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mem3 .m3-sub{font-size:12px;color:#8e8e93}
+.mem3 .m3-lk{border:0;background:none;padding:2px 0;font-size:13px;font-weight:600;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.mem3 .m3-lk:disabled{opacity:.5}
+.mem3 .m3-range{display:flex;align-items:flex-end;gap:10px}
+.mem3 .m3-range i{flex:none;width:12px;height:1px;background:#c4c4c7;margin-bottom:22px}
+.mem3 .m3-range label{flex:1;min-width:0}
+.mem3 .m3-range span{display:block;margin:0 0 6px 2px;font-size:12px;color:#8e8e93}
+.mem3 .m3-in{display:block;width:100%;box-sizing:border-box;height:42px;border:0;border-radius:11px;background:var(--p);padding:0 12px;font-size:16px;text-align:center;color:var(--ink)}
+.mem3 .m3-note+.m3-note{margin-top:10px}
+.mem3 .m3-note>summary{display:block;list-style:none;cursor:pointer;padding:13px 16px}
+.mem3 .m3-note>summary::-webkit-details-marker{display:none}
+.mem3 .m3-top{display:flex;align-items:center;gap:8px;font-size:13px;color:#8e8e93}
+.mem3 .m3-top b{font-size:14px;font-weight:700;color:var(--ink)}
+.mem3 .m3-top em{margin-left:auto;font-style:normal;font-size:12px}
+.mem3 .m3-chev{text-decoration:none;font-size:20px;line-height:1;color:#c4c4c7;transition:transform .2s}
+.mem3 .m3-note[open] .m3-chev{transform:rotate(90deg)}
+.mem3 .m3-pv{margin:7px 0 0;font-size:15px;line-height:1.55;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mem3 .m3-note[open] .m3-pv{display:none}
+.mem3 .m3-body{padding:0 16px 14px}
+.mem3 .m3-body .mm-act{justify-content:space-between}
+.mem3 .m3-tag{display:inline-flex;align-items:center;height:18px;padding:0 7px;border-radius:9px;background:rgba(120,120,128,.16);color:#6d6d72;font-style:normal;font-size:11px;font-weight:600;line-height:1}
+.mem3 .m3-tag.on{background:#111;color:#fff}
+.mem3 .m3-meta{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:#8e8e93}
+.mem3 .m3-vact{align-items:center;margin-top:14px;padding-top:12px;border-top:.5px solid rgba(60,60,67,.29)}
+.mem3 #cs-vec-prog{font-size:12px;color:#8e8e93}
+.mem3 .mm-act.wrap .mm-b{height:34px;padding:0 14px}
+[data-theme=dark] .mem3 .m3-stats>div+div:before,[data-theme=dark] .mem3 .m3-mode,[data-theme=dark] .mem3 .m3-vact,[data-theme=dark] .mem3 .mm-in,[data-theme=dark] .mem3 .mm-item,[data-theme=dark] .mem3 .mm-sub{border-color:rgba(255,255,255,.14)}
+[data-theme=dark] .mem3 .m3-stats>div+div:before{background:rgba(255,255,255,.14)}
+[data-theme=dark] .mem3 .m3-in{background:#2c2c2e}
+[data-theme=dark] .mem3 .m3-range i{background:#48484a}
+[data-theme=dark] .mem3 .m3-tag{background:rgba(255,255,255,.14);color:#aeaeb2}
+[data-theme=dark] .mem3 .m3-tag.on{background:#fff;color:#000}
+[data-theme=dark] .mem3 .m3-dot{background:#fff}
+</style>
+<style id="kin-css">
+.kn-msg{padding:0!important;background:none!important;border:0!important;box-shadow:none!important}
+.kn-card{width:min(216px,60vw);border-radius:16px;overflow:hidden;background:#f4f4f5;color:#5a5a60;cursor:pointer;text-align:left}
+[data-theme=dark] .kn-card{background:#2a2a2c;color:#c8c8cc}
+.kn-card .tf-foot{background:#17171a}
+.kn-card.off{opacity:.6}
+.wl-bank.wl-kin{background:linear-gradient(135deg,#17171a,#4b4b53)}
+.wl-bank.wl-kin .wl-bt span{background:rgba(255,255,255,.18)}
+.wl-inc-sum{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 10px;padding:13px 16px;border-radius:14px;background:var(--p);font-size:13px;color:var(--sub)}
+.wl-inc-sum b{font-size:18px;color:var(--ink);font-weight:700}
+</style>
 </body>
 </html>
